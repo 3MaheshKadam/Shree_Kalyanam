@@ -118,7 +118,7 @@ export default function FeaturedProfiles() {
   };
 
   return (
-    <section className="relative py-10 w-full overflow-hidden bg-gradient-to-br from-rose-50 via-amber-50 to-orange-50">
+    <section id='browse-profiles' className="relative py-18 mt-8  w-full overflow-hidden bg-gradient-to-br from-rose-50 via-amber-50 to-orange-50">
       {/* Rich Burgundy & Golden Background Elements */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full blur-3xl animate-float-x" 
