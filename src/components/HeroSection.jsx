@@ -1,232 +1,92 @@
 
 "use client";
-import { useState, useEffect } from "react";
-import { Heart, Star, Sparkles, Crown } from "lucide-react";
-import Image from "next/image";
-// import home from "../../public/images/"
-export default function MatrimonialHero() {
+import Image from 'next/image';
+import React, { useState, useEffect } from 'react';
+// import { Image } from 'next/image';
+const HeroSection = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
-  const handleMouseMove = (e) => {
-    setMousePosition({
-      x: (e.clientX / window.innerWidth) * 100,
-      y: (e.clientY / window.innerHeight) * 100,
-    });
-  };
-
   return (
-    <div 
-      className="relative min-h-screen w-full overflow-hidden flex items-center justify-center px-4 bg-gradient-to-br from-slate-50 via-rose-50/50 to-amber-50/30"
-      onMouseMove={handleMouseMove}
-    >
-      {/* Animated background with floating particles */}
+    <section className="relative min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-rose-50 via-rose-100 to-amber-50 overflow-hidden">
+      {/* Subtle Decorative Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-rose-100/20 via-transparent to-amber-100/20"></div>
-        
-        {/* Floating particles */}
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute animate-float opacity-30"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${3 + Math.random() * 4}s`
-            }}
-          >
-            <div className="w-2 h-2 bg-rose-300 rounded-full blur-sm"></div>
-          </div>
-        ))}
-        
-        {/* Parallax background elements */}
-        <div 
-          className="absolute inset-0 opacity-20"
-          style={{
-            transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px)`
-          }}
-        >
-          <div className="absolute top-20 left-1/4 w-32 h-32 rounded-full bg-gradient-to-br from-rose-200 to-amber-200 opacity-40 blur-xl"></div>
-          <div className="absolute bottom-32 right-1/4 w-40 h-40 rounded-full bg-gradient-to-br from-amber-200 to-rose-200 opacity-30 blur-xl"></div>
-        </div>
+        <div className="absolute top-0 left-0 w-64 h-64 bg-rose-200 rounded-full opacity-30 blur-3xl -translate-x-1/2 translate-y-1/4"></div>
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-amber-200 rounded-full opacity-30 blur-3xl translate-x-1/4 -translate-y-1/4"></div>
       </div>
 
-      <div className="container mx-auto max-w-7xl h-full px-6 py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 h-full items-center gap-16">
-          {/* Left Content */}
-          <div
-            className={`flex flex-col space-y-8 max-w-2xl transition-all duration-1200 transform ${
-              isLoaded ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
-            }`}
-          >
-        
-
-            {/* Main heading with gradient text */}
-            <h1 className="text-5xl lg:text-6xl font-serif font-bold leading-tight tracking-tight">
-              <span className="block text-gray-800">Two Soules</span>
-              <span className="block bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 bg-clip-text text-transparent">
-                One Destiny !
+      <div className="mt-8 container mx-auto px-4  sm:px-10 lg:px-8 py-16 flex flex-col lg:flex-row items-center justify-between">
+        {/* Left Content */}
+        <div className={`lg:w-1/2 flex flex-col space-y-6 max-w-2xl transition-all duration-1000 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-gray-800 leading-tight">
+            Shri Kalyanam
+            <span className="block bg-gradient-to-r from-rose-600 to-amber-500 bg-clip-text text-transparent">
+              Where Hearts Unite
+            </span>
+          </h1>
+          <p className="text-lg sm:text-xl text-gray-600 font-light max-w-md">
+            Embark on a sacred journey to find your life partner. Shri Kalyanam connects souls with love, trust, and tradition.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <a
+              href="/register"
+              className="relative inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-rose-500 to-amber-500 text-white font-semibold rounded-full overflow-hidden group"
+            >
+              <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
+              <span className="relative flex items-center space-x-2">
+                <span>Find Your Match</span>
+                <svg className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
               </span>
-              {/* <span className="block text-gray-800">Begin</span> */}
-            </h1>
-
-            {/* Elegant description */}
-            <p className="text-xl text-gray-600 leading-relaxed max-w-lg font-light">
-              Discover your perfect life partner through our curated community of hearts seeking eternal companionship.
-            </p>
-
-            {/* Enhanced CTA buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-6">
-              <button className="group relative px-8 py-4 bg-gradient-to-r from-rose-500 to-rose-600 text-white rounded-full overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                <div className="relative flex items-center justify-center space-x-3">
-                  <span className="font-medium text-lg">Start Your Journey</span>
-                  <Heart size={20} className="transform group-hover:scale-110 transition-transform duration-200" />
-                </div>
-              </button>
-
-              <button className="group px-8 py-4 bg-white/80 backdrop-blur-sm text-gray-700 rounded-full border-2 border-rose-200 hover:border-rose-400 hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-                <span className="font-medium text-lg group-hover:text-rose-600 transition-colors duration-200">Explore Profiles</span>
-              </button>
-            </div>
-
-            {/* Social proof with enhanced styling */}
-         
+            </a>
+            <a
+              href="/search"
+              className="px-8 py-3 bg-white text-rose-600 font-semibold rounded-full border border-rose-200 hover:bg-rose-50 hover:border-rose-400 transition-all duration-300"
+            >
+              Explore Profiles
+            </a>
           </div>
+         
+        </div>
 
-          {/* Right Content - Enhanced Image Gallery */}
-          <div
-            className={`relative h-full flex items-center justify-center transition-all duration-1200 delay-300 transform ${
-              isLoaded ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
-            }`}
-          >
-            <div className="relative w-[280px] sm:w-[360px] md:w-[420px] lg:w-[480px] aspect-square rounded-3xl mx-auto">
-
-              {/* Main image with glassmorphism effect */}
-              <div className="relative group">
-                <div className="absolute -inset-4 bg-gradient-to-r from-rose-400 to-amber-400 rounded-3xl blur-lg opacity-60 group-hover:opacity-80 transition duration-500"></div>
-                <div className="relative w-full aspect-square rounded-3xl overflow-hidden backdrop-blur-sm bg-white/10 border border-white/20 shadow-2xl transform hover:scale-105 transition-all duration-700">
-                 <Image
+        {/* Right Content - Image */}
+        <div className={`lg:w-1/2  flex justify-center transition-all duration-1000 delay-300 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <div className="relative w-full max-w-md mt-4 ">
+            <div className="absolute -inset-4 bg-gradient-to-r from-rose-400/40 to-amber-400/40 rounded-3xl blur-lg opacity-50"></div>
+            <Image
                     src="/home.jpeg"
                     alt="Happy Couple"
                     width={800}
                     height={800}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover rounded-2xl"
                   />
-                </div>
-              </div>
-
-             
-                  <div className="absolute -bottom-8 -left-8  w-12 h-12 bg-gradient-to-br from-rose-400 to-rose-500 rounded-full flex items-center justify-center">
-                    <Heart size={20} className="text-white" />
-                  </div>
-              {/* </div> */}
-
-              {/* Decorative mandala elements */}
-              <div className="absolute -z-10 bottom-20 -left-16 w-32 h-32 rounded-full border-2 border-rose-200/50 opacity-60">
-                <div className="w-full h-full rounded-full border-2 border-rose-300/30 animate-spin-slow"></div>
-              </div>
-              <div className="absolute -z-10 top-20 -right-16 w-28 h-28 rounded-full border-2 border-amber-200/50 opacity-60">
-                <div className="w-full h-full rounded-full border-2 border-amber-300/30 animate-spin-slow-reverse"></div>
-              </div>
+            <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-rose-500 rounded-full flex items-center justify-center">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+              </svg>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Elegant quote section */}
-      <div
-        className={`absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center transition-all duration-1000 delay-1000 ${
-          isLoaded ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-        }`}
-      >
-     
-      </div>
-
+      {/* Custom CSS for Animations */}
       <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          33% { transform: translateY(-10px) rotate(1deg); }
-          66% { transform: translateY(5px) rotate(-1deg); }
-        }
-        
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        
-        @keyframes spin-slow-reverse {
-          from { transform: rotate(360deg); }
-          to { transform: rotate(0deg); }
-        }
-        
-        @keyframes ripple {
-          0% { transform: scale(0); opacity: 0.3; }
-          100% { transform: scale(4); opacity: 0; }
-        }
-        
         @keyframes shimmer {
           0% { background-position: -1000px 0; }
           100% { background-position: 1000px 0; }
         }
-        
-        .animate-float {
-          animation: float 4s ease-in-out infinite;
-        }
-        
-        .animate-spin-slow {
-          animation: spin-slow 20s linear infinite;
-        }
-        
-        .animate-spin-slow-reverse {
-          animation: spin-slow-reverse 25s linear infinite;
-        }
-        
-        .animate-ripple {
-          animation: ripple 0.8s ease-out;
-        }
-        
-        .animate-shimmer {
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        .group:hover .bg-gradient-to-r {
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
           background-size: 1000px 100%;
           animation: shimmer 2s infinite;
         }
-        
-        /* Custom gradient borders */
-        .gradient-border {
-          position: relative;
-          background: linear-gradient(45deg, #f43f5e, #f59e0b);
-          padding: 2px;
-          border-radius: 1rem;
-        }
-        
-        .gradient-border-inner {
-          background: white;
-          border-radius: 0.875rem;
-        }
-        
-        /* Glassmorphism effect */
-        .glass {
-          background: rgba(255, 255, 255, 0.15);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Luxury text shadow */
-        .luxury-text {
-          text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Hover glow effect */
-        .hover-glow:hover {
-          box-shadow: 0 20px 60px rgba(244, 63, 94, 0.3);
-        }
       `}</style>
-    </div>
+    </section>
   );
-}
+};
+
+export default HeroSection; 

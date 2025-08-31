@@ -9,6 +9,7 @@ import AppDownload from "@/components/AppDownload";
 import UserTestimonials from "@/components/UserTestimonials";
 import BlogPreview from "@/components/BlogPreview";
 import Footer from "@/components/Footer";
+import HowItWorks from "@/components/HowItWorks";
 
 export default function HomePage() {
   return (
@@ -17,8 +18,11 @@ export default function HomePage() {
       <HeroSection />
       {/* <QuickRegistrationForm /> */}
       <SearchMatchesWidget />
-      <WhyChooseUs />
       <FeaturedProfiles />
+
+      <WhyChooseUs />
+            <HowItWorks/>
+
       {/* <SuccessStories /> */}
       <AppDownload />
       <UserTestimonials />
