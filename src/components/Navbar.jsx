@@ -38,11 +38,11 @@
 //             width={48} 
 //             height={48} 
 //             className="w-12 h-12 rounded-full object-cover" 
-//             alt="Shree Kalyanam Logo"
+//             alt="Shri Kalyanam Logo"
 //             priority
 //           />
 //           <span className="font-serif text-2xl font-bold text-gray-800 tracking-tight">
-//             Shree<span className="text-rose-600">Kalyanam</span>
+//             Shri<span className="text-rose-600">Kalyanam</span>
 //           </span>
 //         </Link>
 
@@ -165,11 +165,11 @@ export default function MatrimonialNavbar() {
             width={48} 
             height={48} 
             className="w-12 h-12 rounded-full object-cover" 
-            alt="Shree Kalyanam Logo"
+            alt="Shri Kalyanam Logo"
             priority
           />
           <span className="font-serif text-2xl font-bold text-amber-900 tracking-tight">
-            Shree<span className="text-orange-600">Kalyanam</span>
+            Shri<span className="text-orange-600">Kalyanam</span>
           </span>
         </Link>
 
