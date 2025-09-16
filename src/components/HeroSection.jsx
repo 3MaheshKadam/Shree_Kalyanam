@@ -20,6 +20,50 @@ const HeroSection = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Animation variants
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 40 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { 
+        duration: 0.8,
+        ease: [0.25, 0.46, 0.45, 0.94]
+      } 
+    }
+  };
+
+  const staggerChildren = {
+    visible: { 
+      transition: { 
+        staggerChildren: 0.2,
+        delayChildren: 0.3
+      } 
+    }
+  };
+
+  const imageHover = {
+    rest: { scale: 1 },
+    hover: { 
+      scale: 1.02,
+      transition: {
+        duration: 0.4,
+        ease: "easeInOut"
+      }
+    }
+  };
+
+  const buttonHover = {
+    rest: { scale: 1 },
+    hover: { 
+      scale: 1.05,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
     <section className="relative min-h-screen w-full bg-gradient-to-br from-rose-50 via-white to-purple-50 overflow-hidden">
       {/* Clean Background Elements */}
