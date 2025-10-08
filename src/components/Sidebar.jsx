@@ -52,7 +52,7 @@ export default function Sidebar({ mobileOpen = false, setMobileOpen }) {
             </div>
             <div>
               <h1 className="font-bold text-xl bg-gradient-to-r from-rose-600 to-amber-600 bg-clip-text text-transparent">
-                ShivBandhan
+                shreekalyanam
               </h1>
               <p className="text-xs text-gray-500 font-medium">Find Your Perfect Match</p>
             </div>

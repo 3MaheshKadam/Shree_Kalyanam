@@ -767,7 +767,7 @@ const handlePhotoUploadSuccess = (result, photoId) => {
   {photos.map((photo) => (
     <div key={photo.id} className="relative">
       <CldUploadWidget
-        uploadPreset="shivbandhan"
+        uploadPreset="shreekalyanam"
         options={{
           multiple: false,
           sources: ['local'],

@@ -152,7 +152,7 @@ export default function AppDownloadSection() {
                       width={280}
                       height={560}
                       src="/home.jpeg" 
-                      alt="Shri Kalyanam App Screenshot" 
+                      alt="Shree Kalyanam App Screenshot" 
                       className="w-full aspect-[9/17] object-cover"
                     />
                   </div>

@@ -41,7 +41,7 @@ export default function MatrimonialNavbar() {
                 width={48} 
                 height={48} 
                 className="w-full h-full object-cover" 
-                alt="Shri Kalyanam Logo"
+                alt="Shree Kalyanam Logo"
                 priority
               />
             </div>
@@ -52,7 +52,7 @@ export default function MatrimonialNavbar() {
           </div>
           <div className="flex flex-col">
             <span className="font-light text-xl text-slate-800 tracking-tight leading-tight">
-              Shri
+              Shree
             </span>
             <span className="bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 bg-clip-text text-transparent font-medium text-xl leading-tight">
               Kalyanam

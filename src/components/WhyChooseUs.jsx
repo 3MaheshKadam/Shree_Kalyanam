@@ -236,7 +236,7 @@ export default function WhyChooseUs() {
               </div>
               
               <blockquote className="text-lg text-slate-700 font-light italic leading-relaxed mb-4">
-                "Shri Kalyanam made our matrimonial search stress-free and meaningful. 
+                "Shree Kalyanam made our matrimonial search stress-free and meaningful. 
                 The verified profiles and cultural matching helped us find our perfect life partner."
               </blockquote>
               

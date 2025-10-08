@@ -1,7 +1,9 @@
 "use client";
+import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useState } from 'react';
+import Navbar from "../../components/Navbar";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -42,6 +44,8 @@ export default function Contact() {
   };
 
   return (
+    <>
+      <Navbar />
     <main className="min-h-screen bg-gradient-to-b from-rose-50 to-white">
       {/* Hero Section */}
       <section className="relative py-28 overflow-hidden">
@@ -309,5 +313,8 @@ export default function Contact() {
         </div>
       </section>
     </main>
+    <Footer/>
+        </>
+
   );
 }

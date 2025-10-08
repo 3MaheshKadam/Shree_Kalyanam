@@ -128,7 +128,7 @@ export default function FeaturedProfiles() {
   };
 
   return (
-    <section className="relative py-20 bg-gradient-to-br from-rose-50/50 via-white to-purple-50/50 overflow-hidden">
+    <section id='browse-profiles' className="relative py-20 bg-gradient-to-br from-rose-50/50 via-white to-purple-50/50 overflow-hidden">
       {/* Clean Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 rounded-full bg-pink-100/30 blur-3xl animate-float"></div>

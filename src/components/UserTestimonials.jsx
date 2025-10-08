@@ -9,7 +9,7 @@ const successStories = [
     id: 1,
     couple: "Aarushi & Siddharth",
     location: "Jaipur, India",
-    story: "Shri Kalyanam's thoughtful matchmaking process respected our values and preferences, leading us to a lifelong partnership filled with love and trust.",
+    story: "Shree Kalyanam's thoughtful matchmaking process respected our values and preferences, leading us to a lifelong partnership filled with love and trust.",
     image: "/home.jpeg",
     married: "January 2023",
     storyLink: "/stories/aarushi-siddharth",
@@ -20,7 +20,7 @@ const successStories = [
     id: 2,
     couple: "Meera & Rohan",
     location: "Chennai, India", 
-    story: "The platform's family verification and cultural matching gave us confidence to connect. Shri Kalyanam made our dream of a meaningful union come true.",
+    story: "The platform's family verification and cultural matching gave us confidence to connect. Shree Kalyanam made our dream of a meaningful union come true.",
     image: "/home.jpeg",
     married: "June 2022",
     storyLink: "/stories/meera-rohan",
@@ -31,7 +31,7 @@ const successStories = [
     id: 3,
     couple: "Shalini & Vikrant",
     location: "Pune, India",
-    story: "The personalized profiles and family focus of Shri Kalyanam brought us together. We're grateful for a platform that honors our cultural heritage.",
+    story: "The personalized profiles and family focus of Shree Kalyanam brought us together. We're grateful for a platform that honors our cultural heritage.",
     image: "/home.jpeg",
     married: "November 2023",
     storyLink: "/stories/shalini-vikrant",
@@ -131,7 +131,7 @@ export default function SuccessStories() {
           </h2>
           
           <p className="text-base sm:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed font-light">
-            Celebrate the beautiful journeys of couples who found their perfect match through Shri Kalyanam's trusted matrimonial platform
+            Celebrate the beautiful journeys of couples who found their perfect match through Shree Kalyanam's trusted matrimonial platform
           </p>
         </div>
 

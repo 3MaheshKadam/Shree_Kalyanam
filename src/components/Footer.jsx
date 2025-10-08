@@ -180,7 +180,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
             <p className="text-slate-600 text-sm font-light">
-              © {new Date().getFullYear()} Shri Kalyanam. All rights reserved.
+              © {new Date().getFullYear()} Shree Kalyanam. All rights reserved.
             </p>
             <div className="flex items-center space-x-2 text-sm">
               <div className="w-2 h-2 rounded-full bg-green-500"></div>

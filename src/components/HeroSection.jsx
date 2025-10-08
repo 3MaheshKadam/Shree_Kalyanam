@@ -7,7 +7,7 @@ const HeroSection = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
   const testimonials = [
-    { name: "Priya & Arjun", text: "Found our perfect match through Shri Kalyanam" },
+    { name: "Priya & Arjun", text: "Found our perfect match through Shree Kalyanam" },
     { name: "Meera & Dev", text: "Our families are now connected forever" },
     { name: "Sania & Rahul", text: "Beautiful journey from profiles to wedding" }
   ];
@@ -93,7 +93,7 @@ const HeroSection = () => {
           {/* Clean Brand Heading */}
           <div className="space-y-6">
             <h1 className="text-5xl sm:text-6xl lg:text-6xl font-normal text-slate-800 leading-tight flex gap-2">
-              <span className="block font-light">Shri </span>
+              <span className="block font-light">Shree </span>
               <span className="block bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 bg-clip-text text-transparent font-medium">
                Kalyanam
               </span>

@@ -153,7 +153,7 @@ export async function POST(request) {
 
     // Company name and branding
     const headerX = logoImage ? margin + 120 : margin;
-    drawText('SHIVBANDHAN MATRIMONIAL SERVICES', headerX, currentY, {
+    drawText('shreekalyanam MATRIMONIAL SERVICES', headerX, currentY, {
       size: 16,
       bold: true,
       color: primaryRed
@@ -174,14 +174,14 @@ export async function POST(request) {
     });
     currentY -= 12;
 
-    drawText('Mobile: +91-8888438693 / +91-8888438694 • Email: support@shivbandhan.com', 
+    drawText('Mobile: +91-8888438693 / +91-8888438694 • Email: support@shreekalyanam.com', 
              headerX, currentY, {
       size: 9,
       color: darkText
     });
     currentY -= 12;
 
-    drawText('Website: www.shivbandhan.com', 
+    drawText('Website: www.shreekalyanam.com', 
              headerX, currentY, {
       size: 9,
       color: accentBlue,
@@ -369,7 +369,7 @@ export async function POST(request) {
     currentY -= 15;
 
     // Footer content
-    drawText('ShivBandhan Matrimonial Services • Trusted Since 2010', margin, currentY, {
+    drawText('shreekalyanam Matrimonial Services • Trusted Since 2010', margin, currentY, {
       size: 10,
       bold: true,
       color: primaryRed
@@ -387,7 +387,7 @@ export async function POST(request) {
     });
     currentY -= 12;
 
-    drawText('Contact: +91-8888438693 | Email: support@shivbandhan.com | Website: www.shivbandhan.com', 
+    drawText('Contact: +91-8888438693 | Email: support@shreekalyanam.com | Website: www.shreekalyanam.com', 
              margin, currentY, {
       size: 8,
       color: lightText
@@ -397,7 +397,7 @@ export async function POST(request) {
     const pdfBytes = await pdfDoc.save();
     const base64Pdf = Buffer.from(pdfBytes).toString('base64');
     const sanitizedName = (userData.name || 'Profile').replace(/[^a-zA-Z0-9]/g, '_');
-    const fileName = `ShivBandhan_Profile_${sanitizedName}.pdf`;
+    const fileName = `shreekalyanam_Profile_${sanitizedName}.pdf`;
 
     return NextResponse.json({
       success: true,

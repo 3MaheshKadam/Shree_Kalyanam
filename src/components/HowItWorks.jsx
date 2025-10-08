@@ -182,7 +182,7 @@ export default function OurPromise() {
               </blockquote>
               
               <cite className="text-sm text-slate-500 font-medium not-italic">
-                — The Shri Kalyanam Philosophy
+                — The Shree Kalyanam Philosophy
               </cite>
             </div>
           </div>

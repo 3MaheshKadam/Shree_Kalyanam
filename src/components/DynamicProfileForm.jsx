@@ -661,7 +661,7 @@ const DynamicProfileForm = () => {
             {photos.map((photo) => (
               <div key={photo.id} className="relative">
                 <CldUploadWidget
-                  uploadPreset="shivbandhan"
+                  uploadPreset="shreekalyanam"
                   options={{ multiple: false, sources: ['local'], maxFiles: 1 }}
                   onSuccess={(result) => handlePhotoUploadSuccess(result, photo.id)}
                 >
@@ -755,7 +755,7 @@ const DynamicProfileForm = () => {
             <div className="relative">
               {/* Fixed CldUploadWidget with minimal styling */}
               <CldUploadWidget
-                uploadPreset="shivbandhan"
+                uploadPreset="shreekalyanam"
                 options={{
                   multiple: false,
                   sources: ['local', 'camera'],
