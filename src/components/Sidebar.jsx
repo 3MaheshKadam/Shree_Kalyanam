@@ -7,142 +7,264 @@ import {
   Search, 
   Heart, 
   UserPlus, 
-  MessageCircle, 
-  CreditCard, 
   Settings,
   Sparkles,
   Crown,
-  X
+  X,
+  Star
 } from 'lucide-react';
 
+// Configuration
+const NAV_ITEMS = [
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { href: "/dashboard/profile/me", label: "My Profile", icon: User },
+  { href: "/dashboard/matches", label: "Matches", icon: Heart },
+  { href: "/dashboard/interests", label: "Interests", icon: UserPlus },
+  { href: "/dashboard/subscription", label: "Subscription", icon: Crown },
+  { href: "/dashboard/settings", label: "Settings", icon: Settings },
+];
+
+const QUICK_ACTIONS = [
+  { 
+    href: "/search", 
+    label: "Advanced Search", 
+    icon: Search, 
+    colorScheme: "red" 
+  },
+  { 
+    href: "/dashboard/premium-features", 
+    label: "Premium Features", 
+    icon: Star, 
+    colorScheme: "emerald" 
+  },
+];
+
+// Utility function for color schemes
+const getColorClasses = (scheme, type = 'hover') => {
+  const schemes = {
+    red: {
+      hover: 'hover:from-red-50 hover:to-orange-50 hover:text-red-600 hover:border-red-100/50',
+      icon: 'text-red-500',
+      iconBg: 'border-red-100/50'
+    },
+    emerald: {
+      hover: 'hover:from-emerald-50 hover:to-teal-50 hover:text-emerald-600 hover:border-emerald-100/50',
+      icon: 'text-emerald-500',
+      iconBg: 'border-emerald-100/50'
+    }
+  };
+  return schemes[scheme]?.[type] || '';
+};
+
+// Sub-components
+const Logo = () => (
+  <div className="flex items-center space-x-4">
+
+    <div>
+      <h1 className="font-bold text-2xl bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 bg-clip-text text-transparent">
+        Shree Kalyanam
+      </h1>
+    
+    </div>
+  </div>
+);
+
+const SectionHeader = ({ label, gradientFrom = "orange-500", gradientTo = "red-500" }) => (
+  <div className="text-xs font-bold text-slate-600 uppercase tracking-widest mb-3 px-3 flex items-center">
+    <div className={`w-1.5 h-5 bg-gradient-to-b from-${gradientFrom} to-${gradientTo} rounded-full mr-3 shadow-md`}></div>
+    {label}
+  </div>
+);
+
+const NavLink = ({ href, label, icon: Icon, isActive, onClick }) => (
+  <Link
+    href={href}
+    onClick={onClick}
+    className={`
+      group flex items-center justify-between px-5 py-3.5 rounded-xl 
+      transition-all duration-200 relative
+      active:scale-[0.98]
+      ${isActive
+        ? "bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 text-white shadow-xl shadow-red-500/25"
+        : "text-slate-700 hover:bg-white/80 hover:shadow-lg border border-transparent hover:border-orange-200/50"
+      }
+    `}
+  >
+    <div className="flex items-center space-x-3">
+      <div className={`
+        p-2.5 rounded-lg transition-all duration-200
+        ${isActive 
+          ? "bg-white/25 backdrop-blur-sm" 
+          : "bg-gradient-to-br from-orange-50 to-red-50 group-hover:from-orange-100 group-hover:to-red-100"
+        }
+      `}>
+        <Icon className={`
+          w-5 h-5 transition-all duration-200
+          ${isActive ? "text-white" : "text-orange-600 group-hover:text-red-600"}
+        `} />
+      </div>
+      
+      <span className={`
+        font-semibold text-sm transition-all duration-200
+        ${isActive ? "text-white" : "text-slate-700 group-hover:text-slate-900"}
+      `}>
+        {label}
+      </span>
+    </div>
+    
+    {isActive ? (
+      <div className="flex items-center gap-1">
+        <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
+        <div className="w-1.5 h-1.5 bg-white/70 rounded-full animate-pulse delay-100"></div>
+        <div className="w-1.5 h-1.5 bg-white/40 rounded-full animate-pulse delay-200"></div>
+      </div>
+    ) : (
+      <svg className="w-4 h-4 text-slate-400 opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+      </svg>
+    )}
+  </Link>
+);
+
+const QuickActionLink = ({ href, label, icon: Icon, colorScheme, onClick }) => (
+  <Link
+    href={href}
+    onClick={onClick}
+    className={`
+      flex items-center justify-between px-5 py-3 rounded-xl 
+      text-slate-700 transition-all duration-200 
+      group border border-slate-200/50 hover:border-${colorScheme}-300
+      hover:bg-gradient-to-r active:scale-[0.98]
+      ${colorScheme === 'red' ? 'hover:from-red-50 hover:to-orange-50' : 'hover:from-emerald-50 hover:to-teal-50'}
+    `}
+  >
+    <div className="flex items-center space-x-3">
+      <div className={`
+        p-2 rounded-lg bg-white border-2
+        transition-all duration-200 group-hover:scale-110
+        ${colorScheme === 'red' ? 'border-red-200 group-hover:border-red-400' : 'border-emerald-200 group-hover:border-emerald-400'}
+      `}>
+        <Icon className={`w-4 h-4 ${getColorClasses(colorScheme, 'icon')} transition-all duration-200`} />
+      </div>
+      
+      <span className={`
+        font-medium text-sm
+        ${colorScheme === 'red' ? 'group-hover:text-red-600' : 'group-hover:text-emerald-600'}
+      `}>
+        {label}
+      </span>
+    </div>
+
+    <div className={`
+      w-6 h-6 rounded-full border-2 flex items-center justify-center
+      transition-all duration-200 group-hover:rotate-90
+      ${colorScheme === 'red' ? 'border-red-300 text-red-500' : 'border-emerald-300 text-emerald-500'}
+    `}>
+      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" />
+      </svg>
+    </div>
+  </Link>
+);
+
+const DecorativeBlobs = () => (
+  <>
+    <div className="absolute top-32 -right-10 w-32 h-32 bg-gradient-to-br from-orange-300 to-red-400 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+    <div className="absolute bottom-32 -left-10 w-24 h-24 bg-gradient-to-br from-pink-300 to-red-300 rounded-full blur-2xl opacity-25 animate-pulse delay-700"></div>
+    <div className="absolute top-1/2 -right-5 w-20 h-20 bg-gradient-to-br from-yellow-200 to-orange-300 rounded-full blur-2xl opacity-20 animate-pulse delay-500"></div>
+  </>
+);
+
+// Main Component
 export default function Sidebar({ mobileOpen = false, setMobileOpen }) {
   const pathname = usePathname();
   
-  const navItems = [
-    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, exact: true },
-    { href: "/dashboard/profile/me", label: "My Profile", icon: User },
-    { href: "/dashboard/matches", label: "Matches", icon: Heart },
-    { href: "/dashboard/interests", label: "Interests", icon: UserPlus },
-    // { href: "/dashboard/chat", label: "Chat", icon: MessageCircle },
-    { href: "/dashboard/subscription", label: "Subscription", icon: Crown },
-    { href: "/dashboard/settings", label: "Settings", icon: Settings },
-  ];
+  const closeSidebar = () => setMobileOpen?.(false);
+  
+  const isLinkActive = (href, exact = false) => {
+    return exact ? pathname === href : pathname.startsWith(href);
+  };
 
   return (
     <>
+      {/* Sidebar */}
       <aside className={`
-        fixed lg:sticky top-0 left-0 z-30
-        w-72 bg-gradient-to-b from-white to-rose-50/30 shadow-xl border-r border-rose-100/50 
-        h-screen flex flex-col overflow-hidden transition-all duration-300 ease-in-out
+        fixed lg:sticky top-0 left-0 z-30 w-80 h-screen
+        bg-gradient-to-br from-orange-50/80 via-white to-red-50/60
+        shadow-2xl border-r border-orange-200/40 backdrop-blur-xl
+        flex flex-col overflow-hidden 
+        transition-all duration-300 ease-in-out
         ${mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        {/* Mobile close button */}
+        
+        {/* Mobile Close Button */}
         <button 
-          className="lg:hidden absolute top-4 right-4 p-1 rounded-full bg-rose-100 text-rose-600"
-          onClick={() => setMobileOpen(false)}
+          onClick={closeSidebar}
+          className="lg:hidden absolute top-5 right-5 p-2.5 rounded-xl bg-white/90 text-orange-600 hover:bg-orange-100 shadow-lg transition-all duration-200 backdrop-blur-sm z-50 border border-orange-200"
         >
           <X className="w-5 h-5" />
         </button>
         
-        {/* Header Section */}
-        <div className="p-6 border-b border-rose-100/50 bg-gradient-to-r from-rose-50 to-amber-50/50 flex-shrink-0">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl flex items-center justify-center shadow-lg">
-              <Sparkles className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h1 className="font-bold text-xl bg-gradient-to-r from-rose-600 to-amber-600 bg-clip-text text-transparent">
-                shreekalyanam
-              </h1>
-              <p className="text-xs text-gray-500 font-medium">Find Your Perfect Match</p>
-            </div>
-          </div>
+        {/* Header */}
+        <div className="p-6 border-b border-orange-200/50 bg-white/60 backdrop-blur-md">
+          <Logo />
         </div>
 
-        {/* Navigation Section */}
-        <nav className="flex-1 overflow-y-auto p-4 space-y-1 
-          scrollbar-thin 
-          scrollbar-thumb-gradient-to-b scrollbar-thumb-from-rose-300 scrollbar-thumb-to-rose-400 
-          scrollbar-track-rose-50/50 
-          hover:scrollbar-thumb-from-rose-400 hover:scrollbar-thumb-to-rose-500 
-          scrollbar-thumb-rounded-full 
-          scrollbar-track-rounded-full">
-          <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4 px-3">
-            Navigation
-          </div>
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto p-5 space-y-2.5">
+          <SectionHeader label="Main Menu" />
           
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = item.exact 
-              ? pathname === item.href 
-              : pathname.startsWith(item.href);
+          {NAV_ITEMS.map((item) => (
+            <NavLink
+              key={item.href}
+              href={item.href}
+              label={item.label}
+              icon={item.icon}
+              isActive={isLinkActive(item.href, item.exact)}
+              onClick={closeSidebar}
+            />
+          ))}
+
+          {/* Quick Actions */}
+          <div className="mt-8 pt-6 border-t border-orange-200/50">
+            <SectionHeader 
+              label="Quick Actions" 
+              gradientFrom="red-500" 
+              gradientTo="pink-500" 
+            />
             
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 relative overflow-hidden ${
-                  isActive
-                    ? "bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-lg shadow-rose-200 transform scale-[1.02]"
-                    : "hover:bg-gradient-to-r hover:from-rose-50 hover:to-amber-50 text-gray-700 hover:text-rose-600 hover:shadow-md hover:transform hover:scale-[1.02]"
-                }`}
-              >
-                {/* Active indicator */}
-                {isActive && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-rose-400/20 to-transparent animate-pulse"></div>
-                )}
-                
-                <div className={`relative z-10 p-2 rounded-lg transition-all duration-300 ${
-                  isActive 
-                    ? "bg-white/20 shadow-sm" 
-                    : "group-hover:bg-white/80 group-hover:shadow-sm"
-                }`}>
-                  <Icon className={`w-5 h-5 transition-all duration-300 ${
-                    isActive 
-                      ? "text-white" 
-                      : "text-gray-500 group-hover:text-rose-500"
-                  }`} />
-                </div>
-                
-                <span className={`font-medium relative z-10 transition-all duration-300 ${
-                  isActive 
-                    ? "text-white" 
-                    : "group-hover:text-rose-600"
-                }`}>
-                  {item.label}
-                </span>
-                
-                {/* Sparkle effect for active item */}
-                {isActive && (
-                  <div className="absolute right-4 opacity-60">
-                    <Sparkles className="w-4 h-4 text-white animate-pulse" />
-                  </div>
-                )}
-              </Link>
-            );
-          })}
+            {QUICK_ACTIONS.map((action) => (
+              <QuickActionLink
+                key={action.href}
+                href={action.href}
+                label={action.label}
+                icon={action.icon}
+                colorScheme={action.colorScheme}
+                onClick={closeSidebar}
+              />
+            ))}
+          </div>
         </nav>
 
-        {/* Premium Banner Section */}
-        <div className="p-4 flex-shrink-0">
-          <div className="bg-gradient-to-br from-amber-400 via-rose-400 to-rose-500 rounded-2xl p-4 text-white shadow-xl">
-            <div className="flex items-center space-x-2 mb-2">
-              <Crown className="w-5 h-5 text-yellow-200" />
-              <span className="font-bold text-sm">Premium Features</span>
-            </div>
-            <p className="text-xs text-white/90 mb-3">
-              Unlock unlimited matches and advanced filters
-            </p>
-            <Link href={"/dashboard/subscription"} className="w-full p-3 bg-white/20 backdrop-blur-sm text-white text-xs font-semibold  rounded-lg hover:bg-white/30 transition-all duration-300 border border-white/20">
-              Upgrade Now
-            </Link>
+        {/* Footer */}
+        <div className="p-5 border-t border-orange-200/50 bg-gradient-to-r from-orange-50/50 to-red-50/50 backdrop-blur-md">
+          <div className="flex items-center justify-center gap-2 text-xs text-slate-600">
+            <Sparkles className="w-3 h-3 text-orange-500" />
+            <span>Made with <span className="text-red-500 font-semibold">♥</span> for your journey</span>
           </div>
         </div>
 
         {/* Decorative Elements */}
-        <div className="absolute top-32 -right-8 w-16 h-16 bg-gradient-to-br from-rose-200 to-amber-200 rounded-full blur-xl opacity-30"></div>
-        <div className="absolute bottom-32 -left-4 w-12 h-12 bg-gradient-to-br from-amber-200 to-rose-200 rounded-full blur-lg opacity-40"></div>
+        <DecorativeBlobs />
       </aside>
+
+      {/* Mobile Overlay */}
+      {mobileOpen && (
+        <div 
+          onClick={closeSidebar}
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-20 lg:hidden"
+        />
+      )}
     </>
   );
 }
