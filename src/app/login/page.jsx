@@ -444,18 +444,7 @@ export default function MatrimonialLogin() {
     const cleanedPhone = phoneNumber.replace(/\s/g, '');
 
     if (otpString === '123456') {
-      const staticUser = {
-        id: cleanedPhone,
-        phone: cleanedPhone,
-        name: 'Static User',
-        isVerified: true,
-        phoneIsVerified: true,
-        subscription: null,
-        profilePhoto: null,
-        gender: null
-      };
-      localStorage.setItem('user', JSON.stringify(staticUser));
-      router.push('/dashboard');
+      await login(cleanedPhone);
     } else {
       setError('Invalid OTP');
     }
