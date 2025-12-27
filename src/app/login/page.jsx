@@ -39,7 +39,7 @@ export default function MatrimonialLogin() {
     return phoneRegex.test(phone.replace(/\s/g, ''));
   };
 
-  const handleSendOTP = async () => {
+  const handleSendOTP = () => {
     setError('');
     
     if (!validatePhoneNumber(phoneNumber)) {
@@ -49,30 +49,11 @@ export default function MatrimonialLogin() {
 
     setIsLoading(true);
     
-    try {
-      const response = await fetch('/api/send-otp', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          phoneNumber: phoneNumber.replace(/\s/g, '') // Remove spaces
-        }),
-      });
+    // Simulate success without API
+    setStep(2);
+    setResendTimer(30);
 
-      const data = await response.json();
-      console.log(data)
-      if (data.success) {
-        setStep(2);
-        setResendTimer(30);
-      } else {
-        setError(data.message || 'Failed to send OTP');
-      }
-    } catch (error) {
-      setError('Network error. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(false);
   };
 
   const handleOTPChange = (index, value) => {
@@ -107,67 +88,23 @@ export default function MatrimonialLogin() {
 
     setIsLoading(true);
     setError(''); // Clear previous errors
-    
-    try {
-      const response = await fetch('/api/verify-otp', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          phoneNumber: phoneNumber.replace(/\s/g, ''),
-          otp: otpString
-        }),
-      });
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'OTP verification failed');
-      }
+    const cleanedPhone = phoneNumber.replace(/\s/g, '');
 
-      if (data.success) {
-        await login(data.userId);
-        console.log(data)
-        // Redirect based on user status
-        router.push(`/dashboard/${data.userId}`);
-      } else {
-        setError(data.error || 'OTP verification failed');
-      }
-    } catch (error) {
-      console.error('Verification error:', error);
-      setError(error.message || 'Network error. Please try again.');
-    } finally {
-      setIsLoading(false);
+    if (otpString === '123456') {
+      await login(cleanedPhone);
+      router.push('/dashboard');
+    } else {
+      setError('Invalid OTP');
     }
+
+    setIsLoading(false);
   };
 
-  const handleResendOTP = async () => {
+  const handleResendOTP = () => {
     setOtp(['', '', '', '', '', '']);
     setError('');
     setResendTimer(30);
-    
-    try {
-      const response = await fetch('/api/send-otp', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          phoneNumber: phoneNumber.replace(/\s/g, '') // Remove spaces
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!data.success) {
-        setError(data.message || 'Failed to resend OTP');
-        setResendTimer(0); // Reset timer on error
-      }
-    } catch (error) {
-      setError('Network error. Please try again.');
-      setResendTimer(0); // Reset timer on error
-    }
   };
 
   const formatPhoneDisplay = (phone) => {
