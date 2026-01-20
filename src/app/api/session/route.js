@@ -475,20 +475,62 @@ export const POST = async (request) => {
 
     console.log('Creating session for phone:', userId);
 
-    let user = await User.findOne({ phone: userId });
-    if (!user) {
-      // Create new user if not found
+    // FIX: Check for both formats: with +91 (standard) and without (legacy/raw)
+    // The client might send +91... or just 98... 
+    // We construct both forms to be safe.
+
+    // 1. Clean input to get raw digits
+    const rawDigits = userId.replace(/^\+91/, '');
+    const phoneWithPrefix = `+91${rawDigits}`;
+    const phoneWithoutPrefix = rawDigits;
+
+    // 2. Find ANY user matching either format
+    const users = await User.find({
+      phone: { $in: [phoneWithPrefix, phoneWithoutPrefix] }
+    }).sort({ createdAt: 1 }); // Oldest first (Main Account)
+
+    let user;
+
+    if (users.length === 0) {
+      // Create new user if absolutely no match found
       user = new User({
-        phone: userId,
+        phone: phoneWithPrefix, // Defaults to standard format
         name: 'Static User',
         isVerified: true,
         phoneIsVerified: true,
         subscription: null,
         profilePhoto: null,
-        gender: null
+        gender: null,
+        lastLoginAt: new Date()
       });
       await user.save();
       console.log('Created new user with ID:', user._id);
+    } else {
+      // User(s) found
+      if (users.length > 1) {
+        // Merge Scenario
+        const mainUser = users[0];
+        const duplicateUser = users[1];
+        console.log(`[Session] Merging duplicate user ${duplicateUser._id} into ${mainUser._id}`);
+
+        // Update main user to standard phone format if needed
+        if (mainUser.phone !== phoneWithPrefix) {
+          mainUser.phone = phoneWithPrefix;
+          await mainUser.save();
+        }
+
+        // Delete duplicate
+        await User.findByIdAndDelete(duplicateUser._id);
+        user = mainUser;
+      } else {
+        // Single user
+        user = users[0];
+        // Normalize phone
+        if (user.phone !== phoneWithPrefix) {
+          user.phone = phoneWithPrefix;
+          await user.save();
+        }
+      }
     }
 
     const token = createToken(user._id);
