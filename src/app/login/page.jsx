@@ -18,7 +18,7 @@
 
 //   useEffect(() => {
 //     setIsLoaded(true);
-    
+
 //     // Check if user is already logged in
 //     if (user) {
 //       router.push(`/dashboard`);
@@ -40,16 +40,16 @@
 
 //   const handleSendOTP = async () => {
 //     setError('');
-    
+
 //     if (!validatePhoneNumber(phoneNumber)) {
 //       setError('Please enter a valid 10-digit mobile number');
 //       return;
 //     }
 
 //     setIsLoading(true);
-    
+
 //     try {
-//       const response = await fetch('https://www.shivbandhan.com/api/send-otp', {
+//       const response = await fetch('http://172.24.192.1:3000/api/send-otp', {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -76,7 +76,7 @@
 
 //   const handleOTPChange = (index, value) => {
 //     if (value.length > 1) return; // Prevent multiple characters
-    
+
 //     const newOtp = [...otp];
 //     newOtp[index] = value;
 //     setOtp(newOtp);
@@ -98,7 +98,7 @@
 
 //   const handleVerifyOTP = async () => {
 //     const otpString = otp.join('');
-    
+
 //     if (otpString.length !== 6) {
 //       setError('Please enter complete 6-digit OTP');
 //       return;
@@ -106,7 +106,7 @@
 
 //     setIsLoading(true);
 //     setError(''); // Clear previous errors
-    
+
 //     try {
 //       const response = await fetch('/api/verify-otp', {
 //         method: 'POST',
@@ -120,7 +120,7 @@
 //       });
 
 //       const data = await response.json();
-      
+
 //       if (!response.ok) {
 //         throw new Error(data.error || 'OTP verification failed');
 //       }
@@ -145,7 +145,7 @@
 //     setOtp(['', '', '', '', '', '']);
 //     setError('');
 //     setResendTimer(30);
-    
+
 //     try {
 //       const response = await fetch('/api/send-otp', {
 //         method: 'POST',
@@ -208,7 +208,7 @@
 //                     <Phone size={14} className="mr-2 text-rose-500" />
 //                     Enter Mobile Number
 //                   </label>
-                  
+
 //                   <div className="flex space-x-2 sm:space-x-3">
 //                     <select 
 //                       value={countryCode}
@@ -219,7 +219,7 @@
 //                       <option value="+1">🇺🇸 +1</option>
 //                       <option value="+44">🇬🇧 +44</option>
 //                     </select>
-                    
+
 //                     <input
 //                       type="tel"
 //                       value={phoneNumber}
@@ -269,7 +269,7 @@
 //                   <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3 text-center">
 //                     Enter 6-digit OTP
 //                   </label>
-                  
+
 //                   <div className="flex justify-center space-x-2 sm:space-x-3">
 //                     {otp.map((digit, index) => (
 //                       <input
@@ -316,7 +316,7 @@
 //                     <RotateCcw size={14} className="mr-1 sm:mr-2" />
 //                     {resendTimer > 0 ? `Resend OTP in ${resendTimer}s` : 'Resend OTP'}
 //                   </button>
-                  
+
 //                   <button
 //                     onClick={() => {
 //                       setStep(1);
@@ -371,7 +371,7 @@ export default function MatrimonialLogin() {
 
   useEffect(() => {
     setIsLoaded(true);
-    
+
     // Check if user is already logged in
     if (user) {
       router.push(`/dashboard`);
@@ -393,14 +393,14 @@ export default function MatrimonialLogin() {
 
   const handleSendOTP = () => {
     setError('');
-    
+
     if (!validatePhoneNumber(phoneNumber)) {
       setError('Please enter a valid 10-digit mobile number');
       return;
     }
 
     setIsLoading(true);
-    
+
     // Simulate success without API
     setStep(2);
     setResendTimer(30);
@@ -410,7 +410,7 @@ export default function MatrimonialLogin() {
 
   const handleOTPChange = (index, value) => {
     if (value.length > 1) return; // Prevent multiple characters
-    
+
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
@@ -432,7 +432,7 @@ export default function MatrimonialLogin() {
 
   const handleVerifyOTP = async () => {
     const otpString = otp.join('');
-    
+
     if (otpString.length !== 6) {
       setError('Please enter complete 6-digit OTP');
       return;
@@ -480,9 +480,12 @@ export default function MatrimonialLogin() {
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-2xl border border-white/50 overflow-hidden">
           {/* Header */}
           <div className="text-center px-6 sm:px-8 pt-8 sm:pt-12 pb-6 sm:pb-8">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 transform rotate-3 hover:rotate-0 transition-all duration-300">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-4 transform rotate-3 hover:rotate-0 transition-all duration-300">
               <span className="text-white text-xl sm:text-2xl font-bold">💕</span>
             </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-amber-600 mb-1 drop-shadow-sm">
+              MaliBandhan
+            </h2>
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1 sm:mb-2">Welcome Back</h1>
             <p className="text-sm sm:text-base text-gray-600">Find your perfect match</p>
           </div>
@@ -497,9 +500,9 @@ export default function MatrimonialLogin() {
                     <Phone size={14} className="mr-2 text-rose-500" />
                     Enter Mobile Number
                   </label>
-                  
+
                   <div className="flex space-x-2 sm:space-x-3">
-                    <select 
+                    <select
                       value={countryCode}
                       onChange={(e) => setCountryCode(e.target.value)}
                       className="w-20 sm:w-24 px-2 sm:px-3 py-3 sm:py-4 border border-gray-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
@@ -508,7 +511,7 @@ export default function MatrimonialLogin() {
                       <option value="+1">🇺🇸 +1</option>
                       <option value="+44">🇬🇧 +44</option>
                     </select>
-                    
+
                     <input
                       type="tel"
                       value={phoneNumber}
@@ -558,7 +561,7 @@ export default function MatrimonialLogin() {
                   <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3 text-center">
                     Enter 6-digit OTP
                   </label>
-                  
+
                   <div className="flex justify-center space-x-2 sm:space-x-3">
                     {otp.map((digit, index) => (
                       <input
@@ -605,7 +608,7 @@ export default function MatrimonialLogin() {
                     <RotateCcw size={14} className="mr-1 sm:mr-2" />
                     {resendTimer > 0 ? `Resend OTP in ${resendTimer}s` : 'Resend OTP'}
                   </button>
-                  
+
                   <button
                     onClick={() => {
                       setStep(1);

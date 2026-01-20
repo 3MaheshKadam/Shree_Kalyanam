@@ -139,7 +139,7 @@
 
 //   try {
 //     await dbConnect();
-    
+
 //     // Get token from cookie or Authorization header
 //     let token = request.cookies.get('authToken')?.value;
 //     if (!token) {
@@ -391,7 +391,7 @@ export const GET = async (request) => {
 
   try {
     await dbConnect();
-    
+
     // Get token from cookie or Authorization header
     let token = request.cookies.get('authToken')?.value;
     if (!token) {
@@ -459,7 +459,12 @@ export const POST = async (request) => {
 
   try {
     await dbConnect();
-    const { userId } = await request.json();  // userId is actually the phone number
+    let { userId } = await request.json();  // userId is actually the phone number
+
+    // Ensure phone number has +91 prefix
+    if (userId && !userId.startsWith('+91') && /^\d{10}$/.test(userId)) {
+      userId = '+91' + userId;
+    }
 
     if (!userId) {
       return new NextResponse(

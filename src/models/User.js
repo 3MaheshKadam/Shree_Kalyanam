@@ -88,10 +88,13 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
+    sparse: true,
     trim: true,
     lowercase: true,
     validate: {
       validator: function (v) {
+        // Allow null/undefined/empty string
+        if (!v) return true;
         return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
       },
       message: props => `${props.value} is not a valid email address!`

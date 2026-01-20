@@ -221,7 +221,7 @@ export async function PUT(request) {
     await dbConnect();
 
     const body = await request.json();
-    const { userId, ...updateData } = body;
+    const { userId, phone, ...updateData } = body;
 
     console.log("Received update data:", updateData);
 
