@@ -8,7 +8,7 @@ import Link from 'next/link';
 const DynamicProfileForm = () => {
   const { user } = useSession();
   const [formSections, setFormSections] = useState([]);
-   const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [formData, setFormData] = useState({});
   const [adminWillFill, setAdminWillFill] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -87,7 +87,14 @@ const DynamicProfileForm = () => {
     "Expected Education": 'expectedEducation',
     "Accept Divorcee": 'divorcee',
     "Expected Height": 'expectedHeight',
-    "Expected Income": 'expectedIncome'
+    "Expected Income": 'expectedIncome',
+
+    // Explicit Field Name Mappings (for robust handling of different DB versions)
+    'motherName': 'mother',
+    'mangaldosha': 'mangal',
+    'nativeState': 'state',
+    'state': 'state',
+    'familyWealth': 'familyWealth'
   };
 
   // Helper function to normalize field names for comparison
@@ -197,92 +204,36 @@ const DynamicProfileForm = () => {
   const calculateProfileCompletion = (formDataToCheck = formData) => {
     if (!formSections.length) return 0;
 
-    // Define the required fields we want to check
-    const requiredFields = [
-      'Full Name',
-      'Height',
-      'Weight',
-      'Date of Birth',
-      'Marital Status',
-      'Mother Tongue',
-      'Current City',
-      'Email Address',
-      'Permanent Address',
-      'Gender',
-      'Blood Group',
-      'Wears Lens',
-      'Complexion',
-      'Highest Education',
-      'Occupation',
-      'Field of Study',
-      'Company',
-      'College/University',
-      'Annual Income',
-      "Father's Name",
-      "Mother's Name",
-      "Parent's Residence City",
-      "Number of Brothers",
-      "Number of Sisters",
-      "Married Brothers",
-      "Married Sisters",
-      "Native District",
-      "Native City",
-      "Family Wealth",
-      "Mama's Surname",
-      "Parent's Occupation",
-      "Relative Surnames",
-      "Religion",
-      "Sub Caste",
-      "Caste",
-      "Gothra",
-      "Rashi",
-      "Nadi",
-      "Nakshira",
-      "Mangal Dosha",
-      "Charan",
-      "Birth Place",
-      "Birth Time",
-      "Gan",
-      "Gotra Devak",
-      "Expected Caste",
-      "Preferred City",
-      "Expected Age Difference",
-      "Expected Education",
-      "Accept Divorcee",
-      "Expected Height",
-      "Expected Income"
-    ];
+    let totalPercentage = 0;
 
-    let totalFields = requiredFields.length;
-    let filledFields = 0;
+    formSections.forEach(section => {
+      const sectionFields = section.fields;
+      if (sectionFields.length === 0) return;
 
-    requiredFields.forEach(fieldName => {
-      const value = formDataToCheck[fieldName];
-
-      // Check if the value is filled
-      if (value !== undefined && value !== null && value !== '') {
-        if (Array.isArray(value)) {
-          if (value.length > 0 && value.some(item => item.trim() !== '')) {
-            filledFields++;
+      let filledCount = 0;
+      sectionFields.forEach(field => {
+        const val = formDataToCheck[field.name];
+        // Check for non-empty values
+        if (val !== undefined && val !== null && val !== '') {
+          if (Array.isArray(val)) {
+            if (val.length > 0) filledCount++;
+          } else {
+            filledCount++;
           }
-        } else if (typeof value === 'boolean') {
-          // Boolean fields are always considered filled
-          filledFields++;
-        } else if (typeof value === 'string' && value.trim() !== '') {
-          filledFields++;
-        } else if (typeof value === 'number') {
-          filledFields++;
         }
-      }
+      });
+
+      const sectionCompletion = (filledCount / sectionFields.length) * 100;
+      totalPercentage += sectionCompletion;
     });
 
-    // Add photo as a required field
-    totalFields++;
-    if (formDataToCheck.profilePhoto || (photos[0] && photos[0].url)) {
-      filledFields++;
-    }
+    // Handle Photos as an implicit "section" or bonus? 
+    // User specifically asked for "per profile slot ui", implying the tabs.
+    // Let's average the sections.
+    let overall = Math.round(totalPercentage / formSections.length);
 
-    return totalFields > 0 ? Math.round((filledFields / totalFields) * 100) : 0;
+    // Ensure we don't exceed 100
+    return Math.min(overall, 100);
   };
 
   const transformFormDataForBackend = (formData) => {
@@ -295,40 +246,34 @@ const DynamicProfileForm = () => {
         return;
       }
 
-      // Find if this form field has a mapping
-      const mappingEntry = Object.entries(fieldNameMappings).find(
-        ([key]) => normalizeFieldName(key) === normalizeFieldName(formField)
-      );
+      // Check if the formField is already a valid schema key
+      const isSchemaKey = Object.values(fieldNameMappings).includes(formField);
 
-      if (mappingEntry) {
-        const [_, backendField] = mappingEntry;
-        // Handle different value types appropriately
-        if (Array.isArray(formData[formField])) {
-          transformed[backendField] = formData[formField].filter(item => item.trim() !== '');
-        } else if (typeof formData[formField] === 'boolean') {
+      if (isSchemaKey) {
+        transformed[formField] = formData[formField];
+      } else {
+        // Find if this form field has a mapping
+        const mappingEntry = Object.entries(fieldNameMappings).find(
+          ([key]) => normalizeFieldName(key) === normalizeFieldName(formField)
+        );
+
+        if (mappingEntry) {
+          const [_, backendField] = mappingEntry;
           transformed[backendField] = formData[formField];
         } else {
-          transformed[backendField] = formData[formField] || null;
+          // If no mapping found, pass it through (it might be a schema key already or custom field)
+          transformed[formField] = formData[formField];
         }
-      } else {
-        // If no mapping exists, include the field as-is
-        transformed[formField] = formData[formField];
       }
     });
 
-    // Handle special cases
-    if (formData.profilePhoto) {
-      transformed.profilePhoto = formData.profilePhoto;
+    // Ensure relativeSurname is an array
+    if (transformed.relativeSurname && typeof transformed.relativeSurname === 'string') {
+      transformed.relativeSurname = transformed.relativeSurname.split(',').map(s => s.trim()).filter(Boolean);
     }
-    //sample
-    // Handle relative surnames specifically
-    if (formData['Relative Surnames']) {
-      if (Array.isArray(formData['Relative Surnames'])) {
-        transformed.relativeSurname = formData['Relative Surnames'].filter(s => s.trim() !== '');
-      } else if (typeof formData['Relative Surnames'] === 'string') {
-        transformed.relativeSurname = formData['Relative Surnames'].split(',').map(s => s.trim()).filter(s => s !== '');
-      }
-    }
+
+    // Include photos
+    transformed.photos = photos;
 
     return transformed;
   };
@@ -352,78 +297,31 @@ const DynamicProfileForm = () => {
   const handleProfileUpdate = async () => {
     setIsSaving(true);
     try {
-      // Create a deep copy of the current formData
-      const currentFormData = JSON.parse(JSON.stringify(formData));
-      console.log("current = ", currentFormData)
-      // Transform the data to match your schema
-      const transformedData = {
-        name: currentFormData["Full Name"],
-        email: currentFormData["Email Address"],
-        gender: currentFormData["Gender"],
-        dob: currentFormData["Date of Birth"],
-        height: currentFormData["Height"],
-        religion: currentFormData["Religion"],
-        currentCity: currentFormData["Current City"],
-        education: currentFormData["Highest Education"],
-        maritalStatus: currentFormData["Marital Status"],
-        motherTongue: currentFormData["Mother Tongue"],
-        caste: currentFormData["Caste"],
-        subCaste: currentFormData["Sub Caste"],
-        gothra: currentFormData["Gothra"],
-        fieldOfStudy: currentFormData["Field of Study"],
-        college: currentFormData["College/University"],
-        occupation: currentFormData["Occupation"],
-        company: currentFormData["Company"],
-        weight: currentFormData["Weight"],
-        permanentAddress: currentFormData["Permanent Address"],
-        profilePhoto: currentFormData['profilePhoto'],
-        complexion: currentFormData["Complexion"],
-        income: currentFormData["Annual Income"],
-        bloodGroup: currentFormData["Blood Group"],
-        wearsLens: currentFormData["Wears Lens"],
-        fatherName: currentFormData["Father's Name"],
-        parentResidenceCity: currentFormData["Parent's Residence City"],
-        mother: currentFormData["Mother's Name"],
-        brothers: currentFormData["Number of Brothers"],
-        marriedBrothers: currentFormData["Married Brothers"],
-        sisters: currentFormData["Number of Sisters"],
-        marriedSisters: currentFormData["Married Sisters"],
-        nativeDistrict: currentFormData["Native District"],
-        nativeCity: currentFormData["Native City"],
-        familyWealth: currentFormData["Family Wealth"],
-        relativeSurname: currentFormData["Relative Surnames"],
-        parentOccupation: currentFormData["Parent's Occupation"],
-        mamaSurname: currentFormData["Mama's Surname"],
-        rashi: currentFormData["Rashi"],
-        nakshira: currentFormData["Nakshira"],
-        charan: currentFormData["Charan"],
-        gan: currentFormData["Gan"],
-        nadi: currentFormData["Nadi"],
-        mangal: currentFormData["Mangal Dosha"],
-        birthPlace: currentFormData["Birth Place"],
-        birthTime: currentFormData["Birth Time"],
-        gotraDevak: currentFormData["Gotra Devak"],
-        expectedCaste: currentFormData["Expected Caste"],
-        preferredCity: currentFormData["Preferred City"],
-        expectedAgeDifference: currentFormData["Expected Age Difference"],
-        expectedEducation: currentFormData["Expected Education"],
-        divorcee: currentFormData["Accept Divorcee"],
-        expectedHeight: currentFormData["Expected Height"],
-        expectedIncome: currentFormData["Expected Income"]
+      // Calculate latest completion
+      const currentCompletion = calculateProfileCompletion(formData);
+
+      const updateData = {
+        userId: user?.user?.id || user?.id,
+        ...transformFormDataForBackend(formData),
+        photos: photos.map(p => ({
+          url: p.url,
+          isPrimary: p.isPrimary
+        })),
+        profileCompletion: currentCompletion,
+        profileSetup: {
+          willAdminFill: adminWillFill,
+          dontAskAgain: formData?.profileSetup?.dontAskAgain
+        }
       };
 
-      // Prepare the final payload
-      const payload = {
-        ...transformedData,
-        userId: user?.user?.id || user?.id
-      };
-
-      console.log("Sending payload to backend:", payload);
+      console.log("Sending payload:", updateData);
 
       const response = await fetch('/api/users/update', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updateData),
       });
 
       if (!response.ok) {
@@ -432,11 +330,9 @@ const DynamicProfileForm = () => {
       }
 
       const result = await response.json();
+      setProfileCompletion(currentCompletion);
       alert('Profile updated successfully!');
 
-      if (profileCompletion === 100 && verificationStatus === 'Unverified') {
-        // await handleVerificationSubmit();
-      }
     } catch (error) {
       console.error("Error updating profile:", error);
       alert(`Error: ${error.message}`);
@@ -486,7 +382,7 @@ const DynamicProfileForm = () => {
       handleInputChange('profilePhoto', url);
     }
   };
-  
+
   const handleMakePrimary = (photoId) => {
     setPhotos(photos.map(photo => ({
       ...photo,
@@ -578,25 +474,27 @@ const DynamicProfileForm = () => {
           />
         );
 
+      case 'text':
+      case 'email':
       case 'number':
         return (
-          <input
-            type="number"
-            value={value}
-            onChange={(e) => handleInputChange(field.name, e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-          />
-        );
-
-      default: // text, email, etc.
-        return (
-          <input
-            type={field.type.toLowerCase()}
-            value={value}
-            onChange={(e) => handleInputChange(field.name, e.target.value)}
-            placeholder={field.placeholder}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-          />
+          <div className="relative">
+            <input
+              type={field.type.toLowerCase()}
+              value={value}
+              onChange={(e) => handleInputChange(field.name, e.target.value)}
+              placeholder={field.placeholder || (field.type === 'number' ? 'Enter Number' : `Enter ${field.label}`)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+            />
+            {field.type.toLowerCase() === 'number' && (
+              <span className="absolute right-3 top-2 text-xs text-gray-400 pointer-events-none">
+                (Numeric)
+              </span>
+            )}
+            {field.placeholder && (
+              <p className="text-xs text-gray-500 mt-1">{field.placeholder}</p>
+            )}
+          </div>
         );
     }
   };
@@ -742,217 +640,217 @@ const DynamicProfileForm = () => {
       </div>
     );
   }
-//sample
+  //sample
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50/50 via-white to-amber-50/30">
-  <div className="max-w-7xl mx-auto space-y-6">
-    {/* Profile Header */}
-    <div className="bg-white rounded-2xl p-8 shadow-xl border border-rose-100/50 relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-32 h-32 bg-rose-50 rounded-full blur-2xl opacity-50"></div>
-      <div className="relative z-10">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between">
-          <div className="xs:flex-col lg:flex-row flex items-center space-x-6 mb-6 lg:mb-0">
-            <div className="relative">
-              {/* Fixed CldUploadWidget with minimal styling */}
-              <CldUploadWidget
-                uploadPreset="shivbandhan"
-                options={{
-                  multiple: false,
-                  sources: ['local', 'camera'],
-                  maxFiles: 1
-                }}
-                onSuccess={(result) => handlePhotoUploadSuccess(result, 1)}
-              >
-                {({ open }) => (
-                  <div className="inline-block relative"> {/* Added inline-block container */}
-                    {formData?.profilePhoto ? (
-                      <div 
-                        onClick={() => open()}
-                        className="cursor-pointer"
-                      >
-                        <img
-                          src={formData.profilePhoto}
-                          alt="Profile"
-                          className="w-24 h-24 rounded-full object-cover border-2 border-white shadow-md"
-                        />
-                      </div>
-                    ) : (
-                      <div
-                        className="w-24 h-24 bg-gradient-to-br from-rose-100 to-amber-100 rounded-full flex items-center justify-center cursor-pointer border-2 border-white shadow-md"
-                        onClick={() => open()}
-                      >
-                        <User className="w-12 h-12 text-rose-500" />
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Profile Header */}
+        <div className="bg-white rounded-2xl p-8 shadow-xl border border-rose-100/50 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-rose-50 rounded-full blur-2xl opacity-50"></div>
+          <div className="relative z-10">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between">
+              <div className="xs:flex-col lg:flex-row flex items-center space-x-6 mb-6 lg:mb-0">
+                <div className="relative">
+                  {/* Fixed CldUploadWidget with minimal styling */}
+                  <CldUploadWidget
+                    uploadPreset="shivbandhan"
+                    options={{
+                      multiple: false,
+                      sources: ['local', 'camera'],
+                      maxFiles: 1
+                    }}
+                    onSuccess={(result) => handlePhotoUploadSuccess(result, 1)}
+                  >
+                    {({ open }) => (
+                      <div className="inline-block relative"> {/* Added inline-block container */}
+                        {formData?.profilePhoto ? (
+                          <div
+                            onClick={() => open()}
+                            className="cursor-pointer"
+                          >
+                            <img
+                              src={formData.profilePhoto}
+                              alt="Profile"
+                              className="w-24 h-24 rounded-full object-cover border-2 border-white shadow-md"
+                            />
+                          </div>
+                        ) : (
+                          <div
+                            className="w-24 h-24 bg-gradient-to-br from-rose-100 to-amber-100 rounded-full flex items-center justify-center cursor-pointer border-2 border-white shadow-md"
+                            onClick={() => open()}
+                          >
+                            <User className="w-12 h-12 text-rose-500" />
+                          </div>
+                        )}
+                        <button
+                          className="absolute -top-1 -right-1 w-6 h-6 bg-rose-500 rounded-full flex items-center justify-center hover:bg-rose-600 transition-colors shadow-sm z-20"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            open();
+                          }}
+                        >
+                          <Camera className="w-3 h-3 text-white" />
+                        </button>
                       </div>
                     )}
-                    <button
-                      className="absolute -top-1 -right-1 w-6 h-6 bg-rose-500 rounded-full flex items-center justify-center hover:bg-rose-600 transition-colors shadow-sm z-20"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        open();
-                      }}
-                    >
-                      <Camera className="w-3 h-3 text-white" />
-                    </button>
+                  </CldUploadWidget>
+
+                  <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center shadow-sm">
+                    <CheckCircle className="w-3 h-3 text-white" />
                   </div>
-                )}
-              </CldUploadWidget>
-              
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center shadow-sm">
-                <CheckCircle className="w-3 h-3 text-white" />
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center space-x-2 mb-2">
-                <h1 className="text-2xl font-bold text-gray-900">{formData?.name || 'Your Name'}</h1>
-                {verificationStatus === 'Verified' && <Award className="w-5 h-5 text-green-500" />}
-              </div>
-              <div className="space-y-1 text-gray-600">
-                <div className="flex items-center space-x-4 text-sm">
-                  {formData?.height && <span>{formData?.height}</span>}
-                  {formData?.religion && <span>{formData?.religion}</span>}
                 </div>
-                {formData?.currentCity && (
-                  <div className="flex items-center text-sm">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    {formData?.currentCity}
+                <div>
+                  <div className="flex items-center space-x-2 mb-2">
+                    <h1 className="text-2xl font-bold text-gray-900">{formData?.name || 'Your Name'}</h1>
+                    {verificationStatus === 'Verified' && <Award className="w-5 h-5 text-green-500" />}
                   </div>
-                )}
+                  <div className="space-y-1 text-gray-600">
+                    <div className="flex items-center space-x-4 text-sm">
+                      {formData?.height && <span>{formData?.height}</span>}
+                      {formData?.religion && <span>{formData?.religion}</span>}
+                    </div>
+                    {formData?.currentCity && (
+                      <div className="flex items-center text-sm">
+                        <MapPin className="w-4 h-4 mr-1" />
+                        {formData?.currentCity}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex items-center mt-2">
+                    <VerificationBadge status={verificationStatus} />
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center mt-2">
-                <VerificationBadge status={verificationStatus} />
+
+              <div className="flex flex-col space-y-3">
+                <div className="bg-rose-50 rounded-lg p-4 min-w-[200px]">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-gray-700">Profile Completion</span>
+                    <span className="text-sm font-bold text-rose-600">
+                      {profileCompletion}%
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                    <div
+                      className="bg-gradient-to-r from-rose-500 to-rose-600 h-2 rounded-full"
+                      style={{ width: `${profileCompletion}%` }}
+                    ></div>
+                  </div>
+                  <button
+                    onClick={handleProfileUpdate}
+                    className="w-full bg-rose-500 text-white py-2 rounded-lg text-sm font-medium hover:bg-rose-600 transition-colors"
+                    disabled={isSaving}
+                  >
+                    {isSaving ? 'Saving...' : "Save Profile"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+          {/* Left Sidebar - Profile Sections */}
+          <div className="lg:col-span-1 space-y-4">
+            <div className="bg-white rounded-xl p-4 shadow-lg border border-rose-100/50">
+              <h3 className="font-bold text-gray-900 mb-4">Profile Sections</h3>
+              <div className="space-y-2">
+                {formSections.map((section) => {
+                  const Icon = getIconComponent(section.icon || 'User');
+                  const label = section.label.split(' ')[0] === 'Education'
+                    ? 'Education & Profession'
+                    : section.label.split(' ')[0] === 'Religious'
+                      ? 'Religious & Community'
+                      : section.label;
+
+                  return (
+                    <button
+                      key={section._id}
+                      onClick={() => setActiveTab(section._id)}
+                      className={`w-full px-4 flex items-center p-3 rounded-lg transition-all duration-200 ${activeTab === section._id
+                        ? 'bg-rose-50 text-rose-600 border border-rose-200'
+                        : 'text-gray-700'
+                        }`}
+                    >
+                      <div className="flex items-center whitespace-nowrap">
+                        <Icon className="w-4 h-4 mr-2 flex-shrink-0" />
+                        <span className="text-xs font-medium truncate">{label}</span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-amber-400 to-rose-500 rounded-xl p-4 text-white shadow-lg">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold">{formData.subscription?.plan || 'Free Plan'}</h3>
+                <Crown className="w-5 h-5 text-yellow-200" />
+              </div>
+              <div className="space-y-4 text-sm w-full">
+                <div className="flex justify-between">
+                  <span className="text-white/80">Status:</span>
+                  <span className="font-medium">
+                    {formData.subscription?.isSubscribed ? 'Active' : 'Inactive'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white/80">Expires:</span>
+                  <span className="font-medium">
+                    {formData.subscription?.expiresAt ?
+                      new Date(formData.subscription.expiresAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      }) :
+                      'Never'}
+                  </span>
+                </div>
+                <Link href="/dashboard/subscription" className="w-full cursor-pointer bg-white/20 text-white p-3 rounded-lg text-sm font-medium hover:bg-white/30 transition-colors mt-3">
+                  Manage Plan
+                </Link>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col space-y-3">
-            <div className="bg-rose-50 rounded-lg p-4 min-w-[200px]">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-700">Profile Completion</span>
-                <span className="text-sm font-bold text-rose-600">
-                  {profileCompletion}%
-                </span>
+          {/* Main Profile Content */}
+          <div className="lg:col-span-3">
+            <div className="bg-white rounded-xl shadow-lg border border-rose-100/50">
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-bold text-gray-900">
+                    {formSections.find(s => s._id === activeTab)?.label || 'Profile Section'}
+                  </h2>
+                </div>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                <div
-                  className="bg-gradient-to-r from-rose-500 to-rose-600 h-2 rounded-full"
-                  style={{ width: `${profileCompletion}%` }}
-                ></div>
+
+              <div className="p-6">
+                {renderTabContent()}
               </div>
-              <button
-                onClick={handleProfileUpdate}
-                className="w-full bg-rose-500 text-white py-2 rounded-lg text-sm font-medium hover:bg-rose-600 transition-colors"
-                disabled={isSaving}
-              >
-                {isSaving ? 'Saving...' : "Save Profile"}
-              </button>
+
+              <div className="p-6 border-t border-gray-200 bg-gray-50 rounded-b-xl">
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={() => setActiveTab(formSections[0]?._id)}
+                    className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleProfileUpdate}
+                    disabled={isSaving}
+                    className="px-6 py-2 bg-rose-500 text-white rounded-lg font-medium hover:bg-rose-600 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {isSaving ? 'Saving...' : 'Save Changes'}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-   
-    {/* Main Content Grid */}
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-      {/* Left Sidebar - Profile Sections */}
-      <div className="lg:col-span-1 space-y-4">
-        <div className="bg-white rounded-xl p-4 shadow-lg border border-rose-100/50">
-          <h3 className="font-bold text-gray-900 mb-4">Profile Sections</h3>
-          <div className="space-y-2">
-            {formSections.map((section) => {
-              const Icon = getIconComponent(section.icon || 'User');
-              const label = section.label.split(' ')[0] === 'Education'
-                ? 'Education & Profession'
-                : section.label.split(' ')[0] === 'Religious'
-                  ? 'Religious & Community'
-                  : section.label;
-
-              return (
-                <button
-                  key={section._id}
-                  onClick={() => setActiveTab(section._id)}
-                  className={`w-full px-4 flex items-center p-3 rounded-lg transition-all duration-200 ${activeTab === section._id
-                      ? 'bg-rose-50 text-rose-600 border border-rose-200'
-                      : 'text-gray-700'
-                    }`}
-                >
-                  <div className="flex items-center whitespace-nowrap">
-                    <Icon className="w-4 h-4 mr-2 flex-shrink-0" />
-                    <span className="text-xs font-medium truncate">{label}</span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-amber-400 to-rose-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold">{formData.subscription?.plan || 'Free Plan'}</h3>
-            <Crown className="w-5 h-5 text-yellow-200" />
-          </div>
-          <div className="space-y-4 text-sm w-full">
-            <div className="flex justify-between">
-              <span className="text-white/80">Status:</span>
-              <span className="font-medium">
-                {formData.subscription?.isSubscribed ? 'Active' : 'Inactive'}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-white/80">Expires:</span>
-              <span className="font-medium">
-                {formData.subscription?.expiresAt ?
-                  new Date(formData.subscription.expiresAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  }) :
-                  'Never'}
-              </span>
-            </div>
-            <Link href="/dashboard/subscription" className="w-full cursor-pointer bg-white/20 text-white p-3 rounded-lg text-sm font-medium hover:bg-white/30 transition-colors mt-3">
-              Manage Plan
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Profile Content */}
-      <div className="lg:col-span-3">
-        <div className="bg-white rounded-xl shadow-lg border border-rose-100/50">
-          <div className="p-6 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold text-gray-900">
-                {formSections.find(s => s._id === activeTab)?.label || 'Profile Section'}
-              </h2>
-            </div>
-          </div>
-
-          <div className="p-6">
-            {renderTabContent()}
-          </div>
-
-          <div className="p-6 border-t border-gray-200 bg-gray-50 rounded-b-xl">
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={() => setActiveTab(formSections[0]?._id)}
-                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleProfileUpdate}
-                disabled={isSaving}
-                className="px-6 py-2 bg-rose-500 text-white rounded-lg font-medium hover:bg-rose-600 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
-              >
-                {isSaving ? 'Saving...' : 'Save Changes'}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
   );
 };
 
