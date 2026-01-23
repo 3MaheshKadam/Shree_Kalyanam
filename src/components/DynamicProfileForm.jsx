@@ -88,6 +88,8 @@ const DynamicProfileForm = () => {
     "Accept Divorcee": 'divorcee',
     "Expected Height": 'expectedHeight',
     "Expected Income": 'expectedIncome',
+    "Expected Sub-caste": 'expectedSubCaste',
+    "Partner Working Status": 'expectedWorkingStatus',
 
     // Explicit Field Name Mappings (for robust handling of different DB versions)
     'motherName': 'mother',
@@ -108,6 +110,7 @@ const DynamicProfileForm = () => {
         // Fetch form sections structure
         const sectionsRes = await fetch('/api/admin/form-sections');
         const sectionsData = await sectionsRes.json();
+        console.log("Loaded Form Sections:", sectionsData); // Added log as requested
 
         // Transform sections data to match our expected format
         const transformedSections = sectionsData.map(section => ({
@@ -541,6 +544,15 @@ const DynamicProfileForm = () => {
     const currentSection = formSections.find(s => s._id === activeTab);
 
     if (!currentSection) return null;
+
+    // Debug log for section rendering
+    console.log(`Rendering Section: ${currentSection.label}`, {
+      fields: currentSection.fields.map(f => f.name),
+      expectationsData: {
+        expectedSubCaste: formData.expectedSubCaste,
+        expectedWorkingStatus: formData.expectedWorkingStatus
+      }
+    });
 
     if (currentSection.label.toLowerCase().includes('photo')) {
       return (
