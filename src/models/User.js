@@ -138,9 +138,11 @@ const UserSchema = new mongoose.Schema({
   //sample
   // Expectations
   expectedCaste: { type: String, default: null },
+  expectedSubCaste: { type: String, default: null },
   preferredCity: { type: String, default: null },
   expectedAgeDifference: { type: String, default: null },
   expectedEducation: { type: String, default: null },
+  expectedWorkingStatus: { type: String, default: null }, // "Yes", "No", "Doesn't Matter"
   divorcee: { type: String, default: null }, // "Yes" or "No"
   expectedHeight: { type: String, default: null },
   expectedIncome: { type: String, default: null },
