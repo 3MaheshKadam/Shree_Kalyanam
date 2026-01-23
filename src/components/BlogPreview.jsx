@@ -1,43 +1,42 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Clock, Calendar, Bookmark, Share2 } from 'lucide-react';
 
-const blogPosts = [
-  {
-    id: 1,
-    title: "5 Essential Conversations Before Marriage",
-    category: "Relationship Advice",
-    excerpt: "Discover the key discussions every couple should have to build a strong foundation for their married life.",
-    image: "/blogImages/blog1.png",
-    readTime: "5 min read",
-    date: "May 15, 2024"
-  },
+const featuredPost = {
+  id: 1,
+  title: "The Changing Face of Arranged Marriages: Tradition Meets Technology",
+  category: "Relationship Trends",
+  excerpt: "Discover how modern matchmaking apps are reshaping the age-old tradition of arranged marriages, giving you more control while honoring family values.",
+  image: "/blogImages/blog1.png",
+  readTime: "8 min read",
+  date: "June 15, 2024",
+  author: "Sonia Kapoor"
+};
+
+const recentPosts = [
   {
     id: 2,
-    title: "Balancing Tradition & Modernity in Relationships",
-    category: "Cultural Insights",
-    excerpt: "How to honor family traditions while creating a partnership that works for today's world.",
+    title: "10 Essential Questions for Your First Meeting",
+    category: "Dating Advice",
+    readTime: "5 min read",
     image: "/blogImages/blog2.png",
-    readTime: "7 min read",
-    date: "April 28, 2024"
+    date: "June 10, 2024"
   },
   {
     id: 3,
-    title: "The Psychology of Successful Matches",
-    category: "Matchmaking Science",
-    excerpt: "What research tells us about the factors that create lasting compatibility between partners.",
+    title: "Understanding Kundali Matching in 2024",
+    category: "Astrology",
+    readTime: "6 min read",
     image: "/blogImages/blog3.png",
-    readTime: "8 min read",
-    date: "April 10, 2024"
+    date: "June 05, 2024"
   },
   {
     id: 4,
-    title: "Wedding Planning Without the Stress",
-    category: "Practical Guides",
-    excerpt: "A step-by-step approach to organizing your special day while keeping the joy intact.",
+    title: "How to Plan a Budget Wedding looks Regal",
+    category: "Wedding Planning",
+    readTime: "4 min read",
     image: "/blogImages/blog4.png",
-    readTime: "6 min read",
-    date: "March 22, 2024"
+    date: "May 28, 2024"
   }
 ];
 
@@ -49,74 +48,109 @@ export default function BlogPreview() {
   }, []);
 
   return (
-    <div className="relative w-full overflow-hidden bg-white py-20">
-      {/* Decorative elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-rose-50 blur-3xl opacity-40"></div>
-        <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-amber-50 blur-3xl opacity-30"></div>
-      </div>
-
-      <div className="container mx-auto px-4">
-        <div className={`text-center mb-16 transition-all duration-1000 transform ${isLoaded ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'}`}>
-          <span className="px-4 py-1 rounded-full bg-rose-100 text-rose-600 text-sm font-medium">
-            Insights & Advice
-          </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mt-4 mb-6 font-serif">
-            Relationship <span className="text-rose-600">Wisdom</span>
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto font-sans">
-            Expert advice and thoughtful perspectives to guide your journey
-          </p>
-        </div>
-
-        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 transition-all duration-1000 delay-200 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          {blogPosts.map((post) => (
-            <article key={post.id} className="group">
-              <div className="relative overflow-hidden rounded-xl mb-4 h-48 bg-gray-100">
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-white text-rose-600 text-xs font-medium">
-                  {post.category}
-                </span>
-              </div>
-              
-              <div className="px-2">
-                <div className="flex items-center text-xs text-gray-500 mb-2 font-sans">
-                  <span>{post.date}</span>
-                  <span className="mx-2">•</span>
-                  <span>{post.readTime}</span>
-                </div>
-                
-                <h3 className="text-xl font-bold text-gray-800 mb-3 font-serif leading-snug">
-                  {post.title}
-                </h3>
-                
-                <p className="text-gray-600 mb-4 font-sans">
-                  {post.excerpt}
-                </p>
-                
-                <a 
-                  href="#" 
-                  className="inline-flex items-center text-rose-600 hover:text-rose-700 font-medium font-sans transition-colors duration-300"
-                >
-                  Read More
-                  <ArrowRight size={16} className="ml-1 transform group-hover:translate-x-1 transition-transform duration-200" />
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        <div className={`text-center mt-16 transition-all duration-1000 delay-500 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <button className="px-8 py-3 bg-gradient-to-r from-rose-500 to-rose-600 text-white rounded-full hover:from-rose-600 hover:to-rose-700 transition-all duration-300 shadow-lg hover:shadow-xl font-sans">
+    <section className="py-24 bg-white overflow-hidden">
+      <div className="container mx-auto px-6">
+        {/* Minimal Header */}
+        <div className={`flex flex-col md:flex-row justify-between items-end mb-12 transition-all duration-1000 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <div className="max-w-xl">
+            <span className="text-primary font-bold tracking-widest uppercase text-xs mb-3 block">Our Journal</span>
+            <h2 className="text-4xl md:text-5xl font-serif font-bold text-secondary leading-tight">
+              Wedding & <span className="italic text-primary">Relationship</span> Guide
+            </h2>
+          </div>
+          <button className="hidden md:flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-primary transition-colors group">
             View All Articles
+            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+
+          {/* Main Featured Article (Cleaner: Text below image) */}
+          <div className={`lg:col-span-7 group cursor-pointer transition-all duration-700 delay-200 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <div className="relative h-[400px] md:h-[480px] rounded-[2rem] overflow-hidden mb-8">
+              <img
+                src={featuredPost.image}
+                alt={featuredPost.title}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <span className="absolute top-6 left-6 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-bold text-secondary uppercase tracking-wider">
+                Featured
+              </span>
+            </div>
+
+            <div className="pr-4">
+              <div className="flex items-center gap-4 text-sm text-gray-400 mb-3">
+                <span className="font-medium text-primary uppercase text-xs tracking-wider">{featuredPost.category}</span>
+                <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                <span>{featuredPost.date}</span>
+                <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                <span>{featuredPost.readTime}</span>
+              </div>
+              <h3 className="text-3xl md:text-4xl font-serif font-bold text-secondary mb-4 leading-tight group-hover:text-primary transition-colors">
+                {featuredPost.title}
+              </h3>
+              <p className="text-gray-500 text-lg font-light leading-relaxed mb-6">
+                {featuredPost.excerpt}
+              </p>
+              <span className="inline-flex items-center gap-2 text-primary font-medium border-b border-primary/20 hover:border-primary pb-0.5 transition-all">
+                Read Story <ArrowRight size={18} />
+              </span>
+            </div>
+          </div>
+
+          {/* Sidebar List (Cleaner: No boxes, just separators) */}
+          <div className={`lg:col-span-5 flex flex-col h-full`}>
+            <div className="space-y-8 flex-grow">
+              {recentPosts.map((post, index) => (
+                <div
+                  key={post.id}
+                  className={`flex gap-6 group cursor-pointer pb-8 border-b border-gray-100 last:border-0 last:pb-0 transition-all duration-300 transform ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}
+                  style={{ transitionDelay: `${400 + (index * 150)}ms` }}
+                >
+                  <div className="w-28 h-28 flex-shrink-0 rounded-2xl overflow-hidden">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  </div>
+                  <div className="flex flex-col justify-center">
+                    <span className="text-primary text-xs font-bold uppercase tracking-wider mb-2">{post.category}</span>
+                    <h4 className="text-xl font-serif font-bold text-secondary mb-2 leading-snug group-hover:text-primary transition-colors">
+                      {post.title}
+                    </h4>
+                    <div className="flex items-center gap-3 text-xs text-gray-400 mt-auto">
+                      <span>{post.readTime}</span>
+                      <span>•</span>
+                      <span>{post.date}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Newsletter (Cleaner: Minimalist box) */}
+            <div className={`mt-10 bg-bg-light rounded-2xl p-8 transition-all duration-700 delay-700 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+              <h4 className="text-xl font-serif font-bold text-secondary mb-2">Subscribe to our newsletter</h4>
+              <p className="text-gray-500 text-sm mb-4">Weekly advice for your journey to forever.</p>
+              <div className="flex gap-2">
+                <input type="email" placeholder="Email address" className="bg-white border-0 rounded-lg px-4 py-3 text-sm w-full focus:ring-2 focus:ring-primary/20" />
+                <button className="bg-secondary hover:bg-primary text-white px-5 rounded-lg transition-colors font-medium">
+                  Join
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile View All Button */}
+        <div className="mt-12 text-center md:hidden">
+          <button className="inline-flex items-center gap-2 text-secondary font-medium text-sm">
+            View All Articles <ArrowRight size={16} />
           </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

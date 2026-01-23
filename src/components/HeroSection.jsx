@@ -1,101 +1,108 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Heart } from 'lucide-react';
 import Image from 'next/image';
 
 export default function MatrimonialHero() {
   const [isLoaded, setIsLoaded] = useState(false);
-  
+
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
   return (
-    <div className="relative min-h-[100vh] w-full overflow-hidden flex items-center justify-center px-12 from-rose-50 to-amber-50">
-      {/* Decorative elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-rose-100 blur-3xl opacity-40"></div>
-        <div className="absolute bottom-20 right-40 w-80 h-80 rounded-full bg-amber-100 blur-3xl opacity-50"></div>
+    <div className="relative min-h-[90vh] w-full flex items-center justify-center bg-bg-light overflow-hidden pt-10">
+      {/* Background Pattern Layer */}
+      <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
+        <div className="absolute inset-0 bg-[url('/background-pattern.jpg')] bg-cover bg-center"></div>
       </div>
 
-      <div className="container mx-auto h-full px-4 py-20 ">
-        <div className="grid grid-cols-1 lg:grid-cols-2 h-full items-center gap-12">
-          {/* Left Content - Text and CTA */}
-          <div className={`flex flex-col space-y-6 max-w-lg transition-all duration-1000 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-            <div className="inline-block">
-              <span className="px-4 py-1 rounded-full bg-rose-100 text-rose-600 text-sm font-medium">
-                Trusted by 10,000+ couples
+      {/* Hero Content */}
+      <div className="container relative z-10 mx-auto px-6 py-12 lg:py-20">
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+
+          {/* Left Side: Text Content */}
+          <div className={`flex-1 text-center lg:text-left space-y-8 transition-all duration-1000 transform ${isLoaded ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
+
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 border border-primary/20 backdrop-blur-sm self-center lg:self-start mx-auto lg:mx-0 shadow-sm">
+              <Heart size={16} className="text-secondary fill-secondary" />
+              <span className="text-secondary font-medium text-sm tracking-wide uppercase">Trusted Matrimony Service</span>
+            </div>
+
+            <h1 className="text-4xl md:text-6xl font-serif font-bold text-secondary leading-tight">
+              Begin Your Journey to <br />
+              <span className="text-primary italic relative">
+                Forever
+                <svg className="absolute w-full h-3 -bottom-1 left-0 text-primary/30" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.00025 6.99997C25.7509 2.15575 102.49 2.48835 200.001 6.99997" stroke="currentColor" strokeWidth="3" /></svg>
               </span>
-            </div>
-            
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 leading-tight">
-              Find Your <span className="text-rose-600">Perfect</span> Life Partner
             </h1>
-            
-            <p className="text-lg text-gray-600">
-              Join thousands who have found love with our thoughtful matchmaking process that honors tradition while embracing modern connections.
+
+            <p className="text-lg md:text-xl text-secondary/70 max-w-2xl mx-auto lg:mx-0 font-sans leading-relaxed">
+              Discover a Match Made in Heaven. We blend tradition with modern matchmaking to help you find a partner who shares your values, dreams, and culture.
             </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <button className="px-8 py-3 bg-gradient-to-r from-rose-500 to-rose-600 text-white rounded-full hover:from-rose-600 hover:to-rose-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:translate-y-px transform flex items-center justify-center group">
-                <span className="font-medium">Register Free</span>
-                <ArrowRight size={18} className="ml-2 transform group-hover:translate-x-1 transition-transform duration-200" />
+
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+              <button className="px-8 py-4 bg-secondary text-white rounded-full hover:bg-secondary/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 flex items-center gap-3 group min-w-[180px] justify-center">
+                <span className="font-medium text-lg">Find a Match</span>
+                <ArrowRight size={20} className="transform group-hover:translate-x-1 transition-transform" />
               </button>
-              
-              <button className="px-8 py-3 bg-white text-rose-600 rounded-full hover:bg-gray-50 transition-all duration-300 shadow-md flex items-center justify-center">
-                <span className="font-medium">How It Works</span>
+
+              <button className="px-8 py-4 bg-white text-secondary border border-secondary/20 rounded-full hover:bg-primary/5 transition-all duration-300 shadow-md hover:shadow-lg min-w-[180px]">
+                <span className="font-medium text-lg">How It Works</span>
               </button>
             </div>
-            
-            <div className="flex items-center space-x-4 pt-6">
-              <div className="flex -space-x-3">
+
+            <div className="pt-8 flex items-center justify-center lg:justify-start gap-6">
+              <div className="flex -space-x-4">
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 overflow-hidden">
-                    <Image width={1920} height={1080} src={`/people/rohan.jpg`} alt="User" className="w-full h-full object-cover" />
+                  <div key={i} className="w-12 h-12 rounded-full border-2 border-bg-light relative overflow-hidden bg-gray-200">
+                    <Image width={100} height={100} src={`/people/rohan.jpg`} alt="Member" className="w-full h-full object-cover" />
                   </div>
                 ))}
               </div>
-              <div className="text-sm text-gray-600">
-                <span className="font-semibold">Join 20,000+</span> members finding love every day
+              <div className="text-left">
+                <p className="text-2xl font-bold text-secondary">20k+</p>
+                <p className="text-sm text-secondary/60">Success Stories</p>
               </div>
             </div>
           </div>
-          
-          {/* Right Content - Image */}
-          <div className={`relative h-full flex items-center justify-center transition-all duration-1000 delay-300 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-            <div className="relative w-full max-w-lg">
-              {/* Main image with decorative border */}
-              <div className="w-full aspect-[4/4] rounded-2xl overflow-hidden shadow-2xl relative z-10 transform rotate-2 hover:rotate-0 transition-all duration-500">
-                <img 
-                  src="/images/couple.jpeg" 
-                  alt="Happy Couple" 
-                  className="w-full h-full object-cover"
+
+          {/* Right Side: Image Composition */}
+          <div className={`flex-1 relative w-full max-w-xl lg:max-w-none transition-all duration-1000 delay-300 transform ${isLoaded ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}>
+            <div className="relative z-10">
+              {/* Main Image Frame (Arch Shape) */}
+              <div className="relative w-full aspect-[3/4] md:aspect-[4/5] lg:aspect-[3/4] rounded-t-[10rem] rounded-b-[2rem] overflow-hidden border-[8px] border-white shadow-2xl">
+                <img
+                  src="/images/HeroImage.png"
+                  alt="Happy Couple"
+                  className="w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-              </div>
-              
-              {/* Decorative elements */}
-              <div className="absolute -bottom-6 -left-6 w-24 h-24 lg:w-40 lg:h-40 rounded-lg bg-white p-2 shadow-xl transform -rotate-6 z-20 ">
-                <div className="w-full h-full rounded bg-rose-100 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-rose-600 font-bold text-xl">3,500+</div>
-                    <div className="text-gray-600 text-xs">Success Stories</div>
+                <div className="absolute inset-0 bg-gradient-to-t from-secondary/40 via-transparent to-transparent"></div>
+
+                {/* Floating Badge Bottom */}
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-white/50 w-[80%]">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-xs text-secondary/60 uppercase tracking-wider font-semibold">Match Rate</p>
+                      <p className="text-2xl font-bold text-primary">98.5%</p>
+                    </div>
+                    <div className="h-10 w-[1px] bg-secondary/10"></div>
+                    <div>
+                      <p className="text-xs text-secondary/60 uppercase tracking-wider font-semibold">Verified Profiles</p>
+                      <p className="text-2xl font-bold text-secondary">100%</p>
+                    </div>
                   </div>
                 </div>
               </div>
-              
-              <div className="absolute -top-4 -right-4 w-24 h-24 lg:w-32 lg:h-32 rounded-lg bg-white p-2 shadow-xl transform rotate-6 z-10">
-                <div className="w-full h-full rounded bg-amber-100 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-amber-600 font-bold text-xl">96%</div>
-                    <div className="text-gray-600 text-xs">Match Rate</div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Abstract shape */}
-              <div className="absolute -z-10 bottom-10 -left-10 w-40 h-40 rounded-full border-8 border-rose-200 opacity-60"></div>
-              <div className="absolute -z-10 top-20 -right-10 w-24 h-24 rounded-full border-8 border-amber-200 opacity-60"></div>
+
+              {/* Decorative Elements behind text/image */}
+              <div className="absolute -top-12 -right-12 w-64 h-64 bg-primary/10 rounded-full blur-3xl -z-10"></div>
+              <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-secondary/10 rounded-full blur-3xl -z-10"></div>
+
+              {/* Floral decoration (CSS shapes or SVG) */}
+              <svg className="absolute -top-6 -left-6 w-24 h-24 text-primary opacity-80" viewBox="0 0 100 100" fill="currentColor">
+                <path d="M50 0 C60 20 80 20 100 20 C80 40 80 60 100 80 C80 80 60 80 50 100 C40 80 20 80 0 80 C20 60 20 40 0 20 C20 20 40 20 50 0 Z" />
+              </svg>
             </div>
           </div>
         </div>

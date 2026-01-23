@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Quote, HeartHandshake, Gem, MapPin, Headphones } from 'lucide-react';
 import Image from 'next/image';
 
 const testimonials = [
@@ -51,62 +51,81 @@ export default function UserTestimonials() {
   };
 
   return (
-    <div className="relative w-full overflow-hidden bg-gradient-to-b from-amber-50 to-rose-50 py-10 md:py-20">
-      {/* Decorative elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-64 h-64 rounded-full bg-rose-100 blur-3xl opacity-30"></div>
-        <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-amber-100 blur-3xl opacity-40"></div>
+    <div className="relative w-full overflow-hidden bg-bg-light py-24">
+      {/* Decorative Background Elements */}
+      <div className="absolute inset-0 pointer-events-none select-none">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent"></div>
+        <div className="absolute -left-20 top-40 w-72 h-72 bg-secondary/10 rounded-full blur-[80px]"></div>
+        <div className="absolute -right-20 bottom-40 w-80 h-80 bg-primary/10 rounded-full blur-[80px]"></div>
       </div>
 
-      <div className="container mx-auto px-4">
-        <div className={`text-center mb-8 md:mb-16 transition-all duration-1000 transform ${isLoaded ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'}`}>
-          <span className="px-4 py-1 rounded-full bg-rose-100 text-rose-600 text-sm font-medium">
-            Love Stories
-          </span>
-          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-800 mt-4 mb-4 md:mb-6">
-            Success <span className="text-rose-600">Stories</span>
+      <div className="container mx-auto px-6 relative z-10">
+        <div className={`text-center mb-16 transition-all duration-1000 transform ${isLoaded ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'}`}>
+          <div className="inline-block mb-3">
+            <span className="px-4 py-1 rounded-full bg-white border border-primary/20 text-primary text-sm font-medium shadow-sm">
+              Real Stories
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-secondary mb-4 font-serif">
+            Matches Made in <span className="text-primary italic">Heaven</span>
           </h2>
-          <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
-            Hear from couples who found their life partners through our platform
+          <p className="text-lg text-secondary/70 max-w-2xl mx-auto font-light">
+            Read heartwarming stories from couples who found their forever through MaliBandhan.
           </p>
         </div>
 
-        {/* Testimonial section with completely revised approach for mobile */}
-        <div className="relative max-w-5xl mx-auto mb-10">
-          {/* Static testimonial display instead of absolute positioning */}
-          <div className="w-full">
+        {/* Testimonial Slider */}
+        <div className="relative max-w-6xl mx-auto mb-20">
+          <div className="relative bg-white rounded-[2.5rem] shadow-2xl overflow-hidden min-h-[500px] md:min-h-[400px] border border-white/50">
             {testimonials.map((testimonial, index) => (
               <div
                 key={testimonial.id}
-                className={`${index === currentTestimonial ? 'block' : 'hidden'}`}
+                className={`absolute inset-0 transition-opacity duration-700 ease-in-out flex flex-col md:flex-row ${index === currentTestimonial ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
               >
-                <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
-                  {/* Mobile-first approach */}
-                  <div className="flex flex-col md:flex-row">
-                    {/* Image Section */}
-                    <div className="w-full h-96  md:h-auto md:w-1/3 relative bg-red-400">
-                      <div className="absolute inset-0 bg-gradient-to-b from-rose-100 to-amber-100 opacity-30"></div>
-                      <Image
-                        width={1920}
-                        height={1080}
-                        src={testimonial.image}
-                        alt={testimonial.name}
-                        className="w-full h-full object-cover "
-                      />
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3 md:p-6">
-                        <h3 className="text-white text-lg md:text-xl font-bold">{testimonial.name}</h3>
-                        <p className="text-rose-100 text-xs md:text-sm">{testimonial.location}</p>
-                      </div>
+                {/* Left: Image Side */}
+                <div className="w-full md:w-2/5 relative h-64 md:h-auto overflow-hidden">
+                  <Image
+                    width={800}
+                    height={1000}
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                    className="w-full h-full object-cover transition-transform duration-[10000ms] ease-linear hover:scale-110" // subtle zoom
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-secondary/60 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-white/10"></div>
+                  {/* Mobile Name Overlay */}
+                  <div className="absolute bottom-4 left-4 text-white md:hidden">
+                    <h3 className="text-xl font-serif font-bold">{testimonial.name}</h3>
+                    <p className="text-sm opacity-90">{testimonial.location}</p>
+                  </div>
+                </div>
+
+                {/* Right: Content Side */}
+                <div className="w-full md:w-3/5 p-8 md:p-16 flex flex-col justify-center relative">
+                  {/* Background Quote Mark */}
+                  <Quote className="absolute top-8 right-8 text-primary/10 w-32 h-32 md:w-40 md:h-40 -rotate-12" />
+
+                  <div className="relative z-10">
+                    <div className="hidden md:block mb-6">
+                      <h3 className="text-3xl font-serif font-bold text-secondary">{testimonial.name}</h3>
+                      <p className="text-primary font-medium">{testimonial.location}</p>
                     </div>
-                    
-                    {/* Content Section */}
-                    <div className="md:w-2/3 p-5 md:p-12 flex flex-col justify-center">
-                      <Quote className="text-rose-200 w-6 h-6 md:w-8 md:h-8 mb-3 md:mb-4" />
-                      <p className="text-gray-700 text-base md:text-xl mb-4 md:mb-6">
-                        "{testimonial.content}"
+
+                    <div className="mb-8">
+                      <Quote className="text-primary w-8 h-8 mb-4 opacity-50 rotate-180" />
+                      <p className="text-xl md:text-2xl text-secondary/80 font-serif italic leading-relaxed">
+                        {testimonial.content}
                       </p>
-                      <div className="mt-auto pt-3 md:pt-4 border-t border-gray-100">
-                        <span className="text-xs md:text-sm text-gray-500">Joined in {testimonial.joined}</span>
+                    </div>
+
+                    <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
+                      <div className="text-sm text-gray-500 font-medium tracking-wide uppercase">
+                        Married since {testimonial.joined}
+                      </div>
+                      <div className="h-px bg-gray-300 flex-grow max-w-[50px]"></div>
+                      <div className="flex text-yellow-500 gap-0.5">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -115,46 +134,47 @@ export default function UserTestimonials() {
             ))}
           </div>
 
-          {/* Navigation Arrows - Properly positioned for mobile */}
-          <button
-            onClick={prevTestimonial}
-            className="absolute left-2 top-20 sm:top-1/4 md:top-1/2 md:-translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-white/90 shadow-md flex items-center justify-center hover:bg-rose-50 transition-colors duration-300 z-20"
-            aria-label="Previous testimonial"
-          >
-            <ChevronLeft className="text-rose-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-          </button>
-          <button
-            onClick={nextTestimonial}
-            className="absolute right-2 top-20 sm:top-1/4 md:top-1/2 md:-translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-white/90 shadow-md flex items-center justify-center hover:bg-rose-50 transition-colors duration-300 z-20"
-            aria-label="Next testimonial"
-          >
-            <ChevronRight className="text-rose-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-          </button>
+          {/* Navigation Buttons (Floating) */}
+          <div className="absolute top-1/2 -left-4 md:-left-8 -translate-y-1/2 z-20">
+            <button onClick={prevTestimonial} className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white text-secondary shadow-lg hover:bg-primary hover:text-white transition-all duration-300 flex items-center justify-center border border-gray-100 group">
+              <ChevronLeft className="w-6 h-6 group-hover:-translate-x-1 transition-transform" />
+            </button>
+          </div>
+          <div className="absolute top-1/2 -right-4 md:-right-8 -translate-y-1/2 z-20">
+            <button onClick={nextTestimonial} className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white text-secondary shadow-lg hover:bg-primary hover:text-white transition-all duration-300 flex items-center justify-center border border-gray-100 group">
+              <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
 
-          {/* Dots Indicator */}
-          <div className="flex justify-center mt-4 sm:mt-6 space-x-2">
+          {/* Dots */}
+          <div className="flex justify-center mt-8 space-x-2">
             {testimonials.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentTestimonial(index)}
-                className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${index === currentTestimonial ? 'bg-rose-600 w-4 md:w-6' : 'bg-rose-200'}`}
-                aria-label={`Go to testimonial ${index + 1}`}
+                className={`transition-all duration-500 rounded-full h-1.5 ${index === currentTestimonial ? 'w-8 bg-primary' : 'w-2 bg-gray-300 hover:bg-primary/50'}`}
+                aria-label={`Go to slide ${index + 1}`}
               />
             ))}
           </div>
         </div>
 
-        {/* Stats Section - Made more responsive */}
-        <div className={`grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-6 md:mt-16 max-w-4xl mx-auto transition-all duration-1000 delay-300 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+        {/* Stats Grid */}
+        <div className={`grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto transition-all duration-1000 delay-300 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           {[
-            { value: "10,000+", label: "Happy Couples" },
-            { value: "96%", label: "Success Rate" },
-            { value: "50+", label: "Countries" },
-            { value: "24/7", label: "Support" },
+            { value: "20,000+", label: "Happy Couples", Icon: HeartHandshake },
+            { value: "98%", label: "Success Rate", Icon: Gem },
+            { value: "50+", label: "Cities Covered", Icon: MapPin },
+            { value: "24/7", label: "Dedicated Support", Icon: Headphones },
           ].map((stat, index) => (
-            <div key={index} className="bg-white/70 backdrop-blur-sm rounded-xl p-3 md:p-6 text-center shadow-sm hover:shadow-md transition-shadow duration-300">
-              <div className="text-xl md:text-3xl font-bold text-rose-600 mb-1 md:mb-2">{stat.value}</div>
-              <div className="text-xs md:text-base text-gray-600">{stat.label}</div>
+            <div key={index} className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border border-primary/5 group relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-12 -mt-12 group-hover:bg-primary/10 transition-colors"></div>
+
+              <div className="mb-4 inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                <stat.Icon size={24} strokeWidth={1.5} />
+              </div>
+              <div className="text-2xl md:text-3xl font-bold text-secondary mb-1 font-sans group-hover:text-primary transition-colors">{stat.value}</div>
+              <div className="text-sm md:text-base text-gray-500 font-medium uppercase tracking-wide">{stat.label}</div>
             </div>
           ))}
         </div>

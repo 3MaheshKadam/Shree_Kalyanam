@@ -5,25 +5,25 @@ import Image from 'next/image';
 
 export default function AppDownloadSection() {
   const [isLoaded, setIsLoaded] = useState(false);
-  
+
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
   // App features list
   const appFeatures = [
-    "Instant match notifications",
-    "Private chat with potential matches",
-    "Verify profiles with video calls",
-    "Search filters for better compatibility"
+    "Real-time match notifications",
+    "Secure chat with families",
+    "Video calling for verification",
+    "Advanced compatibility filters"
   ];
 
   return (
-    <div className="relative w-full overflow-hidden bg-rose-900 py-20 lg:px-20">
+    <div className="relative w-full overflow-hidden bg-secondary py-20 lg:px-20">
       {/* Decorative elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-rose-800/50 blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full bg-amber-800/30 blur-3xl"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-secondary/80 blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full bg-accent/30 blur-3xl"></div>
       </div>
 
       <div className="container mx-auto px-4">
@@ -31,46 +31,46 @@ export default function AppDownloadSection() {
           {/* Left Content - Text and Download Buttons */}
           <div className={`max-w-lg transition-all duration-1000 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
             <div className="inline-block mb-4">
-              <span className="px-4 py-1 rounded-full bg-rose-800/50 text-rose-100 text-sm font-medium">
-                Mobile Experience
+              <span className="px-4 py-1 rounded-full bg-primary/20 text-white/90 text-sm font-medium">
+                Official Mobile App
               </span>
             </div>
-            
+
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">
-              Find Your Perfect Match <span className="text-amber-300">Anytime, Anywhere</span>
+              Bring Your Search for Love <span className="text-primary-light">To Your Fingertips</span>
             </h2>
-            
-            <p className="text-rose-100 text-lg mb-8">
-              Take your search for love on the go with our feature-rich mobile app. Get instant notifications, browse profiles, and connect with potential matches—all from your smartphone.
+
+            <p className="text-white/80 text-lg mb-8">
+              Experience seamless matchmaking with the MaliBandhan app. Stay connected with prospective families, manage your profile, and find your soulmate with our secure and intuitive mobile experience.
             </p>
-            
+
             {/* App features list */}
             <div className="mb-10">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {appFeatures.map((feature, index) => (
-                  <div key={index} className="flex items-center space-x-2 text-rose-50">
-                    <CheckCircle size={18} className="text-amber-300 flex-shrink-0" />
+                  <div key={index} className="flex items-center space-x-2 text-white/90">
+                    <CheckCircle size={18} className="text-primary-light flex-shrink-0" />
                     <span>{feature}</span>
                   </div>
                 ))}
               </div>
             </div>
-            
+
             {/* App rating */}
             <div className="flex items-center mb-8">
               <div className="flex mr-2">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <Star 
-                    key={star} 
-                    size={18} 
-                    className="text-amber-400 fill-amber-400"
+                  <Star
+                    key={star}
+                    size={18}
+                    className="text-primary fill-primary"
                   />
                 ))}
               </div>
               <span className="text-white font-medium">4.9</span>
-              <span className="text-rose-200 ml-1">• 10k+ Reviews</span>
+              <span className="text-white/60 ml-1">• 10k+ Reviews</span>
             </div>
-            
+
             {/* Download buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               {/* App Store Button */}
@@ -87,7 +87,7 @@ export default function AppDownloadSection() {
                   </div>
                 </div>
               </button>
-              
+
               {/* Google Play Button */}
               <button className="px-6 py-3 bg-white rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-lg flex items-center justify-center group">
                 <div className="flex items-center">
@@ -103,27 +103,27 @@ export default function AppDownloadSection() {
                 </div>
               </button>
             </div>
-            
+
             {/* QR Code option */}
             <div className="mt-8 flex items-center">
               <div className="w-16 h-16 bg-white p-1 rounded-lg shadow-lg mr-4">
                 <Image
-                    width={1920}
-                    height={1080} 
-                  src="/qr.png" 
-                  alt="QR Code" 
+                  width={1920}
+                  height={1080}
+                  src="/qr.png"
+                  alt="QR Code"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div>
-                <p className="text-rose-100 text-sm">Or scan QR code</p>
-                <button className="flex items-center text-amber-300 text-sm font-medium mt-1 hover:text-amber-200 group">
+                <p className="text-white/80 text-sm">Or scan QR code</p>
+                <button className="flex items-center text-primary-light text-sm font-medium mt-1 hover:text-white group">
                   Learn more <ChevronRight size={16} className="ml-1 transform group-hover:translate-x-1 transition-transform duration-200" />
                 </button>
               </div>
             </div>
           </div>
-          
+
           {/* Right Content - Phone Mockup */}
           <div className={`flex justify-center  transition-all duration-1000 delay-300 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
             <div className="relative">
@@ -132,10 +132,10 @@ export default function AppDownloadSection() {
                 <div className="w-64 md:w-72 bg-gray-900 rounded-[3rem] p-3 shadow-xl">
                   <div className="w-full rounded-[2.5rem] overflow-hidden border-8 border-gray-900">
                     <Image
-                        width={1920}
-                        height={1080} 
-                      src="/mobileView.png" 
-                      alt="App Screenshot" 
+                      width={1920}
+                      height={1080}
+                      src="/final.jpg"
+                      alt="App Screenshot"
                       className="w-full aspect-[9/17] object-cover"
                     />
                   </div>
@@ -144,50 +144,50 @@ export default function AppDownloadSection() {
                   </div>
                 </div>
               </div>
-              
+
               {/* Second phone (tilted in background) */}
               <div className="absolute -right-20 top-20 -z-10 hidden md:block">
                 <div className="w-64 transform -rotate-6 bg-gray-900 rounded-[3rem] p-3 opacity-70 shadow-xl">
                   <div className="w-full rounded-[2.5rem] overflow-hidden border-8 border-gray-900">
                     <Image
-                        width={1920}
-                        height={1080} 
-                      src="/mobileView.png" 
-                      alt="App Screenshot" 
+                      width={1920}
+                      height={1080}
+                      src="/Finaltwo.png"
+                      alt="App Screenshot"
                       className="w-full aspect-[9/16] object-cover"
                     />
                   </div>
                 </div>
               </div>
-              
+
               {/* Floating feature indicators */}
               <div className="absolute top-20 -left-16 z-20 hidden lg:block">
                 <div className="bg-white/90 backdrop-blur-sm p-3 rounded-xl shadow-lg flex items-center space-x-3 transform -rotate-6">
-                  <div className="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0">
-                    <Download size={16} className="text-rose-600" />
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Download size={16} className="text-primary" />
                   </div>
                   <div>
                     <div className="text-xs text-gray-500">Downloads</div>
-                    <div className="text-sm font-semibold">1M+</div>
+                    <div className="text-sm font-semibold">500k+</div>
                   </div>
                 </div>
               </div>
-              
+
               <div className="absolute bottom-20 -left-8 z-20 hidden lg:block">
                 <div className="bg-white/90 backdrop-blur-sm p-3 rounded-xl shadow-lg flex items-center space-x-3 transform rotate-3">
-                  <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
-                    <Star size={16} className="text-amber-600" />
+                  <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+                    <Star size={16} className="text-primary" />
                   </div>
                   <div>
                     <div className="text-xs text-gray-500">Success Rate</div>
-                    <div className="text-sm font-semibold">94%</div>
+                    <div className="text-sm font-semibold">92%</div>
                   </div>
                 </div>
               </div>
-              
+
               {/* Decorative elements */}
-              <div className="absolute -z-10 -bottom-10 -left-10 w-40 h-40 rounded-full border-8 border-rose-800/40 opacity-60"></div>
-              <div className="absolute -z-10 top-10 right-10 w-24 h-24 rounded-full border-8 border-amber-700/30 opacity-50"></div>
+              <div className="absolute -z-10 -bottom-10 -left-10 w-40 h-40 rounded-full border-8 border-primary/20 opacity-60"></div>
+              <div className="absolute -z-10 top-10 right-10 w-24 h-24 rounded-full border-8 border-accent/20 opacity-50"></div>
             </div>
           </div>
         </div>
