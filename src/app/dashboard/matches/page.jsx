@@ -886,7 +886,7 @@ export default function MatchesPage() {
 
           {/* Action Buttons */}
 
-          <div className="flex space-x-1.5">
+          <div className="flex space-x-2 mt-auto pt-4 border-t border-gray-100">
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -896,31 +896,24 @@ export default function MatchesPage() {
                 }
                 setSelectedProfile(match);
               }}
-              className="flex-1 bg-gray-100 text-gray-700 py-1 px-2 rounded text-xs font-medium hover:bg-gray-200 transition-colors"
+              className="flex-1 bg-white text-secondary border border-gray-200 py-2 px-3 rounded-lg text-sm font-medium hover:bg-rose-50 hover:text-primary hover:border-rose-200 transition-all flex items-center justify-center group"
             >
-              <Eye className="w-3 h-3 mr-0.5 inline" />
+              <Eye className="w-4 h-4 mr-1.5 group-hover:scale-110 transition-transform" />
               View
             </button>
 
             {match.mutualMatch ? (
-              <button className="flex-1 bg-green-50 text-green-600 py-1 px-2 rounded text-xs font-medium hover:bg-green-100 transition-colors flex items-center justify-center">
-                <MessageCircle className="w-3 h-3 mr-0.5" />
+              <button className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:shadow-md transition-all flex items-center justify-center shadow-sm">
+                <MessageCircle className="w-4 h-4 mr-1.5" />
                 Chat
               </button>
             ) : match.interestSent ? (
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleSendInterest(user?.user?.id, match._id);
-                }}
-                disabled={match.interestSent}
-                className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium flex items-center justify-center ${match.interestSent
-                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                    : 'bg-rose-50 text-rose-600 hover:bg-rose-100'
-                  }`}
+                disabled
+                className="flex-1 bg-gray-50 text-gray-500 border border-gray-200 py-2 px-3 rounded-lg text-sm font-medium flex items-center justify-center cursor-not-allowed"
               >
-                <Heart className={`w-4 h-4 mr-1 ${match.interestSent ? 'fill-rose-600' : ''}`} />
-                {match.interestSent ? 'Interest Sent' : 'Send Interest'}
+                <CheckCircle className="w-4 h-4 mr-1.5" />
+                Sent
               </button>
             ) : (
               <button
@@ -930,18 +923,19 @@ export default function MatchesPage() {
                     window.location.href = '/dashboard/subscription';
                     return;
                   }
-                  handleSendInterest(user?.id ? user.id : user.user.id, match._id);
+                  handleSendInterest(user?.id ? user.id : user.user?.id, match._id);
                 }}
                 disabled={checkingSubscription}
-                className={`flex-1 py-1 px-2 rounded text-xs font-medium ${checkingSubscription ? 'bg-gray-100' :
-                    'bg-rose-50 hover:bg-rose-100 text-rose-600'
+                className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium flex items-center justify-center transition-all shadow-sm group ${checkingSubscription
+                    ? 'bg-gray-100 text-gray-400'
+                    : 'bg-gradient-to-r from-secondary to-primary text-white hover:shadow-md hover:scale-[1.02]'
                   }`}
               >
                 {checkingSubscription ? (
-                  <Loader2 className="w-3 h-3 animate-spin mx-auto" />
+                  <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
                   <>
-                    <Heart className="w-3 h-3 mr-0.5 inline" />
+                    <Heart className="w-4 h-4 mr-1.5 group-hover:scale-110 transition-transform" />
                     Interest
                   </>
                 )}
@@ -988,10 +982,10 @@ export default function MatchesPage() {
       <div className="max-w-6xl mx-auto p-4 sm:p-6">
         {/* Header Section */}
         <div className={`transform transition-all duration-1000 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-          <div className="bg-gradient-to-r from-rose-500 to-rose-600 rounded-xl p-4 sm:p-6 text-white shadow-xl relative overflow-hidden mb-4 sm:mb-6">
+          <div className="bg-gradient-to-r from-secondary to-primary rounded-xl p-4 sm:p-6 text-white shadow-xl relative overflow-hidden mb-4 sm:mb-6">
             <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-white/10 rounded-full blur-2xl"></div>
             <div className="relative z-10">
-              <h1 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2">Your Personalized Matches</h1>
+              <h1 className="text-xl sm:text-2xl font-serif font-bold mb-1 sm:mb-2">Your Personalized Matches</h1>
               <p className="text-rose-100 text-sm sm:text-base">Discover profiles selected just for you</p>
             </div>
           </div>
@@ -1024,15 +1018,15 @@ export default function MatchesPage() {
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
                       className={`flex items-center px-3 py-2 sm:px-4 sm:py-2 rounded-md sm:rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-300 flex-shrink-0 mx-1 ${activeTab === tab.id
-                          ? 'bg-rose-500 text-white shadow-sm sm:shadow-md'
-                          : 'text-gray-600 hover:bg-rose-50 hover:text-rose-600'
+                        ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                        : 'bg-white text-gray-600 hover:bg-rose-50'
                         }`}
                     >
                       <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 flex-shrink-0" />
                       <span>{tab.label}</span>
                       <span className={`ml-1.5 sm:ml-2 px-1.5 py-0.5 rounded-full text-[10px] sm:text-xs flex-shrink-0 ${activeTab === tab.id
-                          ? 'bg-white/20 text-white'
-                          : 'bg-gray-100 text-gray-600'
+                        ? 'bg-white/20 text-white'
+                        : 'bg-gray-100 text-gray-600'
                         }`}>
                         {tab.count}
                       </span>
@@ -1084,7 +1078,7 @@ export default function MatchesPage() {
                           ...prev,
                           withPhoto: e.target.checked ? true : null
                         }))}
-                        className="rounded border-gray-300 text-rose-600 focus:ring-rose-500 mr-1 sm:mr-2"
+                        className="rounded border-gray-300 text-secondary focus:ring-rose-500 mr-1 sm:mr-2"
                       />
                       <span>With Photo</span>
                     </label>
@@ -1320,7 +1314,7 @@ export default function MatchesPage() {
                   <button
                     onClick={() => setIsLoading(true)}
                     disabled={isLoading}
-                    className="bg-white border border-rose-300 text-rose-600 px-6 py-2 sm:px-8 sm:py-3 rounded-lg font-medium hover:bg-rose-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                    className="bg-gradient-to-r from-secondary to-primary text-white px-8 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                   >
                     {isLoading ? 'Loading...' : 'Load More Matches'}
                   </button>

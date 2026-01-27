@@ -196,10 +196,10 @@ export default function DynamicSubscriptionPlans() {
       },
       Premium: {
         icon: Crown,
-        color: "from-rose-500 to-pink-500",
-        bgColor: "bg-rose-100",
-        textColor: "text-rose-600",
-        badgeColor: "bg-rose-500",
+        color: "from-secondary to-primary",
+        bgColor: "bg-rose-50",
+        textColor: "text-primary",
+        badgeColor: "bg-primary",
         emoji: "💎",
       },
       Free: {
@@ -237,15 +237,15 @@ export default function DynamicSubscriptionPlans() {
 
   if (loading) {
     return (
-     <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="text-center">
-        {/* Simple Spinner */}
-        <div className="w-12 h-12 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin mx-auto mb-4"></div>
-        
-        {/* Loading Text */}
-        <p className="text-gray-600 text-lg">Loading Subscription Plans</p>
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-center">
+          {/* Simple Spinner */}
+          <div className="w-12 h-12 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin mx-auto mb-4"></div>
+
+          {/* Loading Text */}
+          <p className="text-gray-600 text-lg">Loading Subscription Plans</p>
+        </div>
       </div>
-    </div>
     );
   }
 
@@ -268,10 +268,10 @@ export default function DynamicSubscriptionPlans() {
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-rose-100 to-amber-100 rounded-full mb-6">
-            <Crown className="w-10 h-10 text-rose-500" />
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-rose-100 to-amber-100 rounded-full mb-6 shadow-lg transform hover:scale-105 transition-transform duration-300">
+            <Crown className="w-10 h-10 text-primary" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-serif font-bold text-gray-900 mb-4">
             Choose Your Perfect Plan
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -340,9 +340,8 @@ export default function DynamicSubscriptionPlans() {
             return (
               <div key={plan._id} className="relative">
                 <div
-                  className={`bg-white rounded-2xl p-8 shadow-2xl border border-rose-100/50 relative overflow-hidden transform hover:scale-105 transition-transform duration-300 ${
-                    !plan.isActive ? "opacity-70" : ""
-                  }`}
+                  className={`bg-white rounded-2xl p-8 shadow-2xl border border-rose-100/50 relative overflow-hidden transform hover:scale-105 transition-transform duration-300 ${!plan.isActive ? "opacity-70" : ""
+                    }`}
                 >
                   <div className="relative z-10 pt-6">
                     <div className="text-center mb-8">
@@ -387,16 +386,14 @@ export default function DynamicSubscriptionPlans() {
 
                     <div className="mb-4">
                       <span
-                        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                          plan.isActive
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${plan.isActive
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
+                          }`}
                       >
                         <div
-                          className={`w-2 h-2 rounded-full mr-2 ${
-                            plan.isActive ? "bg-green-500" : "bg-red-500"
-                          }`}
+                          className={`w-2 h-2 rounded-full mr-2 ${plan.isActive ? "bg-green-500" : "bg-red-500"
+                            }`}
                         ></div>
                         {plan.isActive ? "Active" : "Inactive"}
                       </span>
@@ -407,13 +404,11 @@ export default function DynamicSubscriptionPlans() {
                       disabled={
                         !plan.isActive || isButtonLoading || isCurrentPlan
                       }
-                      className={`w-full bg-gradient-to-r ${
-                        config.color
-                      } text-white py-4 rounded-xl font-bold text-lg hover:scale-105 transition-all duration-200 shadow-lg ${
-                        !plan.isActive || isButtonLoading || isCurrentPlan
+                      className={`w-full bg-gradient-to-r ${config.color
+                        } text-white py-4 rounded-xl font-bold text-lg hover:scale-105 transition-all duration-200 shadow-lg ${!plan.isActive || isButtonLoading || isCurrentPlan
                           ? "opacity-50 cursor-not-allowed"
                           : ""
-                      }`}
+                        }`}
                     >
                       {isButtonLoading ? (
                         <Loader2 className="w-5 h-5 animate-spin mx-auto" />

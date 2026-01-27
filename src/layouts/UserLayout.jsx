@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import { useSession } from "@/context/SessionContext";
-import { ShieldAlert, ArrowRight, CheckCircle, XCircle, Menu,Sparkles } from "lucide-react";
+import { ShieldAlert, ArrowRight, CheckCircle, XCircle, Menu, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function UserLayout({ children }) {
@@ -63,7 +63,7 @@ export default function UserLayout({ children }) {
   if (loading || !shouldRender) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-rose-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -71,7 +71,7 @@ export default function UserLayout({ children }) {
   // Special case: allow access to profile page even if not verified
   if (!user?.isVerified && !isProfilePage) {
     return (
-      <div className="flex min-h-screen bg-gradient-to-br from-rose-50 to-blue-50">
+      <div className="flex min-h-screen bg-gradient-to-br from-rose-50 via-white to-amber-50">
         <Sidebar mobileOpen={sidebarOpen} setMobileOpen={setSidebarOpen} />
         <div className="flex-1 p-6 overflow-y-auto flex items-center justify-center">
           <motion.div
@@ -81,14 +81,14 @@ export default function UserLayout({ children }) {
             className="max-w-2xl w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200"
           >
             <div className="p-8 text-center">
-              <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-rose-100 mb-6">
-                <ShieldAlert className="h-10 w-10 text-rose-600" />
+              <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-primary/10 mb-6">
+                <ShieldAlert className="h-10 w-10 text-primary" />
               </div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Account Verification Required</h2>
               <p className="text-gray-600 mb-6">
                 Your account is not yet verified. Please complete your profile to access all features.
               </p>
-              
+
               <div className="space-y-4 mb-8 text-left">
                 <div className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
@@ -98,7 +98,7 @@ export default function UserLayout({ children }) {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <XCircle className="h-5 w-5 text-rose-500 mt-0.5 flex-shrink-0" />
+                  <XCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                   <div>
                     <h4 className="font-medium text-gray-800">Current Restrictions</h4>
                     <p className="text-sm text-gray-500">You cannot access other pages until verified</p>
@@ -110,7 +110,7 @@ export default function UserLayout({ children }) {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => router.push("/dashboard/profile/me")}
-                className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-medium rounded-lg shadow-sm hover:shadow-md transition-all"
+                className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-secondary to-primary text-white font-medium rounded-lg shadow-sm hover:shadow-md transition-all"
               >
                 Complete My Profile
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -126,33 +126,35 @@ export default function UserLayout({ children }) {
     <div className="flex min-h-screen">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-20 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
-      
+
       <Sidebar mobileOpen={sidebarOpen} setMobileOpen={setSidebarOpen} />
-      
-      <main className="flex-1 p-4 lg:p-6 overflow-y-auto bg-gray-100 relative">
+
+      <main className="flex-1 p-4 lg:p-6 overflow-y-auto bg-gradient-to-br from-rose-50 via-white to-amber-50 relative">
         {/* Mobile header */}
-        <div className="lg:hidden flex items-center justify-between mb-4 bg-white p-3 rounded-lg shadow-sm">
-          <button 
+        <div className="lg:hidden flex items-center justify-between mb-4 bg-white/80 backdrop-blur-sm p-3 rounded-lg shadow-sm border border-primary/20">
+          <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded-lg text-gray-600 hover:bg-gray-200"
+            className="p-2 rounded-lg text-gray-600 hover:bg-primary/10 hover:text-primary transition-colors"
           >
             <Menu className="w-5 h-5" />
           </button>
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-rose-500 to-rose-600 rounded-lg flex items-center justify-center">
+            {/* <div className="w-8 h-8 bg-gradient-to-br from-rose-500 to-rose-600 rounded-lg flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-bold text-sm bg-gradient-to-r from-rose-600 to-amber-600 bg-clip-text text-transparent">
-              MaliBandhan
+            </div> */}
+            <span className="font-serif text-xl font-bold text-secondary">
+              Mali<span className="text-primary">Bandhan</span>
             </span>
           </div>
+          {/* Spacer for centering logic if needed, or profile icon */}
+          <div className="w-9"></div>
         </div>
-        
+
         {children}
       </main>
     </div>
