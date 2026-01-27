@@ -459,7 +459,11 @@ export const POST = async (request) => {
 
   try {
     await dbConnect();
-    let { userId } = await request.json();  // userId is actually the phone number
+
+    const bodyText = await request.text();
+    console.log('Received raw body:', bodyText);
+
+    let { userId } = JSON.parse(bodyText);  // userId is actually the phone number
 
     // Ensure phone number has +91 prefix
     if (userId && !userId.startsWith('+91') && /^\d{10}$/.test(userId)) {
@@ -560,7 +564,7 @@ export const POST = async (request) => {
   } catch (error) {
     console.error('Session creation error:', error);
     return new NextResponse(
-      JSON.stringify({ error: 'Internal server error' }),
+      JSON.stringify({ error: 'Internal server error', details: error.message }),
       { status: 500, headers }
     );
   }

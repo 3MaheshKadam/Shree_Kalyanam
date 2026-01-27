@@ -107,9 +107,11 @@ export async function GET(request) {
 
       // Expectations
       expectedCaste: user.expectedCaste,
+      expectedSubCaste: user.expectedSubCaste,
       preferredCity: user.preferredCity,
       expectedAgeDifference: user.expectedAgeDifference,
       expectedEducation: user.expectedEducation,
+      expectedWorkingStatus: user.expectedWorkingStatus,
       divorcee: user.divorcee,
       expectedHeight: user.expectedHeight,
       expectedIncome: user.expectedIncome,
