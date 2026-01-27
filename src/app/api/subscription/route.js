@@ -5,27 +5,53 @@ import Subscription from "@/models/Subscription";
 import User from "@/models/User";
 
 // POST /api/subscription - Create new subscription
+// POST /api/subscription - Subscribe user (Update User only, do NOT create new Plan)
 export async function POST(req) {
   try {
     await connectDB();
     const body = await req.json();
     // console.log("POST Body:", body);
 
-    const newPlan = new Subscription(body);
-    const saved = await newPlan.save();
+    // CRITICAL FIX: Do NOT save a new Subscription document here.
+    // The 'Subscription' collection is for PLAN TEMPLATES only (created by Admin/Seed).
+    // Use the data to update the User's subscription status.
 
-    // After saving the subscription (newPlan.save())
-    await User.findByIdAndUpdate(body.userId, {
-      subscription: {
-        plan: body.name,
-        expiresAt: new Date(
-          Date.now() + body.durationInDays * 24 * 60 * 60 * 1000
-        ),
-        transactionId: body.razorpay_payment_id,
+    // Validate essential data
+    if (!body.userId || !body.name || !body.durationInDays) {
+      return NextResponse.json(
+        { message: "Missing required subscription data (userId, name, duration)" },
+        { status: 400 }
+      );
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      body.userId,
+      {
+        subscription: {
+          plan: body.name,
+          isSubscribed: true,
+          expiresAt: new Date(
+            Date.now() + body.durationInDays * 24 * 60 * 60 * 1000
+          ),
+          transactionId: body.razorpay_payment_id || 'manual_update',
+          // If the frontend sends the plan ID, save it. Otherwise, we can leave it null or look it up.
+          // For now, trusting the flow ensures we don't break the frontend.
+          subscriptionId: body._id || null
+        },
       },
-    });
+      { new: true }
+    );
 
-    return NextResponse.json(saved, { status: 201 });
+    if (!updatedUser) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Subscription updated successfully",
+      subscription: updatedUser.subscription
+    }, { status: 200 });
+
   } catch (error) {
     console.error("POST Error:", error);
     return NextResponse.json(

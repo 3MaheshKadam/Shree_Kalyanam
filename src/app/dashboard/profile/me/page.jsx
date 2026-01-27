@@ -434,7 +434,9 @@ export default function MyProfilePage() {
     );
   }
   function formatDateToYYYYMMDD(dateString) {
+    if (!dateString) return '';
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '';
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // 0-indexed
     const day = String(date.getDate()).padStart(2, '0');
@@ -854,8 +856,22 @@ export default function MyProfilePage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Number of Brothers</label>
                   <input
                     type="number"
+                    min="0"
+                    onKeyDown={(e) => {
+                      if (e.key === '-' || e.key === 'e' || e.key === 'E') {
+                        e.preventDefault();
+                      }
+                    }}
                     value={formData.brothers}
-                    onChange={(e) => setFormData({ ...formData, brothers: parseInt(e.target.value) || 0 })}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === '') {
+                        setFormData({ ...formData, brothers: '' })
+                      } else {
+                        const num = parseInt(val);
+                        setFormData({ ...formData, brothers: isNaN(num) || num < 0 ? 0 : num })
+                      }
+                    }}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
                   />
                 </div>
@@ -863,8 +879,22 @@ export default function MyProfilePage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Married Brothers</label>
                   <input
                     type="number"
+                    min="0"
+                    onKeyDown={(e) => {
+                      if (e.key === '-' || e.key === 'e' || e.key === 'E') {
+                        e.preventDefault();
+                      }
+                    }}
                     value={formData.marriedBrothers}
-                    onChange={(e) => setFormData({ ...formData, marriedBrothers: parseInt(e.target.value) || 0 })}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === '') {
+                        setFormData({ ...formData, marriedBrothers: '' })
+                      } else {
+                        const num = parseInt(val);
+                        setFormData({ ...formData, marriedBrothers: isNaN(num) || num < 0 ? 0 : num })
+                      }
+                    }}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
                   />
                 </div>
@@ -872,8 +902,22 @@ export default function MyProfilePage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Number of Sisters</label>
                   <input
                     type="number"
+                    min="0"
+                    onKeyDown={(e) => {
+                      if (e.key === '-' || e.key === 'e' || e.key === 'E') {
+                        e.preventDefault();
+                      }
+                    }}
                     value={formData.sisters}
-                    onChange={(e) => setFormData({ ...formData, sisters: parseInt(e.target.value) || 0 })}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === '') {
+                        setFormData({ ...formData, sisters: '' })
+                      } else {
+                        const num = parseInt(val);
+                        setFormData({ ...formData, sisters: isNaN(num) || num < 0 ? 0 : num })
+                      }
+                    }}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
                   />
                 </div>
@@ -881,8 +925,22 @@ export default function MyProfilePage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Married Sisters</label>
                   <input
                     type="number"
+                    min="0"
+                    onKeyDown={(e) => {
+                      if (e.key === '-' || e.key === 'e' || e.key === 'E') {
+                        e.preventDefault();
+                      }
+                    }}
                     value={formData.marriedSisters}
-                    onChange={(e) => setFormData({ ...formData, marriedSisters: parseInt(e.target.value) || 0 })}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === '') {
+                        setFormData({ ...formData, marriedSisters: '' })
+                      } else {
+                        const num = parseInt(val);
+                        setFormData({ ...formData, marriedSisters: isNaN(num) || num < 0 ? 0 : num })
+                      }
+                    }}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
                   />
                 </div>

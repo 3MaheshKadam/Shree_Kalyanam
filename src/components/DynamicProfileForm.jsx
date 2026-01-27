@@ -477,23 +477,56 @@ const DynamicProfileForm = () => {
           />
         );
 
+      case 'number':
+        return (
+          <div className="relative">
+            <input
+              type="number"
+              min="0"
+              onKeyDown={(e) => {
+                if (['-', 'e', 'E'].includes(e.key)) {
+                  e.preventDefault();
+                }
+              }}
+              value={value}
+              onChange={(e) => {
+                const val = e.target.value;
+                // If empty, allow it (let user delete)
+                if (val === '') {
+                  handleInputChange(field.name, '');
+                  return;
+                }
+                // Otherwise clamp to 0 if negative (double safety)
+                const num = parseFloat(val);
+                if (num < 0) {
+                  handleInputChange(field.name, 0);
+                } else {
+                  handleInputChange(field.name, val);
+                }
+              }}
+              placeholder={field.placeholder || 'Enter Number'}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            />
+            <span className="absolute right-3 top-2 text-xs text-gray-400 pointer-events-none">
+              (Numeric)
+            </span>
+            {field.placeholder && (
+              <p className="text-xs text-gray-500 mt-1">{field.placeholder}</p>
+            )}
+          </div>
+        );
+
       case 'text':
       case 'email':
-      case 'number':
         return (
           <div className="relative">
             <input
               type={field.type.toLowerCase()}
               value={value}
               onChange={(e) => handleInputChange(field.name, e.target.value)}
-              placeholder={field.placeholder || (field.type === 'number' ? 'Enter Number' : `Enter ${field.label}`)}
+              placeholder={field.placeholder || `Enter ${field.label}`}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
             />
-            {field.type.toLowerCase() === 'number' && (
-              <span className="absolute right-3 top-2 text-xs text-gray-400 pointer-events-none">
-                (Numeric)
-              </span>
-            )}
             {field.placeholder && (
               <p className="text-xs text-gray-500 mt-1">{field.placeholder}</p>
             )}

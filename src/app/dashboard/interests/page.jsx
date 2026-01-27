@@ -513,34 +513,34 @@ export default function InterestsPage() {
         >
           <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-rose-50 rounded-full blur-xl sm:blur-2xl opacity-50"></div>
           <div className="relative z-10">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
               <div>
                 <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">💌 Interests</h1>
                 <p className="text-sm sm:text-base text-gray-600">Manage your sent and received interests</p>
               </div>
 
-              <div className="flex justify-between sm:justify-start sm:space-x-6">
-                <div className="text-center">
-                  <div className="text-xs text-gray-500">Pending Received</div>
-                  <div className="text-base sm:text-lg font-bold">{stats.pendingReceived || 0}</div>
+              <div className="flex items-center gap-2 sm:gap-4 self-end xl:self-auto">
+                <div className="flex justify-start space-x-2 sm:space-x-6">
+                  <div className="bg-rose-50 rounded-lg px-3 sm:px-4 py-2 border border-rose-100 min-w-[90px] sm:min-w-[100px] text-center shadow-sm">
+                    <div className="text-xs text-rose-600 font-medium whitespace-nowrap">Pending Received</div>
+                    <div className="text-lg sm:text-xl font-bold text-rose-900 mt-1">{stats.pendingReceived || 0}</div>
+                  </div>
+                  <div className="bg-amber-50 rounded-lg px-3 sm:px-4 py-2 border border-amber-100 min-w-[90px] sm:min-w-[100px] text-center shadow-sm">
+                    <div className="text-xs text-amber-600 font-medium whitespace-nowrap">Pending Sent</div>
+                    <div className="text-lg sm:text-xl font-bold text-amber-900 mt-1">{stats.pendingSent || 0}</div>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <div className="text-xs text-gray-500">Pending Sent</div>
-                  <div className="text-base sm:text-lg font-bold">{stats.pendingSent || 0}</div>
-                </div>
-              </div>
-            </div>
 
-            <div className="absolute top-2 right-2 sm:top-4 sm:right-4">
-              <motion.button
-                onClick={handleRefresh}
-                disabled={isRefreshing}
-                className="p-1 sm:p-2 text-gray-500 hover:text-rose-600 transition-colors"
-                whileHover={{ rotate: 180 }}
-                whileTap={{ scale: 0.8 }}
-              >
-                <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 ${isRefreshing ? 'animate-spin' : ''}`} />
-              </motion.button>
+                <motion.button
+                  onClick={handleRefresh}
+                  disabled={isRefreshing}
+                  className="p-2 ml-2 bg-white rounded-full text-gray-500 hover:text-rose-600 hover:bg-rose-50 transition-colors border border-gray-200 shadow-sm"
+                  whileHover={{ rotate: 180 }}
+                  whileTap={{ scale: 0.8 }}
+                >
+                  <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 ${isRefreshing ? 'animate-spin' : ''}`} />
+                </motion.button>
+              </div>
             </div>
           </div>
         </motion.div>

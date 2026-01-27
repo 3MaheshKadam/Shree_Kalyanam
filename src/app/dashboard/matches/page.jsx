@@ -35,8 +35,10 @@ const maskFirstName = (fullName) => {
 // Helper function for case-insensitive city comparison
 const isSameCity = (city1, city2) => {
   if (!city1 || !city2) return false;
-  return city1.toLowerCase() === city2.toLowerCase();
+  return city1.trim().toLowerCase() === city2.trim().toLowerCase();
 };
+
+
 
 export default function MatchesPage() {
   const { user } = useSession();
@@ -265,16 +267,24 @@ export default function MatchesPage() {
     return [];
   };
 
-  const fetchUsers = async () => {
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  // ... (previous useEffect remains, but calls fetchUsers(1))
+
+  const fetchUsers = async (pageNum = 1) => {
     try {
-      setIsLoading(true);
+      if (pageNum === 1) setIsLoading(true);
+      else setLoadingMore(true);
 
       const currentUserRes = await fetch('/api/users/me');
       const currentUserData = await currentUserRes.json();
-
+      setCurrentUser(currentUserData);
       const sentReceiverIds = await fetchSentInterests(currentUserData._id);
 
-      const res = await fetch('/api/users/fetchAllUsers?limit=20&page=1');
+      const res = await fetch(`/api/users/fetchAllUsers?limit=20&page=${pageNum}`);
       const data = await res.json();
 
       if (data.success) {
@@ -308,12 +318,31 @@ export default function MatchesPage() {
             };
           });
 
-        setMatches(enriched);
+        if (pageNum === 1) {
+          setMatches(enriched);
+          setTotalPages(data.pagination.totalPages);
+        } else {
+          setMatches(prev => {
+            // Avoid duplicates
+            const existingIds = new Set(prev.map(m => m._id));
+            const uniqueNew = enriched.filter(m => !existingIds.has(m._id));
+            return [...prev, ...uniqueNew];
+          });
+        }
       }
     } catch (err) {
       console.error('Failed to fetch matches:', err);
     } finally {
       setIsLoading(false);
+      setLoadingMore(false);
+    }
+  };
+
+  const handleLoadMore = () => {
+    if (page < totalPages) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      fetchUsers(nextPage);
     }
   };
 
@@ -322,7 +351,7 @@ export default function MatchesPage() {
     { id: 'all', label: 'All Matches', count: matches.filter(m => m.compatibility > 0).length, icon: Users },
     { id: 'preferred', label: 'Preferred', count: matches.filter(m => m.compatibility >= 70).length, icon: Star },
     { id: 'new', label: 'New', count: matches.filter(m => m.isNew).length, icon: Sparkles },
-    { id: 'nearby', label: 'Nearby', count: matches.filter(m => isSameCity(m.currentCity, user?.currentCity)).length, icon: Navigation }
+    { id: 'nearby', label: 'Nearby', count: matches.filter(m => isSameCity(m.currentCity, currentUser?.currentCity)).length, icon: Navigation }
   ];
 
   const filteredMatches = matches.filter(match => {
@@ -335,10 +364,14 @@ export default function MatchesPage() {
     }
 
 
-    if (activeTab !== 'all') {
-      if (activeTab === 'preferred' && match.compatibility < 70) return false;
-      if (activeTab === 'new' && !match.isNew) return false;
-      if (activeTab === 'nearby' && !isSameCity(match.currentCity, user?.currentCity)) return false;
+    if (activeTab === 'preferred' && match.compatibility < 70) shouldShow = false;
+    if (activeTab === 'new' && !match.isNew) shouldShow = false;
+
+    // Use currentUser for city check
+    if (activeTab === 'nearby') {
+      if (!currentUser?.currentCity || !isSameCity(match.currentCity, currentUser.currentCity)) {
+        shouldShow = false;
+      }
     }
     // Quick filters - only apply if they have values
     if (quickFilters.withPhoto !== null) {
@@ -351,7 +384,11 @@ export default function MatchesPage() {
       shouldShow = shouldShow && (quickFilters.activeRecently !== match.lastActive.includes('day'));
     }
     if (quickFilters.sameCity !== null) {
-      shouldShow = shouldShow && (quickFilters.sameCity === isSameCity(match.currentCity, user?.currentCity));
+      if (!currentUser?.currentCity) {
+        shouldShow = false;
+      } else {
+        shouldShow = shouldShow && (quickFilters.sameCity === isSameCity(match.currentCity, currentUser.currentCity));
+      }
     }
 
     // Age range filter - only apply if both min and max are set
@@ -927,8 +964,8 @@ export default function MatchesPage() {
                 }}
                 disabled={checkingSubscription}
                 className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium flex items-center justify-center transition-all shadow-sm group ${checkingSubscription
-                    ? 'bg-gray-100 text-gray-400'
-                    : 'bg-gradient-to-r from-secondary to-primary text-white hover:shadow-md hover:scale-[1.02]'
+                  ? 'bg-gray-100 text-gray-400'
+                  : 'bg-gradient-to-r from-secondary to-primary text-white hover:shadow-md hover:scale-[1.02]'
                   }`}
               >
                 {checkingSubscription ? (
@@ -1309,14 +1346,14 @@ export default function MatchesPage() {
               </div>
 
               {/* Load More Button */}
-              {filteredMatches.length > 0 && (
+              {filteredMatches.length > 0 && page < totalPages && (
                 <div className="text-center mt-6 sm:mt-8">
                   <button
-                    onClick={() => setIsLoading(true)}
-                    disabled={isLoading}
+                    onClick={handleLoadMore}
+                    disabled={loadingMore}
                     className="bg-gradient-to-r from-secondary to-primary text-white px-8 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                   >
-                    {isLoading ? 'Loading...' : 'Load More Matches'}
+                    {loadingMore ? 'Loading...' : 'Load More Matches'}
                   </button>
                 </div>
               )}
