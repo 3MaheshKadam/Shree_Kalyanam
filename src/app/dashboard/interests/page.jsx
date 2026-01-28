@@ -137,7 +137,8 @@ export default function InterestsPage() {
     const profileData = type === 'sent' ? person.receiver : person.sender;
     setSelectedProfile({
       ...profileData,
-      image: profileData?.profilePhoto || profileData?.image
+      image: profileData?.profilePhoto || profileData?.image,
+      interestStatus: person.status
     });
     setShowModal(true);
   };
@@ -687,6 +688,25 @@ export default function InterestsPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Contact Information */}
+                {hasSubscription && selectedProfile.interestStatus === 'accepted' && (
+                  <div className="mb-6 bg-green-50 rounded-xl p-4 border border-green-200">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="p-2 bg-green-100 rounded-full">
+                        <Lock className="w-4 h-4 text-green-700" />
+                      </div>
+                      <h4 className="font-semibold text-lg text-green-900">Contact Information</h4>
+                    </div>
+                    <div className="text-sm text-green-700 mb-4 bg-white/50 p-2 rounded-lg border border-green-100">
+                      Contact details are visible because this interest is accepted.
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <ProfileDetailItem icon={Phone} label="Phone Number" value={selectedProfile.phone} />
+                      <ProfileDetailItem icon={Mail} label="Email Address" value={selectedProfile.email} />
+                    </div>
+                  </div>
+                )}
 
                 {/* Basic Information */}
                 <div className="mb-6">

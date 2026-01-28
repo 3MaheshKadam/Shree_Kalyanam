@@ -66,7 +66,24 @@ export async function GET() {
   try {
     await connectDB();
     const plans = await Subscription.find();
-    return NextResponse.json(plans);
+
+    // Filter out "Messaging" related features dynamically
+    const cleanedPlans = plans.map(plan => {
+      // Convert Mongoose document to plain object if needed, or just clone it
+      const planObj = plan.toObject ? plan.toObject() : { ...plan };
+
+      if (planObj.features && Array.isArray(planObj.features)) {
+        planObj.features = planObj.features.filter(feature => {
+          const lowerFeature = feature.toLowerCase();
+          return !lowerFeature.includes('message') &&
+            !lowerFeature.includes('chat') &&
+            !lowerFeature.includes('communication');
+        });
+      }
+      return planObj;
+    });
+
+    return NextResponse.json(cleanedPlans);
   } catch (error) {
     console.error("GET Error:", error);
     return NextResponse.json(
