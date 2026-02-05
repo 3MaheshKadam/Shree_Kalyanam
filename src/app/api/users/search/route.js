@@ -53,7 +53,8 @@ export async function GET(request) {
             query.$or = [
                 { name: regex },
                 { currentCity: regex },
-                { caste: regex }
+                { caste: regex },
+                { subCaste: regex }, // Added subCaste search
             ];
         }
 
@@ -102,7 +103,7 @@ export async function GET(request) {
 
         const [users, total] = await Promise.all([
             User.find(query)
-                .select('name dob profilePhoto currentCity profession religion caste gender') // Select only needed fields
+                .select('name dob profilePhoto currentCity profession religion caste subCaste gender') // Select only needed fields including subCaste
                 .skip(skip)
                 .limit(limit)
                 .lean(), // faster
@@ -130,6 +131,7 @@ export async function GET(request) {
                 profession: user.occupation, // Mapping 'occupation' to 'profession' as per request key
                 religion: user.religion,
                 caste: user.caste,
+                subCaste: user.subCaste,
                 gender: user.gender
             };
         });

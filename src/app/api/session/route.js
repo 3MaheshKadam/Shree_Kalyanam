@@ -438,7 +438,8 @@ export const GET = async (request) => {
           phoneIsVerified: user.phoneIsVerified,
           subscription: user.subscription,
           profilePhoto: user.profilePhoto,
-          gender: user?.gender
+          gender: user?.gender,
+          currentCity: user.currentCity // Added currentCity for nearby filter
         }
       }),
       { headers }
@@ -546,7 +547,8 @@ export const POST = async (request) => {
       phoneIsVerified: user.phoneIsVerified,
       subscription: user.subscription || null,
       profilePhoto: user.profilePhoto,
-      gender: user?.gender
+      gender: user?.gender,
+      currentCity: user.currentCity // Added currentCity for nearby filter
     };
 
     const response = new NextResponse(
