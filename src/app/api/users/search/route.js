@@ -50,12 +50,34 @@ export async function GET(request) {
         // Text Search (Partial Match)
         if (q) {
             const regex = new RegExp(q, 'i'); // case-insensitive
-            query.$or = [
+            const searchConditions = [
                 { name: regex },
                 { currentCity: regex },
                 { caste: regex },
                 { subCaste: regex }, // Added subCaste search
             ];
+
+            // Check if q is a number (Age Search)
+            const ageQuery = parseInt(q);
+            if (!isNaN(ageQuery)) {
+                const today = new Date();
+                // Youngest possible for this age: Born exactly (Age) years ago today
+                // Oldest possible for this age: Born exactly (Age + 1) years ago today (exclusive)
+                // Actually, if I am 25, I was born between Today-26years and Today-25years.
+                // Example: Today is 2024. Age 0. Born 2023-2024. 
+                // Logic: 
+                // Max DOB (youngest): Today - Age years.
+                // Min DOB (oldest): Today - (Age + 1) years.
+
+                const maxDob = new Date(today.getFullYear() - ageQuery, today.getMonth(), today.getDate());
+                const minDob = new Date(today.getFullYear() - ageQuery - 1, today.getMonth(), today.getDate());
+
+                searchConditions.push({
+                    dob: { $gte: minDob, $lte: maxDob }
+                });
+            }
+
+            query.$or = searchConditions;
         }
 
         // Exact Filters
