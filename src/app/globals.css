@@ -1,16 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #D4AF37;
-  --color-primary-light: #F3E5AB;
-  --color-secondary: #800020;
+  --color-primary: #FC3A71;
+  --color-primary-light: #FF8FA3;
+  --color-secondary: #B24AFB;
   --color-accent: #F5F5F5;
-  --color-bg-light: #FFFAF0;
+  --color-bg-light: #FFF5F7;
+  --color-text-main: #2E0235; /* Darker purple for main text */
 }
 
 @layer base {
   body {
     background-color: var(--color-bg-light);
-    color: var(--color-secondary);
+    color: var(--color-text-main);
   }
 }

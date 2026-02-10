@@ -9,12 +9,12 @@ import {
 } from 'lucide-react';
 const Footer = () => {
   return (
-    <footer className="relative w-full bg-secondary text-white pt-24 pb-12 overflow-hidden">
+    <footer className="relative w-full bg-gradient-to-r from-secondary via-[#900048] to-primary text-white pt-24 pb-12 overflow-hidden">
       {/* Decorative floral backgrounds */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none mix-blend-screen"></div>
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-secondary/10 rounded-full blur-[80px] pointer-events-none mix-blend-screen"></div>
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-6 lg:px-20 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
 
           {/* Brand Column (Span 4) */}
@@ -114,30 +114,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Newsletter / App Download Bar */}
-        <div className="bg-primary/10 rounded-2xl p-6 lg:p-8 flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden relative mb-12 border border-white/5">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
 
-          <div className="relative z-10 text-center md:text-left">
-            <h5 className="text-xl font-serif font-semibold mb-1">Download Our App</h5>
-            <p className="text-white/60 text-sm">Get matches on the go. Available for iOS and Android.</p>
-          </div>
-
-          <div className="relative z-10 flex gap-4">
-            <button className="flex items-center px-4 py-2 bg-black rounded-lg hover:bg-black/80 transition-colors border border-white/10">
-              <span className="text-xs text-left">
-                <span className="block text-[10px] text-white/60">Download on the</span>
-                <span className="font-semibold">App Store</span>
-              </span>
-            </button>
-            <button className="flex items-center px-4 py-2 bg-black rounded-lg hover:bg-black/80 transition-colors border border-white/10">
-              <span className="text-xs text-left">
-                <span className="block text-[10px] text-white/60">Get it on</span>
-                <span className="font-semibold">Google Play</span>
-              </span>
-            </button>
-          </div>
-        </div>
 
         {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-white/50">

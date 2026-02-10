@@ -1,57 +1,72 @@
 "use client"
 import { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, MapPin, Briefcase, Heart } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MapPin, Briefcase, Heart, Sparkles, UserCheck, Ruler, Languages } from 'lucide-react';
 import Image from 'next/image';
 
 export default function FeaturedProfiles() {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [initialRender, setInitialRender] = useState(false);
   const carouselRef = useRef(null);
-  const cardsRef = useRef([]);
 
   const profiles = [
     {
-      name: "Priya",
-      age: 28,
-      city: "Mumbai",
-      profession: "Software Engineer",
-      photo: "/people/people1.png"
-    },
-    {
-      name: "Arjun",
-      age: 31,
-      city: "Delhi",
-      profession: "Marketing Director",
-      photo: "/people/people4.png"
-    },
-    {
-      name: "Ananya",
-      age: 27,
+      id: 1,
+      name: "Aditi Rao",
+      age: "26 yrs",
+      height: "5'5\"",
       city: "Bangalore",
-      profession: "Doctor",
-      photo: "/people/people2.png"
+      profession: "Product Designer",
+      image: "/people/people1.png",
+      religion: "Hindu, Brahmin",
+      tongue: "Kannada",
+      match: "98%"
     },
     {
-      name: "Vikram",
-      age: 30,
-      city: "Chennai",
-      profession: "Architect",
-      photo: "/people/vikram.jpg"
-    },
-    {
-      name: "Neha",
-      age: 29,
-      city: "Kolkata",
-      profession: "Fashion Designer",
-      photo: "/people/people3.png"
-    },
-    {
-      name: "Rohan",
-      age: 32,
-      city: "Pune",
+      id: 2,
+      name: "Karthik Mehta",
+      age: "29 yrs",
+      height: "5'11\"",
+      city: "Mumbai",
       profession: "Investment Banker",
-      photo: "/people/rohan.jpg"
+      image: "/people/people4.png",
+      religion: "Hindu, Vaishya",
+      tongue: "Gujarati",
+      match: "94%"
+    },
+    {
+      id: 3,
+      name: "Sanya Kapoor",
+      age: "27 yrs",
+      height: "5'6\"",
+      city: "Delhi",
+      profession: "Architect",
+      image: "/people/people2.png",
+      religion: "Hindu, Punjabi",
+      tongue: "Hindi",
+      match: "91%"
+    },
+    {
+      id: 4,
+      name: "Rahul Singh",
+      age: "30 yrs",
+      height: "6'0\"",
+      city: "Chandigarh",
+      profession: "Software Engineer",
+      image: "/people/vikram.jpg",
+      religion: "Sikh, Jat",
+      tongue: "Punjabi",
+      match: "89%"
+    },
+    {
+      id: 5,
+      name: "Meera Nair",
+      age: "28 yrs",
+      height: "5'4\"",
+      city: "Kochi",
+      profession: "Doctor",
+      image: "/people/people3.png",
+      religion: "Hindu, Nair",
+      tongue: "Malayalam",
+      match: "96%"
     }
   ];
 
@@ -59,147 +74,126 @@ export default function FeaturedProfiles() {
     setIsLoaded(true);
   }, []);
 
-
-  const scrollToIndex = (index) => {
-    let newIndex;
-    if (index < 0) {
-      newIndex = profiles.length - 1;
-    } else if (index >= profiles.length) {
-      newIndex = 0;
-    } else {
-      newIndex = index;
-    }
-    setCurrentIndex(newIndex);
-  };
-
   const scrollLeft = () => {
-    scrollToIndex(currentIndex - 1);
-    if (cardsRef.current[currentIndex]) {
-      cardsRef.current[currentIndex].scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center'
-      });
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: -360, behavior: 'smooth' });
     }
   };
 
   const scrollRight = () => {
-    scrollToIndex(currentIndex + 1);
-    if (cardsRef.current[currentIndex]) {
-      cardsRef.current[currentIndex].scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center'
-      });
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: 360, behavior: 'smooth' });
     }
   };
 
   return (
-    <div className="relative py-24 w-full overflow-hidden bg-white lg:px-20">
-      {/* Decorative elements */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-40 left-20 w-72 h-72 rounded-full bg-primary/20 blur-3xl opacity-20"></div>
-        <div className="absolute bottom-20 right-20 w-80 h-80 rounded-full bg-secondary/20 blur-3xl opacity-20"></div>
-        <div className="absolute top-60 right-1/4 w-60 h-60 rounded-full bg-accent/20 blur-3xl opacity-20"></div>
-      </div>
+    <section className="relative py-24 bg-white overflow-hidden">
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className={`text-center mb-16 transition-all duration-700 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <h2 className="text-4xl font-bold text-secondary mb-4 font-serif">Featured Profiles</h2>
-          <p className="text-lg text-secondary/70 max-w-2xl mx-auto">
-            Meet some of our exceptional members looking for meaningful connections
-          </p>
-        </div>
+      {/* Background Decor */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none" />
 
-        <div className="relative">
-          {/* Carousel navigation buttons */}
-          <button
-            onClick={scrollLeft}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/70 backdrop-blur-md text-primary rounded-full p-3 shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300 md:-left-6 hover:-translate-x-1"
-            aria-label="Previous profile"
-          >
-            <ChevronLeft size={24} />
-          </button>
+      <div className="container mx-auto px-6 lg:px-20 relative z-10">
 
-          <button
-            onClick={scrollRight}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/70 backdrop-blur-md text-primary rounded-full p-3 shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300 md:-right-6 hover:translate-x-1"
-            aria-label="Next profile"
-          >
-            <ChevronRight size={24} />
-          </button>
+        {/* Header */}
+        <div className={`flex flex-col md:flex-row justify-between items-end mb-16 gap-6 transition-all duration-1000 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <div className="max-w-2xl">
+            <span className="text-primary font-bold tracking-widest uppercase text-sm mb-2 block">Premium Matches</span>
+            <h2 className="text-4xl md:text-5xl font-serif font-bold text-secondary">
+              Featured <span className="text-primary italic">Profiles</span>
+            </h2>
+          </div>
 
-          {/* Carousel container */}
-          <div
-            ref={carouselRef}
-            className="flex gap-8 overflow-x-auto pb-8 pt-4 px-2 snap-x snap-mandatory scrollbar-hide"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            {profiles.map((profile, index) => (
-              <div
-                key={index}
-                ref={el => cardsRef.current[index] = el}
-                className="flex-shrink-0 w-80 snap-center p-2"
-              >
-                <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:border-2 hover:border-[#7E5D8C] transition-all duration-300 transform hover:scale-105 group border border-gray-100 h-full flex flex-col">
-                  {/* Profile image */}
-                  <div className="relative h-96 overflow-hidden flex-shrink-0">
-                    <Image
-                      width={1920}
-                      height={1080}
-                      src={profile.photo}
-                      alt={profile.name}
-                      className="w-full h-full object-cover transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10"></div>
-
-                    {/* Like button overlay */}
-                    <button className="absolute top-4 right-4 p-2 bg-white/20 backdrop-blur-md rounded-full hover:bg-white/60 transition-all duration-300 z-10">
-                      <Heart size={20} className="text-white hover:text-primary transition-colors duration-300" />
-                    </button>
-
-                    {/* Name overlay */}
-                    <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
-                      <h3 className="text-2xl font-semibold mb-1">{profile.name}, {profile.age}</h3>
-                    </div>
-                  </div>
-
-                  {/* Profile info */}
-                  <div className="p-5 bg-white flex flex-col flex-grow">
-                    <div className="space-y-3 mb-4 flex-grow">
-                      <div className="flex items-center text-secondary/80">
-                        <MapPin size={16} className="mr-2 text-primary" />
-                        <span>{profile.city}</span>
-                      </div>
-                      <div className="flex items-center text-secondary/80">
-                        <Briefcase size={16} className="mr-2 text-primary" />
-                        <span>{profile.profession}</span>
-                      </div>
-                    </div>
-
-                    <button className="w-full py-3 px-4 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-medium hover:from-secondary hover:to-primary transition-all duration-300 shadow-md hover:shadow-lg">
-                      View Profile
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+          {/* Navigation Buttons */}
+          <div className="flex gap-3">
+            <button onClick={scrollLeft} className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center hover:bg-white hover:border-primary hover:text-primary transition-all duration-300 shadow-sm">
+              <ChevronLeft size={24} />
+            </button>
+            <button onClick={scrollRight} className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center shadow-lg hover:bg-secondary transition-all duration-300">
+              <ChevronRight size={24} />
+            </button>
           </div>
         </div>
 
-        {/* Pagination dots */}
-        <div className="flex justify-center mt-8 space-x-2">
-          {profiles.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => scrollToIndex(index)}
-              className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex ? 'w-8 bg-primary' : 'w-2 bg-primary/20 hover:bg-primary/40'
-                }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
+        {/* Carousel Container */}
+        <div
+          ref={carouselRef}
+          className="flex gap-8 overflow-x-auto pb-12 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 py-8"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {profiles.map((profile, index) => (
+            <div
+              key={profile.id}
+              className={`flex-shrink-0 w-80 md:w-[22rem] snap-center group relative transition-all duration-700 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
+              style={{ transitionDelay: `${index * 100}ms` }}
+            >
+              <div className="bg-white rounded-[2rem] shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 group-hover:-translate-y-2">
+
+                {/* Image Section */}
+                <div className="relative h-[24rem] w-full overflow-hidden">
+                  <Image
+                    src={profile.image}
+                    alt={profile.name}
+                    width={400}
+                    height={600}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+
+                  {/* Match Score Badge */}
+                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold text-green-600 shadow-sm flex items-center gap-1">
+                    <Sparkles size={14} className="fill-green-600" />
+                    {profile.match} Match
+                  </div>
+
+                  {/* Gradient Overlay for Text Visibility if needed */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+
+                {/* Content Section */}
+                <div className="p-6 relative">
+                  {/* Floating Like Button */}
+                  <button className="absolute -top-6 right-6 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center text-gray-300 hover:text-primary transition-colors duration-300 z-10 border border-gray-50">
+                    <Heart size={24} className="fill-current" />
+                  </button>
+
+                  <div className="flex items-center gap-2 text-primary font-medium text-xs uppercase tracking-wider mb-2">
+                    <UserCheck size={14} />
+                    Verified Profile
+                  </div>
+
+                  <h3 className="text-2xl font-serif font-bold text-secondary mb-1">
+                    {profile.name}
+                  </h3>
+
+                  <div className="flex flex-wrap gap-y-2 text-secondary/70 text-sm mb-6">
+                    <span className="flex items-center gap-1 mr-4">
+                      {profile.age}, {profile.height}
+                    </span>
+                    <span className="flex items-center gap-1 w-full mt-1">
+                      <MapPin size={14} className="text-primary/60" />
+                      {profile.city}
+                    </span>
+                    <span className="flex items-center gap-1 w-full mt-1">
+                      <Briefcase size={14} className="text-primary/60" />
+                      {profile.profession}
+                    </span>
+                    <span className="flex items-center gap-1 w-full mt-1">
+                      <Languages size={14} className="text-primary/60" />
+                      {profile.tongue}, {profile.religion}
+                    </span>
+                  </div>
+
+                  <button className="w-full py-3 rounded-xl border-2 border-primary text-primary font-bold hover:bg-primary hover:text-white transition-all duration-300">
+                    Connect Now
+                  </button>
+                </div>
+
+              </div>
+            </div>
           ))}
         </div>
+
       </div>
-    </div>
+    </section>
   );
 }

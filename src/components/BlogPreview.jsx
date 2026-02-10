@@ -49,7 +49,7 @@ export default function BlogPreview() {
 
   return (
     <section className="py-24 bg-white overflow-hidden">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 lg:px-20">
         {/* Minimal Header */}
         <div className={`flex flex-col md:flex-row justify-between items-end mb-12 transition-all duration-1000 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="max-w-xl">

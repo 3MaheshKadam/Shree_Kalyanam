@@ -1,13 +1,13 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { Search, MapPin, Calendar, Users, Heart } from 'lucide-react';
+import { Search, MapPin, Calendar, Users, Heart, ChevronDown } from 'lucide-react';
 
 export default function SearchMatchesWidget() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [filters, setFilters] = useState({
-    ageMin: 25,
-    ageMax: 35,
-    gender: '',
+    ageMin: 22,
+    ageMax: 30,
+    gender: 'female',
     location: '',
     religion: ''
   });
@@ -28,115 +28,134 @@ export default function SearchMatchesWidget() {
   };
 
   return (
-    <div className="w-full bg-white shadow-lg rounded-2xl overflow-hidden transform -mt-8 relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
-      <div className={`p-1 transition-all duration-1000 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-        <div className="bg-gradient-to-r from-secondary/5 to-primary/5 rounded-xl p-4 sm:p-6">
+    <div className="relative w-full z-30 px-4 sm:px-6 lg:px-20 -mt-24 mb-16">
+      <div
+        className={`w-full max-w-7xl mx-auto transition-all duration-1000 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+      >
+        <div className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-2xl shadow-secondary/10 rounded-3xl p-6 md:p-8">
+
           <form onSubmit={handleSubmit}>
-            <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:items-center gap-2 md:gap-4">
-              <h3 className="text-secondary font-semibold text-lg flex items-center md:mr-2 lg:mr-4 md:pr-2 lg:pr-4 md:border-r md:border-gray-200">
-                <Heart className="text-primary mr-2" size={20} />
-                <span className="whitespace-nowrap">Find Matches</span>
-              </h3>
+            <div className="flex flex-col lg:flex-row items-end gap-6">
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 flex-1 w-full">
-                {/* Age Range Filter */}
-                <div className="relative w-full">
-                  <div className="absolute left-3 top-3 text-secondary/50">
-                    <Calendar size={18} />
-                  </div>
-                  <div className="flex items-center w-full">
-                    <select
-                      name="ageMin"
-                      value={filters.ageMin}
-                      onChange={handleChange}
-                      className="pl-10 py-2 pr-2 bg-white rounded-l-lg border border-r-0 border-gray-200 text-secondary text-sm focus:ring-1 focus:ring-primary focus:outline-none w-full"
-                    >
-                      {Array.from({ length: 30 }, (_, i) => i + 18).map(age => (
-                        <option key={`min-${age}`} value={age}>{age}</option>
-                      ))}
-                    </select>
-                    <span className="bg-white border-t border-b border-gray-200 py-2 px-2 text-secondary/70 text-sm whitespace-nowrap">to</span>
-                    <select
-                      name="ageMax"
-                      value={filters.ageMax}
-                      onChange={handleChange}
-                      className="pr-4 py-2 pl-2 bg-white rounded-r-lg border border-l-0 border-gray-200 text-secondary text-sm focus:ring-1 focus:ring-primary focus:outline-none w-full"
-                    >
-                      {Array.from({ length: 42 }, (_, i) => i + 18).map(age => (
-                        <option key={`max-${age}`} value={age}>{age}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {/* Gender Filter */}
-                <div className="relative w-full">
-                  <div className="absolute left-3 top-3 text-secondary/50">
-                    <Users size={18} />
-                  </div>
-                  <select
-                    name="gender"
-                    value={filters.gender}
-                    onChange={handleChange}
-                    className="pl-10 py-2 pr-4 bg-white rounded-lg border border-gray-200 text-secondary w-full text-sm focus:ring-1 focus:ring-primary focus:outline-none appearance-none"
-                  >
-                    <option value="">Looking for</option>
-                    <option value="female">Bride</option>
-                    <option value="male">Groom</option>
-                  </select>
-                </div>
-
-                {/* Location Filter */}
-                <div className="relative w-full">
-                  <div className="absolute left-3 top-3 text-secondary/50">
-                    <MapPin size={18} />
-                  </div>
-                  <select
-                    name="location"
-                    value={filters.location}
-                    onChange={handleChange}
-                    className="pl-10 py-2 pr-4 bg-white rounded-lg border border-gray-200 text-secondary w-full text-sm focus:ring-1 focus:ring-primary focus:outline-none appearance-none"
-                  >
-                    <option value="">Any Location</option>
-                    <option value="mumbai">Mumbai</option>
-                    <option value="delhi">Delhi</option>
-                    <option value="bangalore">Bangalore</option>
-                    <option value="chennai">Chennai</option>
-                    <option value="kolkata">Kolkata</option>
-                    <option value="international">International</option>
-                  </select>
-                </div>
-
-                {/* Religion/Caste Filter */}
-                <div className="relative w-full">
-                  <div className="absolute left-3 top-3 text-secondary/50">
-                    <Heart size={18} />
-                  </div>
-                  <select
-                    name="religion"
-                    value={filters.religion}
-                    onChange={handleChange}
-                    className="pl-10 py-2 pr-4 bg-white rounded-lg border border-gray-200 text-secondary w-full text-sm focus:ring-1 focus:ring-primary focus:outline-none appearance-none"
-                  >
-                    <option value="">Any Religion</option>
-                    <option value="hindu">Hindu</option>
-                    <option value="muslim">Muslim</option>
-                    <option value="christian">Christian</option>
-                    <option value="sikh">Sikh</option>
-                    <option value="jain">Jain</option>
-                    <option value="buddhist">Buddhist</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
+              {/* Title / Label (Desktop only vertical text or icon?) - Keeping it simple for now */}
+              <div className="hidden lg:flex flex-col justify-center items-center px-4 border-r border-secondary/10 h-full min-h-[60px]">
+                <span className="text-secondary font-serif font-bold text-xl leading-none">Find</span>
+                <span className="text-primary font-serif font-bold text-xl leading-none">Match</span>
               </div>
 
-              <button
-                type="submit"
-                className="flex-shrink-0 px-4 py-2 sm:px-6 sm:py-2.5 bg-gradient-to-r from-primary to-secondary text-white rounded-full hover:from-secondary hover:to-primary transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center whitespace-nowrap w-full sm:w-auto"
-              >
-                <Search size={18} className="mr-2" />
-                <span className="font-medium">Search</span>
-              </button>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 flex-1 w-full">
+
+                {/* Gender / Looking For */}
+                <div className="relative group">
+                  <label className="block text-xs font-semibold text-secondary/60 uppercase tracking-wider mb-2 ml-1">I'm looking for</label>
+                  <div className="relative">
+                    <Users className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 group-hover:text-primary transition-colors" size={20} />
+                    <select
+                      name="gender"
+                      value={filters.gender}
+                      onChange={handleChange}
+                      className="w-full pl-12 pr-10 py-4 bg-white/50 border border-secondary/10 rounded-2xl text-secondary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer hover:bg-white/80"
+                    >
+                      <option value="female">Woman</option>
+                      <option value="male">Man</option>
+                    </select>
+                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary/40 pointer-events-none" size={16} />
+                  </div>
+                </div>
+
+                {/* Age Range */}
+                <div className="relative group">
+                  <label className="block text-xs font-semibold text-secondary/60 uppercase tracking-wider mb-2 ml-1">Age (Years)</label>
+                  <div className="flex items-center gap-2">
+                    <div className="relative w-full">
+                      <select
+                        name="ageMin"
+                        value={filters.ageMin}
+                        onChange={handleChange}
+                        className="w-full pl-4 pr-8 py-4 bg-white/50 border border-secondary/10 rounded-2xl text-secondary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer hover:bg-white/80 text-center"
+                      >
+                        {Array.from({ length: 42 }, (_, i) => i + 18).map(age => (
+                          <option key={`min-${age}`} value={age}>{age}</option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 text-secondary/40 pointer-events-none" size={14} />
+                    </div>
+                    <span className="text-secondary/40 font-medium">-</span>
+                    <div className="relative w-full">
+                      <select
+                        name="ageMax"
+                        value={filters.ageMax}
+                        onChange={handleChange}
+                        className="w-full pl-4 pr-8 py-4 bg-white/50 border border-secondary/10 rounded-2xl text-secondary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer hover:bg-white/80 text-center"
+                      >
+                        {Array.from({ length: 42 }, (_, i) => i + 18).map(age => (
+                          <option key={`max-${age}`} value={age}>{age}</option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 text-secondary/40 pointer-events-none" size={14} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Religion */}
+                <div className="relative group">
+                  <label className="block text-xs font-semibold text-secondary/60 uppercase tracking-wider mb-2 ml-1">Religion</label>
+                  <div className="relative">
+                    <Heart className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 group-hover:text-primary transition-colors" size={20} />
+                    <select
+                      name="religion"
+                      value={filters.religion}
+                      onChange={handleChange}
+                      className="w-full pl-12 pr-10 py-4 bg-white/50 border border-secondary/10 rounded-2xl text-secondary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer hover:bg-white/80"
+                    >
+                      <option value="">Any Religion</option>
+                      <option value="hindu">Hindu</option>
+                      <option value="muslim">Muslim</option>
+                      <option value="christian">Christian</option>
+                      <option value="sikh">Sikh</option>
+                      <option value="jain">Jain</option>
+                      <option value="buddhist">Buddhist</option>
+                    </select>
+                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary/40 pointer-events-none" size={16} />
+                  </div>
+                </div>
+
+                {/* Location */}
+                <div className="relative group">
+                  <label className="block text-xs font-semibold text-secondary/60 uppercase tracking-wider mb-2 ml-1">Location</label>
+                  <div className="relative">
+                    <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 group-hover:text-primary transition-colors" size={20} />
+                    <select
+                      name="location"
+                      value={filters.location}
+                      onChange={handleChange}
+                      className="w-full pl-12 pr-10 py-4 bg-white/50 border border-secondary/10 rounded-2xl text-secondary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer hover:bg-white/80"
+                    >
+                      <option value="">Any Location</option>
+                      <option value="mumbai">Mumbai</option>
+                      <option value="delhi">Delhi</option>
+                      <option value="bangalore">Bangalore</option>
+                      <option value="pune">Pune</option>
+                      <option value="hyderabad">Hyderabad</option>
+                    </select>
+                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary/40 pointer-events-none" size={16} />
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Submit Button */}
+              <div className="w-full lg:w-auto mt-4 lg:mt-0">
+                <button
+                  type="submit"
+                  className="w-full lg:w-auto h-[58px] px-8 bg-gradient-to-r from-primary to-secondary text-white rounded-2xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-primary/25 hover:shadow-primary/40 flex items-center justify-center gap-2 group"
+                >
+                  <Search size={22} className="group-hover:scale-110 transition-transform" />
+                  <span className="font-bold text-lg hidden lg:inline">Search</span>
+                  <span className="font-bold text-lg inline lg:hidden">Find Matches</span>
+                </button>
+              </div>
+
             </div>
           </form>
         </div>

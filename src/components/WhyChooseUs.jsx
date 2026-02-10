@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { Shield, Users, Lock, Smartphone, HeartHandshake, Sparkles } from 'lucide-react';
+import { Shield, Users, Lock, Smartphone, HeartHandshake, Sparkles, CheckCircle2, Fingerprint, Award } from 'lucide-react';
 
 export default function WhyChooseUs() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -9,157 +9,118 @@ export default function WhyChooseUs() {
     setIsLoaded(true);
   }, []);
 
-  const features = [
-    {
-      icon: Shield,
-      title: "Verified Profiles",
-      description: "We strictly verify every profile to ensure a safe and trustworthy community for your search."
-    },
-    {
-      icon: Lock,
-      title: "100% Privacy",
-      description: "Your personal details are safe with us. You have complete control over who sees your information."
-    },
-    {
-      icon: Users,
-      title: "Community Match",
-      description: "Connect with families that share your values, culture, and traditions for a perfect bond."
-    },
-    {
-      icon: Smartphone,
-      title: "Easy to Use",
-      description: "Our seamless mobile-friendly design lets you find your soulmate anytime, anywhere."
-    }
-  ];
-
   return (
-    <div className="relative py-24 w-full bg-white overflow-hidden">
-      {/* Background Decor - Creative Floral Theme - MAX DENSITY */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
-        {/* 1. Large Organic Gradients base */}
-        <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[100px] opacity-60 mix-blend-multiply animate-pulse" style={{ animationDuration: '7s' }}></div>
-        <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] opacity-60 mix-blend-multiply animate-pulse" style={{ animationDuration: '10s' }}></div>
-        <div className="absolute top-1/2 left-1/3 w-96 h-96 bg-pink-200/20 rounded-full blur-[80px] opacity-40 mix-blend-overlay"></div>
+    <section className="relative py-24 w-full bg-[#FFF8FA] overflow-hidden">
 
-        {/* 2. Complex Hanging Vines (Top Left) */}
-        <svg className="absolute -top-10 -left-10 w-[400px] h-[400px] text-secondary/10 transform -rotate-12" viewBox="0 0 400 400" fill="none">
-          <path d="M50 0 Q80 100 150 150 T300 250" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-          <path d="M100 80 Q50 100 60 140" stroke="currentColor" strokeWidth="1.5" />
-          <path d="M120 120 Q80 150 90 190" stroke="currentColor" strokeWidth="1.5" />
-          <path d="M180 180 Q150 220 160 260" stroke="currentColor" strokeWidth="1.5" />
-          <circle cx="60" cy="140" r="4" fill="currentColor" className="text-secondary/30" />
-          <circle cx="90" cy="190" r="3" fill="currentColor" className="text-primary/30" />
-          <circle cx="160" cy="260" r="5" fill="currentColor" className="text-secondary/30" />
-        </svg>
+      {/* Background Decor */}
+      <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-secondary/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
-        {/* 3. Rising Flower Stalks (Bottom Right) */}
-        <svg className="absolute -bottom-20 -right-20 w-[500px] h-[500px] text-primary/10" viewBox="0 0 500 500" fill="none">
-          <path d="M400 500 Q350 350 300 250 T200 100" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-          <path d="M450 500 Q420 400 380 320" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <div className="container mx-auto px-6 lg:px-20 relative z-10">
 
-          {/* Leaves on main stalk */}
-          <path d="M330 300 Q360 280 350 250" stroke="currentColor" strokeWidth="1.5" />
-          <path d="M310 270 Q280 260 270 230" stroke="currentColor" strokeWidth="1.5" />
-
-          {/* Bud at top */}
-          <circle cx="200" cy="100" r="8" fill="currentColor" className="text-primary/20" />
-          <circle cx="380" cy="320" r="5" fill="currentColor" className="text-secondary/20" />
-        </svg>
-
-        {/* 4. Abstract Wave Patterns (Middle) */}
-        <div className="absolute top-1/4 right-0 w-full h-24 opacity-10">
-          <svg width="100%" height="100%" preserveAspectRatio="none">
-            <path d="M0 20 Q 300 80 600 20 T 1200 50" stroke="#800020" strokeWidth="1" fill="none" />
-          </svg>
-        </div>
-        <div className="absolute bottom-1/3 left-0 w-full h-32 opacity-10">
-          <svg width="100%" height="100%" preserveAspectRatio="none">
-            <path d="M0 60 Q 400 0 800 60 T 1600 30" stroke="#D4AF37" strokeWidth="1" fill="none" />
-          </svg>
-        </div>
-
-        {/* 5. Scattered Floating Petals */}
-        {[...Array(8)].map((_, i) => (
-          <svg
-            key={`petal-${i}`}
-            className="absolute text-secondary/10 animate-pulse"
-            style={{
-              top: `${Math.random() * 80 + 10}%`,
-              left: `${Math.random() * 80 + 10}%`,
-              width: `${Math.random() * 20 + 10}px`,
-              height: `${Math.random() * 20 + 10}px`,
-              transform: `rotate(${Math.random() * 360}deg)`,
-              animationDelay: `${i * 0.5}s`
-            }}
-            viewBox="0 0 24 24" fill="currentColor"
-          >
-            <path d="M12 2C8 2 8 8 8 8C8 8 2 8 2 12C2 16 8 16 8 16C8 16 8 22 12 22C16 22 16 16 16 16C16 16 22 16 22 12C22 8 16 8 16 8C16 8 16 2 12 2Z" />
-          </svg>
-        ))}
-
-        {/* 6. Sparkle Clusters */}
-        <div className="absolute top-20 right-20 flex gap-4 opacity-30">
-          <Sparkles size={16} className="text-primary animate-bounce delay-100" />
-          <Sparkles size={24} className="text-secondary animate-pulse" />
-        </div>
-        <div className="absolute bottom-40 left-20 flex gap-6 opacity-30">
-          <Sparkles size={20} className="text-secondary animate-bounce delay-700" />
-          <Sparkles size={12} className="text-primary animate-pulse" />
-        </div>
-
-        {/* 7. Geometric Accents */}
-        <div className="absolute top-40 left-10 w-2 h-2 rounded-full bg-secondary/40"></div>
-        <div className="absolute top-42 left-14 w-3 h-3 rounded-full bg-primary/40"></div>
-
-        <div className="absolute bottom-60 right-10 w-16 h-16 border-2 border-primary/5 rounded-full"></div>
-        <div className="absolute bottom-52 right-16 w-8 h-8 border border-secondary/10 rounded-full"></div>
-      </div>
-
-      <div className="container mx-auto px-6 relative z-10">
-
-        {/* Header Section */}
-        <div className={`text-center mb-20 transition-all duration-700 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-            <Sparkles size={14} />
-            <span className="uppercase tracking-wider text-xs">Why We Are Special</span>
+        {/* Section Header */}
+        <div className={`text-center max-w-3xl mx-auto mb-20 transition-all duration-1000 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-secondary/10 shadow-sm mb-6">
+            <Sparkles size={14} className="text-primary" />
+            <span className="uppercase tracking-widest text-[10px] font-bold text-secondary/70">Why Choose Us</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-secondary mb-6">
-            Trusted by Thousands of Families
+
+          <h2 className="text-4xl md:text-5xl font-serif font-bold text-secondary mb-6 leading-tight">
+            Designed for <span className="relative inline-block text-primary">Serious Relationships
+              <svg className="absolute w-full h-3 -bottom-1 left-0 text-primary/20" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.00025 6.99997C25.7509 2.15575 102.49 2.48835 200.001 6.99997" stroke="currentColor" strokeWidth="3" strokeLinecap="round" /></svg>
+            </span>
           </h2>
-          <p className="text-lg text-secondary/70 max-w-2xl mx-auto font-light leading-relaxed">
-            We bring together tradition and technology to help you write your beautiful love story. Here is why Shree Kalyanam is the right choice for you.
+
+          <p className="text-lg text-secondary/60 font-light leading-relaxed">
+            We prioritize safety, privacy, and compatibility to ensure your journey to marriage is smooth and secure.
           </p>
         </div>
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className={`group bg-bg-light/50 border border-white/60 p-8 rounded-3xl transition-all duration-500 hover:shadow-xl hover:bg-white hover:-translate-y-2 relative overflow-hidden ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
-              style={{ transitionDelay: `${150 * index}ms` }}
-            >
-              {/* Hover Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        {/* Bento Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(250px,auto)]">
 
-              {/* Icon */}
-              <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 relative z-10">
-                <feature.icon className="text-primary" size={32} strokeWidth={1.5} />
-              </div>
+          {/* Card 1: Large Feature (Span 2) */}
+          <div className={`col-span-1 md:col-span-2 bg-gradient-to-br from-[#FFF5F8] to-white border border-primary/10 rounded-[2.5rem] p-10 relative overflow-hidden group hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-primary/10 to-transparent rounded-bl-[100px] transition-transform duration-700 group-hover:scale-110" />
 
-              {/* Content */}
-              <div className="relative z-10">
-                <h3 className="text-xl font-serif font-semibold text-secondary mb-3 group-hover:text-primary transition-colors duration-300">
-                  {feature.title}
-                </h3>
-                <p className="text-secondary/70 text-sm leading-relaxed">
-                  {feature.description}
+            <div className="relative z-10 flex flex-col items-start h-full justify-between">
+              <div>
+                <div className="w-14 h-14 rounded-2xl bg-white shadow-md flex items-center justify-center text-primary mb-6">
+                  <Shield size={32} strokeWidth={1.5} />
+                </div>
+                <h3 className="text-3xl font-serif font-bold text-secondary mb-4">100% Verified Profiles</h3>
+                <p className="text-secondary/60 text-lg leading-relaxed max-w-md">
+                  We strictly verify every profile with government ID and phone number to ensure a zero-tolerance policy against fake profiles.
                 </p>
               </div>
+
+              <div className="mt-8 flex gap-4">
+                <div className="px-4 py-2 bg-white rounded-full text-sm font-medium text-secondary/80 shadow-sm border border-secondary/5 flex items-center gap-2">
+                  <CheckCircle2 size={16} className="text-green-500" />
+                  Phone Verified
+                </div>
+                <div className="px-4 py-2 bg-white rounded-full text-sm font-medium text-secondary/80 shadow-sm border border-secondary/5 flex items-center gap-2">
+                  <CheckCircle2 size={16} className="text-green-500" />
+                  ID Verified
+                </div>
+              </div>
             </div>
-          ))}
+          </div>
+
+          {/* Card 2: Vertical Feature (Span 1) */}
+          <div className={`col-span-1 md:row-span-2 bg-gradient-to-b from-[#F3F0FF] to-white border border-purple-100 rounded-[2.5rem] p-10 relative overflow-hidden group hover:shadow-2xl hover:shadow-purple-500/5 transition-all duration-500 delay-100 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-purple-100 rounded-full blur-3xl opacity-60 transition-transform duration-700 group-hover:scale-125" />
+
+            <div className="relative z-10 flex flex-col h-full">
+              <div className="w-14 h-14 rounded-2xl bg-white shadow-md flex items-center justify-center text-purple-600 mb-6">
+                <Smartphone size={32} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-2xl font-serif font-bold text-secondary mb-4">Designed for Mobile</h3>
+              <p className="text-secondary/60 text-lg leading-relaxed mb-auto">
+                Experience our seamless, intuitive app designed to help you connect on the go. Chat, browse, and interact effortlessly.
+              </p>
+
+              <div className="mt-10 relative h-64 w-full bg-white rounded-t-3xl shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)] p-4 border border-purple-50">
+                {/* Mock UI Elements */}
+                <div className="w-full h-2 bg-purple-100 rounded-full mb-3" />
+                <div className="w-2/3 h-2 bg-purple-50 rounded-full mb-6" />
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-purple-50 rounded-xl h-24 w-full" />
+                  <div className="bg-purple-50 rounded-xl h-24 w-full" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 3: Feature (Span 1) */}
+          <div className={`col-span-1 bg-gradient-to-br from-[#FFF8E1] to-white border border-orange-100 rounded-[2.5rem] p-10 relative overflow-hidden group hover:shadow-2xl hover:shadow-orange-500/5 transition-all duration-500 delay-200 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <div className="relative z-10">
+              <div className="w-14 h-14 rounded-2xl bg-white shadow-md flex items-center justify-center text-orange-500 mb-6">
+                <Lock size={32} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-2xl font-serif font-bold text-secondary mb-3">Total Privacy</h3>
+              <p className="text-secondary/60 font-light text-sm leading-relaxed">
+                You are in control. Decide who sees your photos and contact details. Zero spam, complete peace of mind.
+              </p>
+            </div>
+          </div>
+
+          {/* Card 4: Feature (Span 1) */}
+          <div className={`col-span-1 bg-gradient-to-br from-[#ECFDF5] to-white border border-green-100 rounded-[2.5rem] p-10 relative overflow-hidden group hover:shadow-2xl hover:shadow-green-500/5 transition-all duration-500 delay-300 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <div className="relative z-10">
+              <div className="w-14 h-14 rounded-2xl bg-white shadow-md flex items-center justify-center text-green-600 mb-6">
+                <Users size={32} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-2xl font-serif font-bold text-secondary mb-3">Community Match</h3>
+              <p className="text-secondary/60 font-light text-sm leading-relaxed">
+                Our algorithms connect you with families that share your culture, values, and lifestyle preferences.
+              </p>
+            </div>
+          </div>
+
         </div>
+
       </div>
-    </div>
+    </section>
   );
 }

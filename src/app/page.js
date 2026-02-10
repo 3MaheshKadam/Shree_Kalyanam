@@ -1,7 +1,8 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import PlatformIntro from "@/components/PlatformIntro";
 import QuickRegistrationForm from "@/components/QuickRegistrationForm";
-import SearchMatchesWidget from "@/components/SearchMatchesWidget";
+
 import WhyChooseUs from "@/components/WhyChooseUs";
 import HowItWorks from "@/components/HowItWorks";
 import FeaturedProfiles from "@/components/FeaturedProfiles";
@@ -11,6 +12,7 @@ import AppDownload from "@/components/AppDownload";
 import UserTestimonials from "@/components/UserTestimonials";
 import BlogPreview from "@/components/BlogPreview";
 import Footer from "@/components/Footer";
+import AppDownloadCTA from "@/components/AppDownloadCTA";
 
 export default function HomePage() {
   return (
@@ -18,7 +20,8 @@ export default function HomePage() {
       <Navbar />
       <HeroSection />
       {/* <QuickRegistrationForm /> */}
-      <SearchMatchesWidget />
+
+      <PlatformIntro />
       <WhyChooseUs />
       <HowItWorks />
       <FeaturedProfiles />
@@ -27,8 +30,9 @@ export default function HomePage() {
       <AppDownload />
       <UserTestimonials />
 
-      <BlogPreview />
+
       <MembershipPlans />
+      <AppDownloadCTA />
       <Footer />
     </>
   );
