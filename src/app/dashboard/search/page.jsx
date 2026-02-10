@@ -213,10 +213,10 @@ export default function SearchProfilesPage() {
   );
 
   const ProfileCard = ({ profile }) => (
-    <div className="bg-white rounded-xl shadow-lg border border-rose-100/50 hover:shadow-xl transition-all duration-300 overflow-hidden">
+    <div className="bg-white rounded-xl shadow-lg border border-secondary/10 hover:shadow-xl transition-all duration-300 overflow-hidden">
       <div className="relative">
         {/* Profile Image */}
-        <div className="aspect-[4/5] bg-gradient-to-br from-rose-100 to-amber-100 flex items-center justify-center relative">
+        <div className="aspect-[4/5] bg-gradient-to-br from-secondary/10 to-primary/10 flex items-center justify-center relative">
           {profile.hasPhoto ? (
             <div className={`w-full h-full flex items-center justify-center ${profile.isBlurred ? 'blur-md' : ''}`}>
               <User className="w-16 h-16 text-primary" />
@@ -294,7 +294,7 @@ export default function SearchProfilesPage() {
 
           {/* Action Buttons */}
           <div className="flex space-x-2">
-            <button className="flex-1 bg-rose-50 text-rose-600 py-2 px-3 rounded-lg text-sm font-medium hover:bg-rose-100 transition-colors flex items-center justify-center">
+            <button className="flex-1 bg-secondary/10 text-secondary py-2 px-3 rounded-lg text-sm font-medium hover:bg-secondary/20 transition-colors flex items-center justify-center">
               <Heart className="w-4 h-4 mr-1" />
               Interest
             </button>
@@ -311,7 +311,7 @@ export default function SearchProfilesPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50/50 via-white to-amber-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-secondary/5 via-white to-primary/5">
       <div className="max-w-7xl mx-auto p-6">
 
         {/* Header Section */}
@@ -320,7 +320,7 @@ export default function SearchProfilesPage() {
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
             <div className="relative z-10">
               <h1 className="text-2xl font-serif font-bold mb-2">Find Your Perfect Match</h1>
-              <p className="text-rose-100">Discover profiles that align with your preferences</p>
+              <p className="text-secondary/80">Discover profiles that align with your preferences</p>
             </div>
           </div>
         </div>
@@ -334,10 +334,10 @@ export default function SearchProfilesPage() {
             <div className="lg:hidden mb-4">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="w-full bg-white rounded-xl p-4 shadow-lg border border-rose-100/50 flex items-center justify-between"
+                className="w-full bg-white rounded-xl p-4 shadow-lg border border-secondary/10 flex items-center justify-between"
               >
                 <div className="flex items-center">
-                  <Filter className="w-5 h-5 text-rose-500 mr-2" />
+                  <Filter className="w-5 h-5 text-secondary mr-2" />
                   <span className="font-semibold text-gray-900">Filters</span>
                 </div>
                 <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
@@ -345,13 +345,13 @@ export default function SearchProfilesPage() {
             </div>
 
             {/* Filter Panel */}
-            <div className={`bg-white rounded-xl shadow-lg border border-rose-100/50 ${showFilters || !isMobile ? 'block' : 'hidden'} lg:block`}>
+            <div className={`bg-white rounded-xl shadow-lg border border-secondary/10 ${showFilters || !isMobile ? 'block' : 'hidden'} lg:block`}>
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-bold text-gray-900">Filters</h2>
                   <button
                     onClick={resetFilters}
-                    className="flex items-center text-rose-600 hover:text-rose-700 text-sm font-medium"
+                    className="flex items-center text-secondary hover:text-secondary text-sm font-medium"
                   >
                     <RotateCcw className="w-4 h-4 mr-1" />
                     Reset
@@ -385,7 +385,7 @@ export default function SearchProfilesPage() {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Height Range</label>
                       <div className="flex space-x-2">
-                        <select className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent text-sm">
+                        <select className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent text-sm">
                           <option>4'6" - 5'0"</option>
                           <option>5'0" - 5'6"</option>
                           <option>5'6" - 6'0"</option>
@@ -399,7 +399,7 @@ export default function SearchProfilesPage() {
                   <FilterSection title="Community" section="community">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Religion</label>
-                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent text-sm">
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent text-sm">
                         <option value="">Any Religion</option>
                         <option>Hindu</option>
                         <option>Muslim</option>
@@ -412,7 +412,7 @@ export default function SearchProfilesPage() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Caste</label>
-                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent text-sm">
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent text-sm">
                         <option value="">Any Caste</option>
                         <option>Brahmin</option>
                         <option>Kshatriya</option>
@@ -429,13 +429,13 @@ export default function SearchProfilesPage() {
                       <input
                         type="text"
                         placeholder="Enter city name"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent text-sm"
                       />
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">State</label>
-                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent text-sm">
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent text-sm">
                         <option value="">Any State</option>
                         <option>Maharashtra</option>
                         <option>Delhi</option>

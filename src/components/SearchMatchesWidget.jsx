@@ -30,7 +30,7 @@ export default function SearchMatchesWidget() {
   return (
     <div className="w-full bg-white shadow-lg rounded-2xl overflow-hidden transform -mt-8 relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
       <div className={`p-1 transition-all duration-1000 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-        <div className="bg-gradient-to-r from-rose-50 to-amber-50 rounded-xl p-4 sm:p-6">
+        <div className="bg-gradient-to-r from-secondary/5 to-primary/5 rounded-xl p-4 sm:p-6">
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:items-center gap-2 md:gap-4">
               <h3 className="text-secondary font-semibold text-lg flex items-center md:mr-2 lg:mr-4 md:pr-2 lg:pr-4 md:border-r md:border-gray-200">

@@ -37,7 +37,7 @@ export default function ContextualSubscriptionModal({ isOpen, onClose, interestD
 
                     {/* Content */}
                     <div className="p-6">
-                        <div className="mb-6 bg-rose-50 border border-rose-100 rounded-xl p-4">
+                        <div className="mb-6 bg-secondary/5 border border-secondary/10 rounded-xl p-4">
                             <p className="text-secondary font-medium mb-1">
                                 💖 Someone who matches your preferences is interested in you!
                             </p>
@@ -74,7 +74,7 @@ export default function ContextualSubscriptionModal({ isOpen, onClose, interestD
                         </button>
 
                         <p className="text-center text-xs text-gray-400 mt-4">
-                            Join 10,000+ happy couples on MaliBandhan
+                            Join 10,000+ happy couples on Shree Kalyanam
                         </p>
                     </div>
                 </motion.div>

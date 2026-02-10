@@ -117,7 +117,7 @@ export default function DynamicSubscriptionPlans() {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
         currency: order.currency,
-        name: "MaliBandhan Subscription",
+        name: "Shree Kalyanam Subscription",
         description: plan.name,
         order_id: order.id,
         handler: async function (response) {
@@ -188,16 +188,16 @@ export default function DynamicSubscriptionPlans() {
     const configs = {
       Gold: {
         icon: Crown,
-        color: "from-yellow-400 to-yellow-600",
-        bgColor: "bg-yellow-100",
-        textColor: "text-yellow-600",
-        badgeColor: "bg-yellow-500",
+        color: "from-primary to-primary-light",
+        bgColor: "bg-primary/20",
+        textColor: "text-primary",
+        badgeColor: "bg-primary",
         emoji: "👑",
       },
       Premium: {
         icon: Crown,
         color: "from-secondary to-primary",
-        bgColor: "bg-rose-50",
+        bgColor: "bg-secondary-50",
         textColor: "text-primary",
         badgeColor: "bg-primary",
         emoji: "💎",
@@ -240,7 +240,7 @@ export default function DynamicSubscriptionPlans() {
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="text-center">
           {/* Simple Spinner */}
-          <div className="w-12 h-12 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-12 h-12 border-primary rounded-full animate-spin mx-auto mb-4"></div>
 
           {/* Loading Text */}
           <p className="text-gray-600 text-lg">Loading Subscription Plans</p>
@@ -340,7 +340,7 @@ export default function DynamicSubscriptionPlans() {
             return (
               <div key={plan._id} className="relative">
                 <div
-                  className={`bg-white rounded-2xl p-8 shadow-2xl border border-rose-100/50 relative overflow-hidden transform hover:scale-105 transition-transform duration-300 ${!plan.isActive ? "opacity-70" : ""
+                  className={`bg-white rounded-2xl p-8 shadow-2xl border border-secondary-100/50 relative overflow-hidden transform hover:scale-105 transition-transform duration-300 ${!plan.isActive ? "opacity-70" : ""
                     }`}
                 >
                   <div className="relative z-10 pt-6">
@@ -426,7 +426,7 @@ export default function DynamicSubscriptionPlans() {
         </div>
 
         {/* FAQ Section */}
-        <div className="bg-white rounded-2xl p-8 shadow-lg border border-rose-100/50">
+        <div className="bg-white rounded-2xl p-8 shadow-lg border border-secondary-100/50">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             Frequently Asked Questions
           </h2>

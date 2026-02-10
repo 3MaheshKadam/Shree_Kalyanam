@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import User from '@/models/User';
 import dbConnect from '@/lib/dbConnect';
+import { calculateProfileCompletion } from '@/lib/profileCompletion';
 import { Weight } from 'lucide-react';
 // export const dynamic = 'force-dynamic';2
 const corsHeaders = {
@@ -128,7 +129,8 @@ export async function GET(request) {
       profileSetup: {
         willAdminFill: user.profileSetup?.willAdminFill || false,
         dontAskAgain: user.profileSetup?.dontAskAgain || false
-      }
+      },
+      profileCompletion: calculateProfileCompletion(user)
     };
     console.log("Me = ", userData)
     return NextResponse.json(userData, { headers: corsHeaders });

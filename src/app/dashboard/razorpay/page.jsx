@@ -50,7 +50,7 @@ export default function SubscriptionPage() {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
         currency: "INR",
-        name: "ShivBandhan",
+        name: "Shree Kalyanam",
         description: plan.name,
         order_id: order.id,
         handler: async (response) => {
@@ -107,7 +107,7 @@ export default function SubscriptionPage() {
           </ul>
 
           {user?.user?.subscription?.subscriptionId?.toString() ===
-          plan?._id?.toString() ? (
+            plan?._id?.toString() ? (
             <button
               disabled
               className={`w-full bg-gradient-to-r ${config.color} text-white py-4 rounded-xl font-bold text-lg cursor-not-allowed opacity-70`}
@@ -120,11 +120,9 @@ export default function SubscriptionPage() {
           ) : (
             <button
               onClick={() => handleSubscribe(plan)}
-              className={`w-full bg-gradient-to-r ${
-                config.color
-              } text-white py-4 rounded-xl font-bold text-lg hover:scale-105 transition-all duration-200 shadow-lg ${
-                !plan.isActive ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              className={`w-full bg-gradient-to-r ${config.color
+                } text-white py-4 rounded-xl font-bold text-lg hover:scale-105 transition-all duration-200 shadow-lg ${!plan.isActive ? "opacity-50 cursor-not-allowed" : ""
+                }`}
               disabled={!plan.isActive}
             >
               <div className="flex items-center justify-center space-x-2">

@@ -494,14 +494,14 @@ export default function MatchesPage() {
   //   return (
   //     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
   //       <div className="bg-white rounded-xl p-6 max-w-md text-center">
-  //         <Lock className="w-12 h-12 mx-auto text-rose-500 mb-4" />
+  //         <Lock className="w-12 h-12 mx-auto text-secondary-500 mb-4" />
   //         <h3 className="text-xl font-bold text-gray-900 mb-2">Premium Feature</h3>
   //         <p className="text-gray-600 mb-6">
   //           You need a subscription to view full profiles. Upgrade now to see complete details and photos.
   //         </p>
   //         <button
   //           onClick={() => window.location.href = '/dashboard/subscription'}
-  //           className="bg-rose-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-rose-600 transition-colors"
+  //           className="bg-secondary-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-secondary-600 transition-colors"
   //         >
   //           Upgrade Now
   //         </button>
@@ -521,17 +521,17 @@ export default function MatchesPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-rose-100 flex flex-col lg:flex-row"
+            className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-secondary-100 flex flex-col lg:flex-row"
           >
             {/* Fixed Left Side - Profile Image & Quick Stats */}
-            <div className="w-full lg:w-1/3 p-4 border-r border-rose-100 bg-gradient-to-b from-rose-50/30 to-amber-50/30 flex flex-col items-center">
+            <div className="w-full lg:w-1/3 p-4 border-r border-secondary-100 bg-gradient-to-b from-secondary-50/30 to-primary-50/30 flex flex-col items-center">
               {/* Close button for desktop */}
 
 
               {/* Header for mobile */}
               <div className="lg:hidden mb-4 text-center">
-                <h3 className="text-xl font-bold text-rose-800">Profile Details</h3>
-                <p className="text-sm text-rose-600">Compatibility: {profile.compatibility}% Match</p>
+                <h3 className="text-xl font-bold text-secondary-800">Profile Details</h3>
+                <p className="text-sm text-secondary-600">Compatibility: {profile.compatibility}% Match</p>
               </div>
 
               {/* Clickable Profile Photo */}
@@ -553,8 +553,8 @@ export default function MatchesPage() {
                     </>
                   ) : (
                     <div className="h-full flex flex-col items-center justify-center gap-2">
-                      <Camera className="w-12 h-12 text-rose-300" />
-                      <span className="text-rose-400 font-medium">Add Profile Photo</span>
+                      <Camera className="w-12 h-12 text-secondary-300" />
+                      <span className="text-secondary-400 font-medium">Add Profile Photo</span>
                     </div>
                   )}
                 </div>
@@ -562,13 +562,13 @@ export default function MatchesPage() {
 
               {/* Quick Stats */}
               <div className="w-full grid grid-cols-2 gap-2 mt-2">
-                <div className="bg-rose-50 p-2 rounded-lg text-center">
-                  <p className="text-xs text-rose-600">Age</p>
-                  <p className="font-semibold text-rose-800">{profile.age}</p>
+                <div className="bg-secondary-50 p-2 rounded-lg text-center">
+                  <p className="text-xs text-secondary-600">Age</p>
+                  <p className="font-semibold text-secondary-800">{profile.age}</p>
                 </div>
-                <div className="bg-amber-50 p-2 rounded-lg text-center">
-                  <p className="text-xs text-amber-600">Height</p>
-                  <p className="font-semibold text-amber-800">{profile.height}</p>
+                <div className="bg-primary-50 p-2 rounded-lg text-center">
+                  <p className="text-xs text-primary-600">Height</p>
+                  <p className="font-semibold text-primary-800">{profile.height}</p>
                 </div>
                 <div className="bg-emerald-50 p-2 rounded-lg text-center">
                   <p className="text-xs text-emerald-600">City</p>
@@ -584,14 +584,14 @@ export default function MatchesPage() {
             {/* Scrollable Right Side - Profile Details */}
             <div className="w-full lg:w-2/3 overflow-y-auto flex flex-col">
               {/* Header for desktop */}
-              <div className="hidden lg:flex sticky top-0 bg-gradient-to-r from-rose-50 to-amber-50 p-4 border-b border-rose-200 z-10">
+              <div className="hidden lg:flex sticky top-0 bg-gradient-to-r from-rose-50 to-amber-50 p-4 border-b border-secondary-200 z-10">
                 <div>
-                  <h3 className="text-xl font-bold text-rose-800">Profile Details</h3>
-                  <p className="text-sm text-rose-600">Compatibility: {profile.compatibility}% Match</p>
+                  <h3 className="text-xl font-bold text-secondary-800">Profile Details</h3>
+                  <p className="text-sm text-secondary-600">Compatibility: {profile.compatibility}% Match</p>
                 </div>
                 <button
                   onClick={onClose}
-                  className="text-rose-500 hover:text-rose-700 transition-colors p-1 rounded-full hover:bg-rose-100 ml-auto"
+                  className="text-secondary-500 hover:text-secondary-700 transition-colors p-1 rounded-full hover:bg-secondary-100 ml-auto"
                 >
                   <X className="w-6 h-6" />
                 </button>
@@ -600,7 +600,7 @@ export default function MatchesPage() {
               {/* Content */}
               <div className="p-6">
                 {/* Name and Title */}
-                <div className="border-b border-rose-100 pb-4">
+                <div className="border-b border-secondary-100 pb-4">
                   <h2 className="text-2xl font-bold text-gray-900 mb-1">
                     {hasSubscription ? profile.name : maskFirstName(profile.name)}
                     {profile.isVerified && (
@@ -610,14 +610,14 @@ export default function MatchesPage() {
                       </span>
                     )}
                   </h2>
-                  <p className="text-rose-600 font-medium">{profile.occupation || 'Professional'}</p>
+                  <p className="text-secondary-600 font-medium">{profile.occupation || 'Professional'}</p>
                 </div>
 
                 {/* Info Sections */}
                 <div className="space-y-5 mt-5">
                   {/* About Section */}
                   <div className="bg-gradient-to-r from-rose-50/50 to-transparent p-4 rounded-xl">
-                    <h3 className="flex items-center text-rose-700 font-semibold mb-2">
+                    <h3 className="flex items-center text-secondary-700 font-semibold mb-2">
                       <User className="w-4 h-4 mr-2" />
                       About
                     </h3>
@@ -709,7 +709,7 @@ export default function MatchesPage() {
 
                   {/* Family Section */}
                   <div className="bg-gradient-to-r from-amber-50/50 to-transparent p-4 rounded-xl">
-                    <h3 className="flex items-center text-amber-700 font-semibold mb-2">
+                    <h3 className="flex items-center text-primary-700 font-semibold mb-2">
                       <Users className="w-4 h-4 mr-2" />
                       Family
                     </h3>
@@ -792,22 +792,22 @@ export default function MatchesPage() {
                   />
                 ) : (
                   <div className="aspect-[3/4] bg-gradient-to-br from-rose-100 to-amber-100 rounded-lg flex items-center justify-center">
-                    <Camera className="w-16 h-16 text-rose-300" />
+                    <Camera className="w-16 h-16 text-secondary-300" />
                   </div>
                 )}
-                <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-rose-600 text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg">
-                  MaliBandhan Matrimony
+                <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-secondary-600 text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg">
+                  Shree Kalyanam Matrimony
                 </div>
                 <button
                   onClick={() => setIsImagePopupOpen(false)}
-                  className="absolute -top-3 -right-3 bg-white rounded-full p-1 shadow-md hover:bg-rose-50 transition-colors"
+                  className="absolute -top-3 -right-3 bg-white rounded-full p-1 shadow-md hover:bg-secondary-50 transition-colors"
                 >
-                  <X className="w-6 h-6 text-rose-600" />
+                  <X className="w-6 h-6 text-secondary-600" />
                 </button>
               </motion.div>
             </motion.div>
           )}
-        </AnimatePresence>
+        </AnimatePresence >
       </>
     );
   };
@@ -841,7 +841,7 @@ export default function MatchesPage() {
                     e.stopPropagation();
                     window.location.href = '/dashboard/subscription';
                   }}
-                  className="mt-2 bg-white text-rose-600 px-3 py-1 rounded-full text-xs font-medium hover:bg-rose-50 transition-colors"
+                  className="mt-2 bg-white text-secondary-600 px-3 py-1 rounded-full text-xs font-medium hover:bg-secondary-50 transition-colors"
                 >
                   Unlock Now
                 </button> */}
@@ -878,13 +878,13 @@ export default function MatchesPage() {
               ${match.compatibility >= 90 ? 'text-green-500' :
                   match.compatibility >= 70 ? 'text-teal-500' :
                     match.compatibility >= 50 ? 'text-yellow-500' :
-                      'text-rose-500'
+                      'text-secondary-500'
                 }`} />
               <span className={`text-[10px] font-medium 
               ${match.compatibility >= 90 ? 'text-green-700' :
                   match.compatibility >= 70 ? 'text-teal-700' :
                     match.compatibility >= 50 ? 'text-yellow-700' :
-                      'text-rose-700'
+                      'text-secondary-700'
                 }`}>
                 {match.compatibility}%
               </span>
@@ -933,7 +933,7 @@ export default function MatchesPage() {
                 }
                 setSelectedProfile(match);
               }}
-              className="flex-1 bg-white text-secondary border border-gray-200 py-2 px-3 rounded-lg text-sm font-medium hover:bg-rose-50 hover:text-primary hover:border-rose-200 transition-all flex items-center justify-center group"
+              className="flex-1 bg-white text-secondary border border-gray-200 py-2 px-3 rounded-lg text-sm font-medium hover:bg-secondary-50 hover:text-primary hover:border-secondary-200 transition-all flex items-center justify-center group"
             >
               <Eye className="w-4 h-4 mr-1.5 group-hover:scale-110 transition-transform" />
               View
@@ -989,7 +989,7 @@ export default function MatchesPage() {
       {isLoading ? (
         <div className="flex flex-col items-center justify-center">
           <div className="animate-pulse flex space-x-4 mb-4">
-            <div className="rounded-full bg-rose-100 h-12 w-12"></div>
+            <div className="rounded-full bg-secondary-100 h-12 w-12"></div>
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Browsing matches...</h3>
           <p className="text-gray-600 mb-6 max-w-md mx-auto">
@@ -998,14 +998,14 @@ export default function MatchesPage() {
         </div>
       ) : (
         <>
-          <div className="bg-rose-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-            <Heart className="w-8 h-8 text-rose-400" />
+          <div className="bg-secondary-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <Heart className="w-8 h-8 text-secondary-400" />
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">No matches found yet</h3>
           <p className="text-gray-600 mb-6 max-w-md mx-auto">
             Try updating your preferences or keep checking back — someone special may join soon!
           </p>
-          <button className="bg-rose-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-rose-600 transition-colors">
+          <button className="bg-secondary-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-secondary-600 transition-colors">
             Edit Preferences
           </button>
         </>
@@ -1023,7 +1023,7 @@ export default function MatchesPage() {
             <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-white/10 rounded-full blur-2xl"></div>
             <div className="relative z-10">
               <h1 className="text-xl sm:text-2xl font-serif font-bold mb-1 sm:mb-2">Your Personalized Matches</h1>
-              <p className="text-rose-100 text-sm sm:text-base">Discover profiles selected just for you</p>
+              <p className="text-secondary-100 text-sm sm:text-base">Discover profiles selected just for you</p>
             </div>
           </div>
         </div>
@@ -1046,7 +1046,7 @@ export default function MatchesPage() {
             </div>
 
             {/* Match Type Tabs */}
-            <div className="bg-white rounded-lg sm:rounded-xl shadow-md sm:shadow-lg border border-rose-100/50 p-1 sm:p-2 w-full max-w-full overflow-hidden">
+            <div className="bg-white rounded-lg sm:rounded-xl shadow-md sm:shadow-lg border border-secondary-100/50 p-1 sm:p-2 w-full max-w-full overflow-hidden">
               <div className="flex overflow-x-auto pb-2 -mx-1 sm:-mx-2 px-1 sm:px-2 hide-scrollbar">
                 {tabs.map((tab) => {
                   const IconComponent = tab.icon;
@@ -1055,8 +1055,8 @@ export default function MatchesPage() {
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
                       className={`flex items-center px-3 py-2 sm:px-4 sm:py-2 rounded-md sm:rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-300 flex-shrink-0 mx-1 ${activeTab === tab.id
-                        ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                        : 'bg-white text-gray-600 hover:bg-rose-50'
+                        ? 'bg-secondary-50 text-secondary-700 border border-secondary-200'
+                        : 'bg-white text-gray-600 hover:bg-secondary-50'
                         }`}
                     >
                       <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 flex-shrink-0" />
@@ -1088,7 +1088,7 @@ export default function MatchesPage() {
 
         {/* Quick Filters & Sorting */}
         <div className={`transform transition-all duration-1000 delay-300 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-          <div className="bg-white rounded-lg sm:rounded-xl shadow-md sm:shadow-lg border border-rose-100/50 p-3 sm:p-4 mb-4 sm:mb-6">
+          <div className="bg-white rounded-lg sm:rounded-xl shadow-md sm:shadow-lg border border-secondary-100/50 p-3 sm:p-4 mb-4 sm:mb-6">
             <div className="flex flex-col md:flex-row gap-3 sm:gap-4">
 
 
@@ -1097,7 +1097,7 @@ export default function MatchesPage() {
               <div className="flex-1">
                 <button
                   onClick={() => setShowQuickFilters(!showQuickFilters)}
-                  className="flex items-center text-gray-700 hover:text-rose-600 transition-colors text-sm"
+                  className="flex items-center text-gray-700 hover:text-secondary-600 transition-colors text-sm"
                 >
                   <SlidersHorizontal className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                   <span className="font-medium">Quick Filters</span>
@@ -1129,7 +1129,7 @@ export default function MatchesPage() {
                           ...prev,
                           verified: e.target.checked ? true : null
                         }))}
-                        className="rounded border-gray-300 text-rose-600 focus:ring-rose-500 mr-1 sm:mr-2"
+                        className="rounded border-gray-300 text-secondary-600 focus:ring-rose-500 mr-1 sm:mr-2"
                       />
                       <span>Verified Only</span>
                     </label>
@@ -1143,7 +1143,7 @@ export default function MatchesPage() {
                           ...prev,
                           activeRecently: e.target.checked ? true : null
                         }))}
-                        className="rounded border-gray-300 text-rose-600 focus:ring-rose-500 mr-1 sm:mr-2"
+                        className="rounded border-gray-300 text-secondary-600 focus:ring-rose-500 mr-1 sm:mr-2"
                       />
                       <span>Active Recently</span>
                     </label>
@@ -1157,7 +1157,7 @@ export default function MatchesPage() {
                           ...prev,
                           sameCity: e.target.checked ? true : null
                         }))}
-                        className="rounded border-gray-300 text-rose-600 focus:ring-rose-500 mr-1 sm:mr-2"
+                        className="rounded border-gray-300 text-secondary-600 focus:ring-rose-500 mr-1 sm:mr-2"
                       />
                       <span>Same City</span>
                     </label>
@@ -1316,12 +1316,12 @@ export default function MatchesPage() {
                         setSearchQuery('');
                         setActiveTab('all');
                       }}
-                      className="text-xs text-rose-600 hover:text-rose-800"
+                      className="text-xs text-secondary-600 hover:text-secondary-800"
                     >
                       Clear Filters
                     </button>
                   )}
-                <div className="flex items-center text-xs sm:text-sm text-rose-600">
+                <div className="flex items-center text-xs sm:text-sm text-secondary-600">
                   <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-0.5 sm:mr-1" />
                   <span>Upgrade to see more</span>
                 </div>

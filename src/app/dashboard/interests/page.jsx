@@ -182,7 +182,7 @@ export default function InterestsPage() {
   const getBadgeStyle = (badge) => {
     switch (badge) {
       case 'New': return 'bg-blue-100 text-blue-800';
-      case 'Premium': return 'bg-amber-100 text-amber-800';
+      case 'Premium': return 'bg-primary-100 text-primary-800';
       case 'Verified': return 'bg-green-100 text-green-800';
       case 'Recently Active': return 'bg-purple-100 text-purple-800';
       default: return 'bg-gray-100 text-gray-800';
@@ -196,7 +196,7 @@ export default function InterestsPage() {
 
     return (
       <motion.div
-        className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 shadow-md sm:shadow-lg border border-rose-100/50 hover:shadow-sm sm:hover:shadow-xl transition-all duration-300 hover:border-rose-200"
+        className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 shadow-md sm:shadow-lg border border-secondary-100/50 hover:shadow-sm sm:hover:shadow-xl transition-all duration-300 hover:border-secondary-200"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
@@ -231,7 +231,7 @@ export default function InterestsPage() {
                   )}
                 </>
               ) : (
-                <User className="w-6 h-6 sm:w-8 sm:h-8 text-rose-500" />
+                <User className="w-6 h-6 sm:w-8 sm:h-8 text-secondary-500" />
               )}
             </motion.div>
             {profile?.isOnline && (
@@ -340,7 +340,7 @@ export default function InterestsPage() {
                 {(type === 'sent' || (type === 'received' && hasSubscription)) && (
                   <motion.button
                     onClick={() => handleViewProfile(person, type)}
-                    className="flex items-center px-2 sm:px-3 py-1 bg-white text-secondary border border-gray-200 rounded-md sm:rounded-lg text-xs sm:text-sm font-medium hover:bg-rose-50 hover:border-rose-200 transition-colors shadow-sm"
+                    className="flex items-center px-2 sm:px-3 py-1 bg-white text-secondary border border-gray-200 rounded-md sm:rounded-lg text-xs sm:text-sm font-medium hover:bg-secondary-50 hover:border-secondary-200 transition-colors shadow-sm"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     disabled={checkingSubscription}
@@ -368,7 +368,7 @@ export default function InterestsPage() {
       whileHover={{ x: 5 }}
       transition={{ type: "spring", stiffness: 300 }}
     >
-      <Icon className="w-5 h-5 text-rose-500 mt-0.5 mr-3 flex-shrink-0" />
+      <Icon className="w-5 h-5 text-secondary-500 mt-0.5 mr-3 flex-shrink-0" />
       <div>
         <div className="text-sm font-medium text-gray-500">{label}</div>
         <div className="text-gray-900">{value || 'Not specified'}</div>
@@ -439,7 +439,7 @@ export default function InterestsPage() {
           <p className="text-gray-600 mb-4">{error}</p>
           <button
             onClick={handleRefresh}
-            className="bg-rose-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-rose-600 transition-colors"
+            className="bg-secondary-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-secondary-600 transition-colors"
           >
             Try Again
           </button>
@@ -461,21 +461,21 @@ export default function InterestsPage() {
             onClick={() => setExpandedImage(null)}
           >
             <motion.div
-              className="relative bg-white rounded-lg shadow-xl border-2 border-rose-500 overflow-hidden w-full max-w-md mx-4"
+              className="relative bg-white rounded-lg shadow-xl border-2 border-secondary-500 overflow-hidden w-full max-w-md mx-4"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               transition={{ type: "spring" }}
             >
               {/* Header */}
-              <div className="bg-rose-500 p-2 flex justify-between items-center">
+              <div className="bg-secondary-500 p-2 flex justify-between items-center">
                 <div className="flex items-center space-x-2">
                   <Heart className="w-5 h-5 text-white" />
                   <span className="text-white font-medium">Profile Picture</span>
                 </div>
                 <motion.button
                   onClick={() => setExpandedImage(null)}
-                  className="p-1 rounded-full hover:bg-rose-600 transition-colors"
+                  className="p-1 rounded-full hover:bg-secondary-600 transition-colors"
                   whileHover={{ rotate: 90 }}
                   whileTap={{ scale: 0.8 }}
                 >
@@ -495,9 +495,9 @@ export default function InterestsPage() {
               </div>
 
               {/* Footer */}
-              <div className="bg-rose-50 p-3 border-t border-rose-200 flex justify-center">
-                <span className="text-rose-800 text-sm font-medium">
-                  MaliBandhan Matrimony
+              <div className="bg-secondary-50 p-3 border-t border-secondary-200 flex justify-center">
+                <span className="text-secondary-800 text-sm font-medium">
+                  Shree Kalyanam Matrimony
                 </span>
               </div>
             </motion.div>
@@ -507,12 +507,12 @@ export default function InterestsPage() {
 
       <div className="max-w-5xl mx-auto space-y-6">
         <motion.div
-          className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg sm:shadow-xl border border-rose-100/50 relative overflow-hidden"
+          className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg sm:shadow-xl border border-secondary-100/50 relative overflow-hidden"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1 }}
         >
-          <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-rose-50 rounded-full blur-xl sm:blur-2xl opacity-50"></div>
+          <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-secondary-50 rounded-full blur-xl sm:blur-2xl opacity-50"></div>
           <div className="relative z-10">
             <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
               <div>
@@ -522,20 +522,20 @@ export default function InterestsPage() {
 
               <div className="flex items-center gap-2 sm:gap-4 self-end xl:self-auto">
                 <div className="flex justify-start space-x-2 sm:space-x-6">
-                  <div className="bg-rose-50 rounded-lg px-3 sm:px-4 py-2 border border-rose-100 min-w-[90px] sm:min-w-[100px] text-center shadow-sm">
-                    <div className="text-xs text-rose-600 font-medium whitespace-nowrap">Pending Received</div>
-                    <div className="text-lg sm:text-xl font-bold text-rose-900 mt-1">{stats.pendingReceived || 0}</div>
+                  <div className="bg-secondary-50 rounded-lg px-3 sm:px-4 py-2 border border-secondary-100 min-w-[90px] sm:min-w-[100px] text-center shadow-sm">
+                    <div className="text-xs text-secondary-600 font-medium whitespace-nowrap">Pending Received</div>
+                    <div className="text-lg sm:text-xl font-bold text-secondary-900 mt-1">{stats.pendingReceived || 0}</div>
                   </div>
-                  <div className="bg-amber-50 rounded-lg px-3 sm:px-4 py-2 border border-amber-100 min-w-[90px] sm:min-w-[100px] text-center shadow-sm">
-                    <div className="text-xs text-amber-600 font-medium whitespace-nowrap">Pending Sent</div>
-                    <div className="text-lg sm:text-xl font-bold text-amber-900 mt-1">{stats.pendingSent || 0}</div>
+                  <div className="bg-primary-50 rounded-lg px-3 sm:px-4 py-2 border border-primary-100 min-w-[90px] sm:min-w-[100px] text-center shadow-sm">
+                    <div className="text-xs text-primary-600 font-medium whitespace-nowrap">Pending Sent</div>
+                    <div className="text-lg sm:text-xl font-bold text-primary-900 mt-1">{stats.pendingSent || 0}</div>
                   </div>
                 </div>
 
                 <motion.button
                   onClick={handleRefresh}
                   disabled={isRefreshing}
-                  className="p-2 ml-2 bg-white rounded-full text-gray-500 hover:text-rose-600 hover:bg-rose-50 transition-colors border border-gray-200 shadow-sm"
+                  className="p-2 ml-2 bg-white rounded-full text-gray-500 hover:text-secondary-600 hover:bg-secondary-50 transition-colors border border-gray-200 shadow-sm"
                   whileHover={{ rotate: 180 }}
                   whileTap={{ scale: 0.8 }}
                 >
@@ -547,7 +547,7 @@ export default function InterestsPage() {
         </motion.div>
 
         <motion.div
-          className="bg-white rounded-xl shadow-lg border border-rose-100/50"
+          className="bg-white rounded-xl shadow-lg border border-secondary-100/50"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -573,7 +573,7 @@ export default function InterestsPage() {
                     <Icon className="w-4 h-4" />
                     <span>{tab.label}</span>
                     <span className={`px-2 py-1 rounded-full text-xs ${activeTab === tab.id
-                      ? 'bg-rose-50 text-primary'
+                      ? 'bg-secondary-50 text-primary'
                       : 'bg-gray-100 text-gray-600'
                       }`}>
                       {tab.count}
@@ -592,8 +592,8 @@ export default function InterestsPage() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                <div className="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Heart className="w-8 h-8 text-rose-500" />
+                <div className="w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Heart className="w-8 h-8 text-secondary-500" />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
                   {activeTab === 'sent' ? 'No Interests Sent Yet' : 'No Interests Received Yet'}

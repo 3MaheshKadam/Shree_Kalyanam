@@ -484,7 +484,7 @@ export default function MatrimonialLogin() {
               <span className="text-white text-xl sm:text-2xl font-bold">💕</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-secondary to-primary mb-1 drop-shadow-sm">
-              MaliBandhan
+              Shree Kalyanam
             </h2>
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1 sm:mb-2">Welcome Back</h1>
             <p className="text-sm sm:text-base text-gray-600">Find your perfect match</p>

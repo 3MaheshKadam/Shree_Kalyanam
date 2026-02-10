@@ -62,7 +62,7 @@ export default function UserLayout({ children }) {
 
   if (loading || !shouldRender) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="flex items-center justify-center min-h-screen bg-secondary/10">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
@@ -71,7 +71,7 @@ export default function UserLayout({ children }) {
   // Special case: allow access to profile page even if not verified
   if (!user?.isVerified && !isProfilePage) {
     return (
-      <div className="flex min-h-screen bg-gradient-to-br from-rose-50 via-white to-amber-50">
+      <div className="flex min-h-screen bg-gradient-to-br from-secondary/5 via-white to-primary/5">
         <Sidebar mobileOpen={sidebarOpen} setMobileOpen={setSidebarOpen} />
         <div className="flex-1 p-6 overflow-y-auto flex items-center justify-center">
           <motion.div
@@ -134,7 +134,7 @@ export default function UserLayout({ children }) {
 
       <Sidebar mobileOpen={sidebarOpen} setMobileOpen={setSidebarOpen} />
 
-      <main className="flex-1 p-4 lg:p-6 overflow-y-auto bg-gradient-to-br from-rose-50 via-white to-amber-50 relative">
+      <main className="flex-1 p-4 lg:p-6 overflow-y-auto bg-gradient-to-br from-secondary/5 via-white to-primary/5 relative">
         {/* Mobile header */}
         <div className="lg:hidden flex items-center justify-between mb-4 bg-white/80 backdrop-blur-sm p-3 rounded-lg shadow-sm border border-primary/20">
           <button
@@ -144,11 +144,11 @@ export default function UserLayout({ children }) {
             <Menu className="w-5 h-5" />
           </button>
           <div className="flex items-center space-x-2">
-            {/* <div className="w-8 h-8 bg-gradient-to-br from-rose-500 to-rose-600 rounded-lg flex items-center justify-center">
+            {/* <div className="w-8 h-8 bg-gradient-to-br from-secondary to-secondary-600 rounded-lg flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-white" />
             </div> */}
             <span className="font-serif text-xl font-bold text-secondary">
-              Mali<span className="text-primary">Bandhan</span>
+              Shree <span className="text-primary">Kalyanam</span>
             </span>
           </div>
           {/* Spacer for centering logic if needed, or profile icon */}

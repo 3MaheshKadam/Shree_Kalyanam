@@ -69,12 +69,12 @@ export default function WhyChooseUs() {
         {/* 4. Abstract Wave Patterns (Middle) */}
         <div className="absolute top-1/4 right-0 w-full h-24 opacity-10">
           <svg width="100%" height="100%" preserveAspectRatio="none">
-            <path d="M0 20 Q 300 80 600 20 T 1200 50" stroke="#7E5D8C" strokeWidth="1" fill="none" />
+            <path d="M0 20 Q 300 80 600 20 T 1200 50" stroke="#800020" strokeWidth="1" fill="none" />
           </svg>
         </div>
         <div className="absolute bottom-1/3 left-0 w-full h-32 opacity-10">
           <svg width="100%" height="100%" preserveAspectRatio="none">
-            <path d="M0 60 Q 400 0 800 60 T 1600 30" stroke="#D982B2" strokeWidth="1" fill="none" />
+            <path d="M0 60 Q 400 0 800 60 T 1600 30" stroke="#D4AF37" strokeWidth="1" fill="none" />
           </svg>
         </div>
 
@@ -127,7 +127,7 @@ export default function WhyChooseUs() {
             Trusted by Thousands of Families
           </h2>
           <p className="text-lg text-secondary/70 max-w-2xl mx-auto font-light leading-relaxed">
-            We bring together tradition and technology to help you write your beautiful love story. Here is why MaliBandhan is the right choice for you.
+            We bring together tradition and technology to help you write your beautiful love story. Here is why Shree Kalyanam is the right choice for you.
           </p>
         </div>
 

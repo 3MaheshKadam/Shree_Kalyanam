@@ -516,6 +516,17 @@ const DynamicProfileForm = () => {
           </div>
         );
 
+      case 'textarea':
+        return (
+          <textarea
+            value={value}
+            onChange={(e) => handleInputChange(field.name, e.target.value)}
+            placeholder={field.placeholder || `Enter ${field.label}`}
+            rows={4}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent resize-y"
+          />
+        );
+
       case 'text':
       case 'email':
         return (

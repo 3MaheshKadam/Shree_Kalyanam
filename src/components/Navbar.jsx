@@ -32,7 +32,7 @@ export default function MatrimonialNavbar() {
           {/* <Heart className="text-primary" size={24} /> */}
           <Image src={"/logo.png"} width={1920} height={1080} className='w-12 h-12 rounded-full' alt='logo' />
           <span className="font-serif text-2xl font-bold text-secondary">
-            Mali<span className="text-primary">Bandhan</span>
+            Shree <span className="text-primary">Kalyanam</span>
           </span>
         </div>
 

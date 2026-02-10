@@ -12,7 +12,7 @@ const Footer = () => {
     <footer className="relative w-full bg-secondary text-white pt-24 pb-12 overflow-hidden">
       {/* Decorative floral backgrounds */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none mix-blend-screen"></div>
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-pink-500/10 rounded-full blur-[80px] pointer-events-none mix-blend-screen"></div>
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-secondary/10 rounded-full blur-[80px] pointer-events-none mix-blend-screen"></div>
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
@@ -23,7 +23,7 @@ const Footer = () => {
               <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
                 <Heart className="text-primary-light fill-primary-light" size={20} />
               </div>
-              <span className="text-3xl font-serif font-bold tracking-wide">MaliBandhan</span>
+              <span className="text-3xl font-serif font-bold tracking-wide">Shree Kalyanam</span>
             </div>
 
             <p className="text-white/70 leading-relaxed font-light text-lg">
@@ -100,8 +100,8 @@ const Footer = () => {
               </li>
               <li className="flex items-center space-x-3 group">
                 <Mail className="text-primary group-hover:text-primary-light transition-colors" size={20} />
-                <a href="mailto:support@malibandhan.com" className="text-white/70 hover:text-white transition-colors text-sm">
-                  support@malibandhan.com
+                <a href="mailto:support@shreekalyanam.com" className="text-white/70 hover:text-white transition-colors text-sm">
+                  support@shreekalyanam.com
                 </a>
               </li>
               <li className="flex items-center space-x-3 group">
@@ -141,7 +141,7 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-white/50">
-          <p>© {new Date().getFullYear()} MaliBandhan. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Shree Kalyanam. All rights reserved.</p>
           <div className="flex items-center space-x-2 mt-4 md:mt-0">
 
           </div>

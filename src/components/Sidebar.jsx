@@ -32,24 +32,24 @@ export default function Sidebar({ mobileOpen = false, setMobileOpen }) {
     <>
       <aside className={`
         fixed lg:sticky top-0 left-0 z-30
-        w-72 bg-gradient-to-b from-white to-rose-50/30 shadow-xl border-r border-rose-100/50 
+        w-72 bg-gradient-to-b from-white to-secondary/5 shadow-xl border-r border-secondary/10 
         h-screen flex flex-col overflow-hidden transition-all duration-300 ease-in-out
         ${mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* Mobile close button */}
         <button
-          className="lg:hidden absolute top-4 right-4 p-1 rounded-full bg-rose-50 text-gray-500 hover:text-primary transition-colors"
+          className="lg:hidden absolute top-4 right-4 p-1 rounded-full bg-secondary/10 text-gray-500 hover:text-primary transition-colors"
           onClick={() => setMobileOpen(false)}
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Header Section */}
-        <div className="p-6 border-b border-rose-100/50 bg-gradient-to-r from-rose-50 to-amber-50/50 flex-shrink-0">
+        <div className="p-6 border-b border-secondary/10 bg-gradient-to-r from-secondary/5 to-primary/5 flex-shrink-0">
           <div className="flex items-center space-x-3">
             <div>
               <h1 className="font-serif text-2xl font-bold text-secondary">
-                Mali<span className="text-primary">Bandhan</span>
+                Shree <span className="text-primary">Kalyanam</span>
               </h1>
               <p className="text-xs text-gray-500 font-medium">Find Your Perfect Match</p>
             </div>
@@ -59,7 +59,7 @@ export default function Sidebar({ mobileOpen = false, setMobileOpen }) {
         {/* Navigation Section */}
         <nav className="flex-1 overflow-y-auto p-4 space-y-1 
           scrollbar-thin 
-          scrollbar-thumb-rose-200 
+          scrollbar-thumb-secondary/20 
           scrollbar-track-transparent 
           hover:scrollbar-thumb-primary/50 
           scrollbar-thumb-rounded-full 
@@ -80,7 +80,7 @@ export default function Sidebar({ mobileOpen = false, setMobileOpen }) {
                 href={item.href}
                 className={`group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 relative overflow-hidden ${isActive
                   ? "bg-gradient-to-r from-secondary to-primary text-white shadow-lg shadow-primary/20 transform scale-[1.02]"
-                  : "hover:bg-gradient-to-r hover:from-rose-50 hover:to-amber-50 text-gray-700 hover:text-primary hover:shadow-md hover:transform hover:scale-[1.02]"
+                  : "hover:bg-gradient-to-r hover:from-secondary/10 hover:to-primary/10 text-gray-700 hover:text-primary hover:shadow-md hover:transform hover:scale-[1.02]"
                   }`}
               >
                 {/* Active indicator */}
@@ -133,8 +133,8 @@ export default function Sidebar({ mobileOpen = false, setMobileOpen }) {
         </div>
 
         {/* Decorative Elements */}
-        <div className="absolute top-32 -right-8 w-16 h-16 bg-gradient-to-br from-rose-200 to-amber-200 rounded-full blur-xl opacity-30"></div>
-        <div className="absolute bottom-32 -left-4 w-12 h-12 bg-gradient-to-br from-amber-200 to-rose-200 rounded-full blur-lg opacity-40"></div>
+        <div className="absolute top-32 -right-8 w-16 h-16 bg-gradient-to-br from-secondary/20 to-primary/20 rounded-full blur-xl opacity-30"></div>
+        <div className="absolute bottom-32 -left-4 w-12 h-12 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full blur-lg opacity-40"></div>
       </aside>
     </>
   );
