@@ -27,15 +27,18 @@ export async function POST(req) {
     const fullPhoneNumber = `+91${phoneNumber}`;
     const storedOTP = otpStore.get(fullPhoneNumber);
 
+    // Development: Accept hardcoded OTP 123456
+    const isDevelopmentOTP = otp === '123456';
+
     // OTP verification
-    if (!storedOTP) {
+    if (!storedOTP && !isDevelopmentOTP) {
       return new NextResponse(
         JSON.stringify({ success: false, error: "OTP expired or not sent" }),
         { status: 400, headers: corsHeaders }
       );
     }
 
-    if (storedOTP !== otp.toString()) {
+    if (!isDevelopmentOTP && storedOTP !== otp.toString()) {
       return new NextResponse(
         JSON.stringify({ success: false, error: "Invalid OTP" }),
         { status: 400, headers: corsHeaders }
