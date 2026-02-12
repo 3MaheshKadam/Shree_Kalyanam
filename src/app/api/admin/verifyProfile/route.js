@@ -1,10 +1,10 @@
-import dbConnect from "@/lib/db";
+import connectDB from "@/lib/dbConnect";
 import User from "@/models/User";
 
 export const POST = async (request) => {
   try {
     const { userId, action } = await request.json();
-    console.log(userId,action)
+    console.log(userId, action)
     await dbConnect();
 
     let updateData = {};

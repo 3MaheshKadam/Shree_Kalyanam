@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { 
+import {
   User, Heart, Eye, CheckCircle, Clock, Crown, ArrowRight, Bell, MapPin, Calendar, Award, TrendingUp, Star, Gift, Sparkles, UserPlus, MessageCircle, Camera, Phone, Shield
 } from 'lucide-react';
 import { useSession } from '@/context/SessionContext';
@@ -12,7 +12,7 @@ export default function MatrimonialDashboard() {
   const router = useRouter()
   const [userData, setUserData] = useState({ name: '', profileCompletion: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
-  
+
   const fetchUserData = async () => {
     try {
       const response = await fetch('/dashboard/profile/me');
@@ -24,7 +24,7 @@ export default function MatrimonialDashboard() {
       return { name: 'User', profileCompletion: 0 };
     }
   };
-  
+
   useEffect(() => {
     const loadData = async () => {
       // Simulate loading delay
@@ -36,28 +36,43 @@ export default function MatrimonialDashboard() {
       });
       setIsLoaded(true);
     };
-    
+
     loadData();
   }, [user]);
-  
+
 
   // Get subscription plan display name and status
   const getSubscriptionInfo = () => {
     if (!user?.subscription) return { plan: 'Free Plan', status: 'Inactive', color: 'bg-gray-500' };
-    
+
     const { plan, isSubscribed, expiresAt } = user.subscription;
     const expiryDate = new Date(expiresAt);
     const isExpired = expiryDate < new Date();
-    
+
+    // Determine color based on plan type
+    let gradientColor = 'bg-gradient-to-br from-gray-400 to-gray-500'; // Default/Free
+
+    if (isSubscribed && !isExpired) {
+      if (plan?.toLowerCase().includes('gold')) {
+        gradientColor = 'bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600';
+      } else if (plan?.toLowerCase().includes('silver')) {
+        gradientColor = 'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-500';
+      } else if (plan?.toLowerCase().includes('premium') || plan?.toLowerCase().includes('platinum')) {
+        gradientColor = 'bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600';
+      } else {
+        gradientColor = 'bg-gradient-to-br from-rose-500 to-pink-600'; // Default active
+      }
+    }
+
     return {
       plan: plan || 'Basic Plan',
       status: isSubscribed && !isExpired ? 'Active' : 'Expired',
-      expiryDate: expiryDate.toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'short', 
-        day: 'numeric' 
+      expiryDate: expiryDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
       }),
-      color: isSubscribed && !isExpired ? 'bg-gradient-to-br from-amber-400 to-rose-500' : 'bg-gradient-to-br from-amber-400 to-rose-500'
+      color: gradientColor
     };
   };
 
@@ -76,12 +91,35 @@ export default function MatrimonialDashboard() {
     <div className={`bg-gray-200 rounded animate-pulse ${width} ${height} mb-2`}></div>
   );
 
-  const recentActivity = [
-    { type: "view", message: "Someone viewed your profile", time: "2 hours ago", icon: Eye },
-    { type: "interest", message: "New interest received", time: "5 hours ago", icon: Heart },
-    { type: "match", message: "You have a new match!", time: "1 day ago", icon: Star },
-    { type: "message", message: "Someone sent you a message", time: "2 days ago", icon: MessageCircle },
-  ];
+  const [recentActivity, setRecentActivity] = useState([]);
+
+  useEffect(() => {
+    const fetchRecentActivity = async () => {
+      try {
+        if (!user?.id && !user?.user?.id) return;
+
+        const userId = user?.id || user?.user?.id;
+        const res = await fetch(`/api/interest/received?userId=${userId}`);
+        const data = await res.json();
+
+        if (data.success && data.interests) {
+          const activities = data.interests.slice(0, 5).map(interest => ({
+            type: "interest",
+            message: `New interest received from ${interest.sender?.name || 'a member'}`,
+            time: new Date(interest.createdAt).toLocaleDateString(),
+            icon: Heart
+          }));
+          setRecentActivity(activities);
+        }
+      } catch (error) {
+        console.error("Error fetching recent activity:", error);
+      }
+    };
+
+    if (user) {
+      fetchRecentActivity();
+    }
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50/50 via-white to-amber-50/30 p-6">
@@ -91,13 +129,13 @@ export default function MatrimonialDashboard() {
           <SkeletonCard height="h-32" />
         ) : (
           <div className={`transform transition-all duration-1000 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-            <div className="bg-gradient-to-r from-rose-500 to-rose-600 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
+            <div className="bg-gradient-to-r from-orange-500 via-rose-500 to-pink-600 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full blur-xl"></div>
               <div className="relative z-10">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h1 className="text-2xl font-bold mb-2">Welcome back, {user?.name}! 👋</h1>
+                    <h1 className="text-2xl font-serif font-bold mb-2">Welcome back, {user?.name}! 👋</h1>
                     <p className="text-rose-100">Your perfect match is just a click away</p>
                   </div>
                   <div className="hidden md:block">
@@ -150,7 +188,7 @@ export default function MatrimonialDashboard() {
                     </span>
                   </div>
                 </div>
-               
+
               </div>
             </div>
 
@@ -158,38 +196,38 @@ export default function MatrimonialDashboard() {
             <div className="bg-white rounded-xl p-6 shadow-lg border border-rose-100/50 hover:shadow-xl transition-all duration-300">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold text-gray-800">Contact Info</h3>
-                <Phone className="w-5 h-5 text-rose-500" />
+                <Phone className="w-5 h-5 text-secondary" />
               </div>
               <div className="space-y-3">
                 <div>
                   <div className="text-sm text-gray-600 mb-1">Phone Number</div>
                   <div className="text-sm font-medium text-gray-900">{user?.phone}</div>
                 </div>
-               
+
               </div>
             </div>
 
             {/* Subscription Status */}
-         <div className={`${subscriptionInfo.color} rounded-xl p-6 shadow-lg text-white`}>
-  <div className="flex items-center justify-between mb-4">
-    <h3 className="font-semibold">{subscriptionInfo.plan}</h3>
-    <Crown className="w-5 h-5 text-yellow-200" />
-  </div>
-  <div className="space-y-2">
-    <div className="text-lg font-bold">{subscriptionInfo.status}</div>
-    {user?.subscription?.isSubscribed && (
-      <div className="text-sm text-white/80">
-        Expires: {subscriptionInfo.expiryDate}
-      </div>
-    )}
-    <Link 
-      href={"/dashboard/subscription"} 
-      className="inline-block w-full p-3 bg-white/20 text-white rounded-lg text-sm font-medium hover:bg-white/30 transition-colors mt-3 text-center"
-    >
-      {subscriptionInfo.status === 'Active' ? 'Manage Plan' : 'Upgrade Now'}
-    </Link>
-  </div>
-</div>
+            <div className={`${subscriptionInfo.color} rounded-xl p-6 shadow-lg text-white`}>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-semibold">{subscriptionInfo.plan}</h3>
+                <Crown className="w-5 h-5 text-yellow-200" />
+              </div>
+              <div className="space-y-2">
+                <div className="text-lg font-bold">{subscriptionInfo.status}</div>
+                {user?.subscription?.isSubscribed && (
+                  <div className="text-sm text-white/80">
+                    Expires: {subscriptionInfo.expiryDate}
+                  </div>
+                )}
+                <Link
+                  href={"/dashboard/subscription"}
+                  className="inline-block w-full p-3 bg-white/20 text-white rounded-lg text-sm font-medium hover:bg-white/30 transition-colors mt-3 text-center"
+                >
+                  {subscriptionInfo.status === 'Active' ? 'Manage Plan' : 'Upgrade Now'}
+                </Link>
+              </div>
+            </div>
           </div>
         )}
 
@@ -209,21 +247,21 @@ export default function MatrimonialDashboard() {
               <div className="text-center">
                 <div className="relative inline-block mb-4">
                   {user?.profilePhoto ? (
-                    <img 
-                      src={user.profilePhoto} 
+                    <img
+                      src={user.profilePhoto}
                       alt={user.name}
                       className="w-24 h-24 rounded-full object-cover mx-auto border-4 border-rose-100"
                     />
                   ) : (
-                    <div className="w-24 h-24 bg-gradient-to-br from-rose-100 to-amber-100 rounded-full flex items-center justify-center mx-auto">
-                      <User className="w-12 h-12 text-rose-500" />
+                    <div className="w-24 h-24 bg-gradient-to-br from-primary-light to-white rounded-full flex items-center justify-center mx-auto border-4 border-rose-50">
+                      <User className="w-12 h-12 text-primary" />
                     </div>
                   )}
                   <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
                     <CheckCircle className="w-3 h-3 text-white" />
                   </div>
                 </div>
-                <h3 className="font-bold text-gray-900 text-lg mb-1">{user?.name}</h3>
+                <h3 className="font-bold text-secondary text-lg mb-1">{user?.name}</h3>
                 <div className="flex items-center justify-center mb-2">
                   <Award className="w-4 h-4 text-green-500 mr-1" />
                   <span className={`text-sm ${user?.isVerified ? "text-green-600" : "text-orange-500"} font-medium`}>
@@ -233,59 +271,63 @@ export default function MatrimonialDashboard() {
                 <div className="text-xs text-gray-500 mb-4">
                   {subscriptionInfo.plan} Member
                 </div>
-                <Link href="/dashboard/profile/me" className="w-full block bg-gradient-to-r px-3 from-rose-500 to-rose-600 text-white py-2 rounded-lg font-medium hover:from-rose-600 hover:to-rose-700 transition-all duration-300 text-center">
+                <Link href="/dashboard/profile/me" className="w-full block bg-gradient-to-r px-3 from-secondary to-secondary/80 text-white py-2 rounded-lg font-medium hover:from-secondary/90 hover:to-secondary transition-all duration-300 text-center shadow-md">
                   Edit Profile
                 </Link>
               </div>
             </div>
 
             {/* Quick Actions Dashboard */}
-        <div className="lg:col-span-2 bg-white rounded-xl p-6 shadow-lg border border-rose-100/50">
-  <div className="flex items-center justify-between mb-6">
-    <h3 className="font-bold text-gray-900 text-lg">Quick Actions</h3>
-  </div>
-  
-  <div className="flex flex-col gap-4 mb-6">
-    <Link href={"/dashboard/matches"} className="flex items-center p-4 bg-rose-50 rounded-lg hover:bg-rose-100 transition-colors">
-      <Heart className="w-6 h-6 text-rose-500 mr-3" />
-      <div className="text-left">
-        <div className="font-medium text-gray-900">Browse Matches</div>
-        <div className="text-sm text-gray-600">Find your perfect match</div>
-      </div>
-    </Link>
-    
-    <Link href={"/dashboard/interests"} className="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-      <UserPlus className="w-6 h-6 text-green-500 mr-3" />
-      <div className="text-left">
-        <div className="font-medium text-gray-900">Interests</div>
-        <div className="text-sm text-gray-600">Manage interests</div>
-      </div>
-    </Link>
-  </div>
-</div>  
+            <div className="lg:col-span-2 bg-white rounded-xl p-6 shadow-lg border border-rose-100/50">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="font-bold text-gray-900 text-lg">Quick Actions</h3>
+              </div>
+
+              <div className="flex flex-col gap-4 mb-6">
+                <Link href={"/dashboard/matches"} className="flex items-center p-4 bg-rose-50 rounded-lg hover:bg-rose-100 transition-colors group border border-rose-100">
+                  <div className="p-2 bg-white rounded-full mr-4 shadow-sm group-hover:scale-110 transition-transform">
+                    <Heart className="w-6 h-6 text-primary" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-medium text-secondary">Browse Matches</div>
+                    <div className="text-sm text-gray-600">Find your perfect match</div>
+                  </div>
+                </Link>
+
+                <Link href={"/dashboard/interests"} className="flex items-center p-4 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors group border border-indigo-100">
+                  <div className="p-2 bg-white rounded-full mr-4 shadow-sm group-hover:scale-110 transition-transform">
+                    <UserPlus className="w-6 h-6 text-secondary" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-medium text-secondary">Interests</div>
+                    <div className="text-sm text-gray-600">Manage interests</div>
+                  </div>
+                </Link>
+              </div>
+            </div>
           </div>
         )}
 
-       
+
 
         {/* Call to Action */}
         {!isLoaded ? (
           <SkeletonCard height="h-24" />
         ) : (
           <div className={`transform transition-all duration-1000 delay-500 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-            <div className="bg-gradient-to-r from-rose-500 to-amber-500 rounded-xl p-6 text-white shadow-xl">
+            <div className="bg-gradient-to-r from-orange-500 via-rose-500 to-pink-600 rounded-xl p-6 text-white shadow-xl">
               <div className="flex flex-col md:flex-row items-center justify-between">
                 <div className="mb-4 md:mb-0">
-                  <h3 className="font-bold text-xl mb-2">Ready to find your perfect match?</h3>
+                  <h3 className="font-serif font-bold text-xl mb-2">Ready to find your perfect match?</h3>
                   <p className="text-rose-100">Explore personalized matches based on your preferences</p>
                 </div>
                 <div className="flex space-x-3">
-                  <Link href={"/dashboard/matches"}  className="cursor-pointer bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-lg font-medium hover:bg-white/30 transition-all duration-300 flex items-center">
+                  <Link href={"/dashboard/matches"} className="cursor-pointer bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-lg font-medium hover:bg-white/30 transition-all duration-300 flex items-center">
                     <Heart className="w-4 h-4 mr-2" />
                     Browse Matches
                   </Link>
                   {subscriptionInfo.status !== 'Active' && (
-                    <button className="bg-white text-rose-600 px-6 py-3 rounded-lg font-medium hover:bg-rose-50 transition-all duration-300 flex items-center">
+                    <button className="bg-white text-secondary px-6 py-3 rounded-lg font-medium hover:bg-rose-50 transition-all duration-300 flex items-center shadow-lg">
                       <Gift className="w-4 h-4 mr-2" />
                       Upgrade Plan
                     </button>

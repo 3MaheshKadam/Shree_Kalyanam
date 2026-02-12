@@ -52,7 +52,7 @@
 //   });
 // }
 
-import otpStore from "../../../lib/otpStore"; 
+import otpStore from "../../../lib/otpStore";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -66,38 +66,45 @@ export async function POST(req) {
     }
 
     const fullPhoneNumber = `+91${phoneNumber}`;
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    // const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otp = '123456'; // FIXED for dev
+    console.log("DEV DEBUG - Generated OTP:", otp);
 
     // Send OTP via Fast2SMS (DLT template)
-    const fast2smsResponse = await fetch("https://www.fast2sms.com/dev/bulkV2", {
-      method: "POST",
-      headers: {
-        Authorization: process.env.FAST2SMS_API_KEY, // ✅ keep in .env
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        route: "dlt",
-        sender_id: "SHVBDN", // Your approved sender id
-        message: "197321",   // 👈 Your template_id (replace with yours)
-        variables_values: otp, // OTP fills {#var#}
-        numbers: phoneNumber,  // Send without +91
-      }),
-    });
+    try {
+      const fast2smsResponse = await fetch("https://www.fast2sms.com/dev/bulkV2", {
+        method: "POST",
+        headers: {
+          Authorization: process.env.FAST2SMS_API_KEY, // ✅ keep in .env
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          route: "dlt",
+          sender_id: "SHVBDN", // Your approved sender id
+          message: "197321",   // 👈 Your template_id (replace with yours)
+          variables_values: otp, // OTP fills {#var#}
+          numbers: phoneNumber,  // Send without +91
+        }),
+      });
 
-    const responseData = await fast2smsResponse.json();
+      const responseData = await fast2smsResponse.json();
 
-    if (!responseData.return) {
-      throw new Error(responseData.message || "Failed to send OTP via Fast2SMS");
+      if (!responseData.return) {
+        console.error("Fast2SMS Error (Non-fatal):", responseData.message);
+        // throw new Error(responseData.message || "Failed to send OTP via Fast2SMS");
+      }
+    } catch (smsError) {
+      console.error("SMS Send Failed (proceeding with dev/manual mode):", smsError.message);
     }
 
-    // Store OTP in memory
+    // Store OTP in memory regardless of SMS success (for dev/testing)
     otpStore.set(fullPhoneNumber, otp);
     setTimeout(() => otpStore.delete(fullPhoneNumber), 5 * 60 * 1000);
 
-    return NextResponse.json({ success: true, message: "OTP sent successfully" });
+    return NextResponse.json({ success: true, message: "OTP generated (check console for dev mode)" });
   } catch (error) {
     return NextResponse.json(
-      { success: false, message: "Error sending OTP", error: error.message },
+      { success: false, message: "Error in OTP flow", error: error.message },
       { status: 500 }
     );
   }

@@ -1,10 +1,10 @@
-import dbConnect from "@/lib/db";
+import connectDB from "@/lib/dbConnect";
 import User from "@/models/User";
 import { calculateProfileCompletion } from "@/lib/profileCompletion";
 
 export const GET = async (request) => {
   try {
-    await dbConnect();
+    await connectDB();
 
     // Find all users who have requested verification or are pending
     const potentialUsers = await User.find({

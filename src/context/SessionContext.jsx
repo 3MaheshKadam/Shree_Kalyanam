@@ -121,10 +121,7 @@ export function SessionProvider({ children }) {
         }
       } catch (error) {
         console.error("❌ Failed to load session:", error);
-        // If API fails (e.g. 500 error, 401, etc), we must clear the potential stale local data
-        // to prevent the app from thinking the user is authenticated.
-        setUser(null);
-        localStorage.removeItem('user');
+        // If API fails, stick with localStorage user if available
       } finally {
         setLoading(false);
       }

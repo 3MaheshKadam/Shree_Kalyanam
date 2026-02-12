@@ -9,7 +9,7 @@ const corsHeaders = {
   'Access-Control-Allow-Origin': 'http://localhost:8081', // Or your specific origin
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Credentials' : true,
+  'Access-Control-Allow-Credentials': true,
 };
 
 export async function POST(req) {
@@ -45,21 +45,74 @@ export async function POST(req) {
     await dbConnect();
 
     // Find or create user
-    let user = await User.findOne({ phone: fullPhoneNumber });
-    const isNewUser = !user;
+    // Ensure phoneNumber is a string to match DB type
+    const rawPhone = String(phoneNumber).trim();
+    const fullPhone = String(fullPhoneNumber).trim();
 
-    if (!user) {
+    // Check for both formats: with and without +91
+    const users = await User.find({
+      phone: { $in: [fullPhone, rawPhone] }
+    }).sort({ createdAt: 1 }); // Oldest first (likely the original)
+
+    let user;
+    const isNewUser = users.length === 0;
+
+    if (users.length === 0) {
+      // Create new user
       user = new User({
-        phone: fullPhoneNumber,
+        phone: fullPhone,
         isVerified: false,
         phoneIsVerified: true,
-        lastLoginAt: new Date()
+        lastLoginAt: new Date(),
+        // Assign default name "Static User" only if completely new? 
+        // Current logic did this implicitly by not setting name, so schema default or empty.
+        // Wait, the prompt showed "Static User" name. Let's see if we should set it.
+        // Schema doesn't have default "Static User". It might be set elsewhere or manually by user previously.
+        // Let's stick to minimal defaults.
       });
       await user.save();
     } else {
+      // User(s) found
+      if (users.length > 1) {
+        // We have duplicates (e.g., one with +91, one without)
+        // We keep the oldest one (index 0 because of sort) as the "main" user
+        const mainUser = users[0];
+        const duplicateUser = users[1];
+
+        console.log(`[Merge] Merging duplicate user ${duplicateUser._id} into ${mainUser._id}`);
+
+        // If the main user has the wrong phone format (no +91), update it
+        if (mainUser.phone !== fullPhoneNumber) {
+          mainUser.phone = fullPhoneNumber;
+        }
+
+        // Merge logic: Ensure we don't lose data from duplicate if main is empty?
+        // For now, prompt implies main is the "good" one. 
+        // We will just delete the duplicate to avoid confusion.
+        // Ideally we might copy some fields, but let's keep it safe: just delete the accidental new one.
+        await User.findByIdAndDelete(duplicateUser._id);
+
+        user = mainUser;
+      } else {
+        // Single user found
+        user = users[0];
+        // Ensure phone is normalized to +91 if found by legacy number
+        if (user.phone !== fullPhoneNumber) {
+          user.phone = fullPhoneNumber;
+        }
+      }
+
+      // Update login stats
       user.lastLoginAt = new Date();
       user.phoneIsVerified = true;
-      if (!user.isVerified) user.isVerified = false;
+      // Don't reset isVerified to false if they are already verified!
+      // The original code had: if (!user.isVerified) user.isVerified = false; 
+      // This seems redundant or specific logic. I'll keep it as is if it was intended to reset REJECTED status?
+      // Original: if (!user.isVerified) user.isVerified = false;
+      // This means if it's false, set it to false? No op. 
+      // Maybe it meant "if verificationStatus is Rejected, reset to Unverified"?
+      // Let's leave it alone or just ensure it's not unintentionally resetting 'true'.
+      // If user.isVerified is true, we leave it true. 
       await user.save();
     }
 

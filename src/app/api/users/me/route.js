@@ -19,7 +19,7 @@ export async function GET(request) {
     if (!token) {
       return NextResponse.json(
         { message: 'Unauthorized' },
-        { status: 401 ,headers:corsHeaders}
+        { status: 401, headers: corsHeaders }
       );
     }
     console.log('Token :', token);
@@ -29,7 +29,7 @@ export async function GET(request) {
     if (!decoded) {
       return NextResponse.json(
         { message: 'Invalid token' },
-        { status: 401,headers:corsHeaders }
+        { status: 401, headers: corsHeaders }
       );
     }
 
@@ -37,104 +37,119 @@ export async function GET(request) {
     if (!user) {
       return NextResponse.json(
         { message: 'User not found' },
-        { status: 404,headers:corsHeaders }
+        { status: 404, headers: corsHeaders }
       );
     }
     console.log('User found:', user);
     // Filter data based on privacy settings
-   const userData = {
-  // Basic Info
-  name: user.name,
-  phone: user.privacySettings.showContact ? user.phone : undefined,
-  profilePhoto: user.privacySettings.showPhoto ? user.profilePhoto : undefined,
-  gender: user.gender,
-  dob: user.dob,
-  height: user.height,
-  weight: user.weight,
-  maritalStatus: user.maritalStatus,
-  motherTongue: user.motherTongue,
-  email: user.email,
-  bloodGroup: user.bloodGroup,
-  complexion: user.complexion,
-  wearsLens: user.wearsLens,
-  permanentAddress: user.permanentAddress,
-  
-  
-  // Religious & Community
-  religion: user.religion,
-  caste: user.caste,
-  subCaste: user.subCaste,
-  gothra: user.gothra,
-  
-  // Education & Profession
-  education: user.education,
-  fieldOfStudy: user.fieldOfStudy,
-  college: user.college,
-  occupation: user.occupation,
-  company: user.company,
-  income: user.income,
-  profilePhoto:user.profilePhoto,
-  
-  // Location
-  currentCity: user.currentCity,
-  state: user.state,
-  
-  // Relative Info
-  fatherName: user.fatherName,
-  parentResidenceCity: user.parentResidenceCity,
-  mother: user.mother,
-  brothers: user.brothers,
-  marriedBrothers: user.marriedBrothers,
-  sisters: user.sisters,
-  marriedSisters: user.marriedSisters,
-  nativeDistrict: user.nativeDistrict,
-  nativeCity: user.nativeCity,
-  familyWealth: user.familyWealth,
-  relativeSurname: user.relativeSurname,
-  parentOccupation: user.parentOccupation,
-  mamaSurname: user.mamaSurname,
-  
-  // Horoscope Info
-  rashi: user.rashi,
-  nakshira: user.nakshira,
-  charan: user.charan,
-  gan: user.gan,
-  nadi: user.nadi,
-  mangal: user.mangal,
-  birthPlace: user.birthPlace,
-  birthTime: user.birthTime,
-  gotraDevak: user.gotraDevak,
-  
-  // Expectations
-  expectedCaste: user.expectedCaste,
-  preferredCity: user.preferredCity,
-  expectedAgeDifference: user.expectedAgeDifference,
-  expectedEducation: user.expectedEducation,
-  divorcee: user.divorcee,
-  expectedHeight: user.expectedHeight,
-  expectedIncome: user.expectedIncome,
-  
-  // System Info
-  id: user._id,
-  isVerified: user.isVerified,
-  verificationStatus: user.verificationStatus,
-  preferences: user.preferences,
-  subscription: user.subscription,
-  createdAt: user.createdAt,
+    const userData = {
+      // Basic Info
+      name: user.name,
+      phone: user.phone,
+      profilePhoto: user.profilePhoto,
+      gender: user.gender,
+      dob: user.dob,
+      height: user.height,
+      weight: user.weight,
+      maritalStatus: user.maritalStatus,
+      motherTongue: user.motherTongue,
+      email: user.email,
+      bloodGroup: user.bloodGroup,
+      complexion: user.complexion,
+      wearsLens: user.wearsLens,
+      permanentAddress: user.permanentAddress,
 
-  // profile setup
- profileSetup: {
+
+      // Religious & Community
+      religion: user.religion,
+      caste: user.caste,
+      subCaste: user.subCaste,
+      gothra: user.gothra,
+
+      // Education & Profession
+      education: user.education,
+      fieldOfStudy: user.fieldOfStudy,
+      college: user.college,
+      occupation: user.occupation,
+      company: user.company,
+      income: user.income,
+      profilePhoto: user.profilePhoto,
+
+      // Location
+      currentCity: user.currentCity,
+      state: user.state,
+
+      // Relative Info
+      fatherName: user.fatherName,
+      parentResidenceCity: user.parentResidenceCity,
+      mother: user.mother,
+      brothers: user.brothers,
+      marriedBrothers: user.marriedBrothers,
+      sisters: user.sisters,
+      marriedSisters: user.marriedSisters,
+      nativeDistrict: user.nativeDistrict,
+      nativeCity: user.nativeCity,
+      familyWealth: user.familyWealth,
+      relativeSurname: user.relativeSurname,
+      parentOccupation: user.parentOccupation,
+      mamaSurname: user.mamaSurname,
+
+      // Horoscope Info
+      rashi: user.rashi,
+      nakshira: user.nakshira,
+      charan: user.charan,
+      gan: user.gan,
+      nadi: user.nadi,
+      mangal: user.mangal,
+      birthPlace: user.birthPlace,
+      birthTime: user.birthTime,
+      gotraDevak: user.gotraDevak,
+
+      // Expectations
+      expectedCaste: user.expectedCaste,
+      expectedSubCaste: user.expectedSubCaste,
+      preferredCity: user.preferredCity,
+      expectedAgeDifference: user.expectedAgeDifference,
+      expectedEducation: user.expectedEducation,
+      expectedWorkingStatus: user.expectedWorkingStatus,
+      divorcee: user.divorcee,
+      expectedHeight: user.expectedHeight,
+      expectedIncome: user.expectedIncome,
+
+      // System Info
+      id: user._id,
+      isVerified: user.isVerified,
+      verificationStatus: user.verificationStatus,
+      preferences: user.preferences,
+      subscription: user.subscription,
+      createdAt: user.createdAt,
+
+      // profile setup
+      profileSetup: {
+        willAdminFill: user.profileSetup?.willAdminFill || false,
         willAdminFill: user.profileSetup?.willAdminFill || false,
         dontAskAgain: user.profileSetup?.dontAskAgain || false
-      }
-};
-    console.log("Me = ",userData)
-    return NextResponse.json(userData,{headers:corsHeaders});
+      },
+
+      // Photos
+      photos: user.photos || []
+    };
+    console.log("Me = ", userData)
+    return NextResponse.json(userData, { headers: corsHeaders });
   } catch (error) {
     console.error('Error fetching user profile:', error);
+
+    // Handle specific JWT errors
+    if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+      return NextResponse.json(
+        { message: 'Invalid or expired token' },
+        { status: 401, headers: corsHeaders }
+      );
+    }
+
     return NextResponse.json(
       { message: 'Internal server error' },
-      { status: 500,headers:corsHeaders }
+      { status: 500, headers: corsHeaders }
     );
   }
 }

@@ -139,7 +139,7 @@
 
 //   try {
 //     await dbConnect();
-    
+
 //     // Get token from cookie or Authorization header
 //     let token = request.cookies.get('authToken')?.value;
 //     if (!token) {
@@ -391,7 +391,7 @@ export const GET = async (request) => {
 
   try {
     await dbConnect();
-    
+
     // Get token from cookie or Authorization header
     let token = request.cookies.get('authToken')?.value;
     if (!token) {
@@ -438,7 +438,8 @@ export const GET = async (request) => {
           phoneIsVerified: user.phoneIsVerified,
           subscription: user.subscription,
           profilePhoto: user.profilePhoto,
-          gender: user?.gender
+          gender: user?.gender,
+          currentCity: user.currentCity // Added currentCity for nearby filter
         }
       }),
       { headers }
@@ -459,31 +460,86 @@ export const POST = async (request) => {
 
   try {
     await dbConnect();
-    const { userId } = await request.json();  // userId is actually the phone number
+
+    const body = await request.json();
+    let { userId } = body;
+    console.log('Received session request for:', userId);
 
     if (!userId) {
       return new NextResponse(
-        JSON.stringify({ error: 'Phone number is required' }),
+        JSON.stringify({ error: 'User ID or Phone is required' }),
         { status: 400, headers }
       );
     }
 
-    console.log('Creating session for phone:', userId);
+    let user;
+    const mongoose = require('mongoose');
 
-    let user = await User.findOne({ phone: userId });
+    // Check if input is a valid MongoDB ObjectId
+    if (mongoose.Types.ObjectId.isValid(userId)) {
+      console.log('Looking up user by ID:', userId);
+      user = await User.findById(userId);
+    }
+
+    // If not found by ID, or not an ID, try as Phone Number
     if (!user) {
-      // Create new user if not found
-      user = new User({
-        phone: userId,
-        name: 'Static User',
-        isVerified: true,
-        phoneIsVerified: true,
-        subscription: null,
-        profilePhoto: null,
-        gender: null
-      });
-      await user.save();
-      console.log('Created new user with ID:', user._id);
+      console.log('Looking up or creating user by Phone:', userId);
+      // Ensure phone number has +91 prefix
+      if (!userId.startsWith('+91') && /^\d{10}$/.test(userId)) {
+        userId = '+91' + userId;
+      }
+
+      // 1. Clean input to get raw digits
+      const rawDigits = userId.replace(/^\+91/, '');
+      const phoneWithPrefix = `+91${rawDigits}`;
+      const phoneWithoutPrefix = rawDigits;
+
+      // 2. Find ANY user matching either format
+      const users = await User.find({
+        phone: { $in: [phoneWithPrefix, phoneWithoutPrefix] }
+      }).sort({ createdAt: 1 }); // Oldest first (Main Account)
+
+      if (users.length === 0) {
+        // Create new user if absolutely no match found
+        user = new User({
+          phone: phoneWithPrefix, // Defaults to standard format
+          name: 'Static User',
+          isVerified: true,
+          phoneIsVerified: true,
+          subscription: null,
+          profilePhoto: null,
+          gender: null,
+          lastLoginAt: new Date()
+        });
+        await user.save();
+        console.log('Created new user with ID:', user._id);
+      } else {
+        // User(s) found
+        if (users.length > 1) {
+          // Merge Scenario
+          const mainUser = users[0];
+          const duplicateUser = users[1];
+          console.log(`[Session] Merging duplicate user ${duplicateUser._id} into ${mainUser._id}`);
+
+          // Update main user to standard phone format if needed
+          if (mainUser.phone !== phoneWithPrefix) {
+            mainUser.phone = phoneWithPrefix;
+            await mainUser.save();
+          }
+
+          // Delete duplicate
+          await User.findByIdAndDelete(duplicateUser._id);
+          user = mainUser;
+        } else {
+          // Single user
+          user = users[0];
+          // Normalize phone
+          if (user.phone !== phoneWithPrefix) {
+            user.phone = phoneWithPrefix;
+            await user.save();
+          }
+        }
+      }
     }
 
     const token = createToken(user._id);
@@ -495,7 +551,8 @@ export const POST = async (request) => {
       phoneIsVerified: user.phoneIsVerified,
       subscription: user.subscription || null,
       profilePhoto: user.profilePhoto,
-      gender: user?.gender
+      gender: user?.gender,
+      currentCity: user.currentCity // Added currentCity for nearby filter
     };
 
     const response = new NextResponse(
@@ -513,7 +570,7 @@ export const POST = async (request) => {
   } catch (error) {
     console.error('Session creation error:', error);
     return new NextResponse(
-      JSON.stringify({ error: 'Internal server error' }),
+      JSON.stringify({ error: 'Internal server error', details: error.message }),
       { status: 500, headers }
     );
   }

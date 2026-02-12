@@ -4,10 +4,11 @@ import Employee from '@/models/Employee';
 import dbConnect from '@/lib/dbConnect';
 
 export async function GET(request, { params }) {
+  const { id } = await params;
   await dbConnect();
 
   try {
-    const employee = await Employee.findById(params.id);
+    const employee = await Employee.findById(id);
 
     if (!employee) {
       return NextResponse.json(
@@ -25,6 +26,7 @@ export async function GET(request, { params }) {
   }
 }
 export async function PUT(request, { params }) {
+  const { id } = await params;
   await dbConnect();
 
   try {
@@ -41,7 +43,7 @@ export async function PUT(request, { params }) {
     } = await request.json();
 
     // Check if employee exists
-    const existingEmployee = await Employee.findById(params.id);
+    const existingEmployee = await Employee.findById(id);
     if (!existingEmployee) {
       return NextResponse.json(
         { success: false, message: 'Employee not found' },
@@ -72,7 +74,7 @@ export async function PUT(request, { params }) {
 
     // Update employee
     const updatedEmployee = await Employee.findByIdAndUpdate(
-      params.id,
+      id,
       {
         name,
         username,
@@ -97,10 +99,11 @@ export async function PUT(request, { params }) {
   }
 }
 export async function DELETE(request, { params }) {
+  const { id } = await params;
   await dbConnect();
 
   try {
-    const deletedEmployee = await Employee.findByIdAndDelete(params.id);
+    const deletedEmployee = await Employee.findByIdAndDelete(id);
 
     if (!deletedEmployee) {
       return NextResponse.json(

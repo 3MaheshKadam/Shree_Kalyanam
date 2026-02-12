@@ -1,6 +1,6 @@
 // // src/app/api/subscription/check/route.js
 // import { NextResponse } from "next/server";
-// import connectDB from "@/lib/db";
+// import connectDB from "@/lib/dbConnect";
 // import Subscription from "@/models/Subscription";
 
 // export async function GET(req) {

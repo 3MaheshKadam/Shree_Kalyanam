@@ -7,7 +7,7 @@ const subscriptionSchema = new mongoose.Schema(
     price: { type: Number, required: true },
     durationInDays: { type: Number, required: true },
     features: [String],
-    // isActive: { type: Boolean, default: true },
+    isActive: { type: Boolean, default: true },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }

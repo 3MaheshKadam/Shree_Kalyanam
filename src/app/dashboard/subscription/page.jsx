@@ -21,6 +21,7 @@ import {
 import { useSession } from "@/context/SessionContext";
 import { useRouter } from "next/navigation";
 import Razorpay from "razorpay";
+import { toast } from "react-hot-toast";
 export default function DynamicSubscriptionPlans() {
   const { user } = useSession();
   const router = useRouter();
@@ -33,23 +34,26 @@ export default function DynamicSubscriptionPlans() {
   const [currentSubscription, setCurrentSubscription] = useState(null);
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [activeButtonId, setActiveButtonId] = useState(null);
-  const fetchUserDatanew = async () => {
-    console.log("hello");
+  // Refresh user data to get latest subscription status
+  const refreshUserData = async () => {
+    if (!user?.id) return;
     try {
-      const res = await fetch(`/api/users/${user?.id}`);
-      const darta = await res.json();
-      console.log("Response from API:", darta.subscription);
-      setCurrentSubscription({
-        subscriptionId: darta.subscription.subscriptionId,
-        plan: darta.subscription.plan,
-      });
+      const res = await fetch(`/api/users/${user.id}`);
+      const userData = await res.json();
+      if (userData.subscription) {
+        setCurrentSubscription({
+          subscriptionId: userData.subscription.subscriptionId,
+          plan: userData.subscription.plan,
+        });
+      }
     } catch (err) {
-      console.log("Error fetching user data:", err);
+      console.error("Error fetching user data:", err);
     }
   };
+
   useEffect(() => {
-    fetchUserDatanew();
-  }, []);
+    refreshUserData();
+  }, [user?.id]);
   // Fetch plans and current subscription
   useEffect(() => {
     const fetchPlans = async () => {
@@ -95,88 +99,37 @@ export default function DynamicSubscriptionPlans() {
     try {
       setActiveButtonId(plan._id);
       setIsSubscribing(true);
-      console.log(user.id, "user id");
-      // 1. Create Razorpay Order
-      const res = await fetch("/api/payment/create-order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+
+      const dummyPaymentId = "test_" + Date.now();
+
+      // The API expects 'razorpay_payment_id', not 'paymentId'
+      const verifyRes = await fetch("/api/users/update-plan", {
+        method: "PATCH", // API uses PATCH
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: plan.price * 100,
           userId: user?.id,
           planId: plan._id,
-          currentSubscriptionId: currentSubscription?.subscriptionId || null,
+          razorpay_payment_id: dummyPaymentId,
         }),
       });
 
-      const order = await res.json();
+      const verifyData = await verifyRes.json();
 
-      // 2. Configure Razorpay checkout
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: order.amount,
-        currency: order.currency,
-        name: "MaliBandhan Subscription",
-        description: plan.name,
-        order_id: order.id,
-        handler: async function (response) {
-          console.log("✅ Payment response:", response);
+      if (verifyRes.ok) { // Check HTTP status 200
+        toast.success(`Subscribed to ${plan.name} (Test Mode)`);
+        setCurrentSubscription({
+          subscriptionId: plan._id,
+          plan: plan.name,
+        });
+        await refreshUserData();
+        router.push("/dashboard/matches");
+      } else {
+        throw new Error(verifyData.error || verifyData.message || "Failed to update subscription");
+      }
 
-          // ✅ 3. Update subscription on success
-          const updateRes = await fetch("/api/users/update-plan", {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              userId: user.id,
-              plan: plan.name,
-              razorpay_payment_id: response.razorpay_payment_id,
-              planId: plan._id,
-              currentSubscriptionId:
-                currentSubscription?.subscriptionId || null,
-            }),
-          });
-
-          const updateResult = await updateRes.json();
-          if (updateRes.ok) {
-            setCurrentSubscription({
-              subscriptionId: plan._id,
-              plan: plan.name,
-            });
-            router.push("/payment-success");
-          } else {
-            throw new Error(
-              updateResult.message || "Failed to update subscription"
-            );
-          }
-        },
-        prefill: {
-          name: user?.name || "Aniket Dahire",
-          email: user?.email || "aniket@example.com",
-          contact: "9999999999",
-        },
-        theme: {
-          color: "#3399cc",
-        },
-      };
-
-      // Initialize Razorpay
-      const razorpay = new window.Razorpay(options);
-
-      // Handle Payment Failure (IMPORTANT: Close the modal)
-      razorpay.on("payment.failed", function (response) {
-        console.error("❌ Payment failed:", response.error);
-        razorpay.close(); // <-- THIS CLOSES THE POPUP IMMEDIATELY
-        window.location.href = "/payment-failure";
-      });
-
-      // Open Razorpay modal
-      razorpay.open();
     } catch (err) {
       console.error("❌ Error in handleSubscription:", err);
-      alert(err.message || "Something went wrong. Please try again.");
+      toast.error(err.message || "Subscription failed");
     } finally {
       setActiveButtonId(null);
       setIsSubscribing(false);
@@ -196,10 +149,10 @@ export default function DynamicSubscriptionPlans() {
       },
       Premium: {
         icon: Crown,
-        color: "from-rose-500 to-pink-500",
-        bgColor: "bg-rose-100",
-        textColor: "text-rose-600",
-        badgeColor: "bg-rose-500",
+        color: "from-secondary to-primary",
+        bgColor: "bg-rose-50",
+        textColor: "text-primary",
+        badgeColor: "bg-primary",
         emoji: "💎",
       },
       Free: {
@@ -237,15 +190,15 @@ export default function DynamicSubscriptionPlans() {
 
   if (loading) {
     return (
-     <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="text-center">
-        {/* Simple Spinner */}
-        <div className="w-12 h-12 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin mx-auto mb-4"></div>
-        
-        {/* Loading Text */}
-        <p className="text-gray-600 text-lg">Loading Subscription Plans</p>
-      </div>
-    </div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-center">
+          {/* Simple Spinner */}
+          <div className="w-12 h-12 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin mx-auto mb-4"></div>
+
+          {/* Loading Text */}
+          <p className="text-gray-600 text-lg">Loading Subscription Plans</p>
+        </div >
+      </div >
     );
   }
 
@@ -268,10 +221,10 @@ export default function DynamicSubscriptionPlans() {
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-rose-100 to-amber-100 rounded-full mb-6">
-            <Crown className="w-10 h-10 text-rose-500" />
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-rose-100 to-amber-100 rounded-full mb-6 shadow-lg transform hover:scale-105 transition-transform duration-300">
+            <Crown className="w-10 h-10 text-primary" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-serif font-bold text-gray-900 mb-4">
             Choose Your Perfect Plan
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -340,9 +293,8 @@ export default function DynamicSubscriptionPlans() {
             return (
               <div key={plan._id} className="relative">
                 <div
-                  className={`bg-white rounded-2xl p-8 shadow-2xl border border-rose-100/50 relative overflow-hidden transform hover:scale-105 transition-transform duration-300 ${
-                    !plan.isActive ? "opacity-70" : ""
-                  }`}
+                  className={`bg-white rounded-2xl p-8 shadow-2xl border border-rose-100/50 relative overflow-hidden transform hover:scale-105 transition-transform duration-300 ${!plan.isActive ? "opacity-70" : ""
+                    }`}
                 >
                   <div className="relative z-10 pt-6">
                     <div className="text-center mb-8">
@@ -387,16 +339,14 @@ export default function DynamicSubscriptionPlans() {
 
                     <div className="mb-4">
                       <span
-                        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                          plan.isActive
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${plan.isActive
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
+                          }`}
                       >
                         <div
-                          className={`w-2 h-2 rounded-full mr-2 ${
-                            plan.isActive ? "bg-green-500" : "bg-red-500"
-                          }`}
+                          className={`w-2 h-2 rounded-full mr-2 ${plan.isActive ? "bg-green-500" : "bg-red-500"
+                            }`}
                         ></div>
                         {plan.isActive ? "Active" : "Inactive"}
                       </span>
@@ -407,13 +357,11 @@ export default function DynamicSubscriptionPlans() {
                       disabled={
                         !plan.isActive || isButtonLoading || isCurrentPlan
                       }
-                      className={`w-full bg-gradient-to-r ${
-                        config.color
-                      } text-white py-4 rounded-xl font-bold text-lg hover:scale-105 transition-all duration-200 shadow-lg ${
-                        !plan.isActive || isButtonLoading || isCurrentPlan
+                      className={`w-full bg-gradient-to-r ${config.color
+                        } text-white py-4 rounded-xl font-bold text-lg hover:scale-105 transition-all duration-200 shadow-lg ${!plan.isActive || isButtonLoading || isCurrentPlan
                           ? "opacity-50 cursor-not-allowed"
                           : ""
-                      }`}
+                        }`}
                     >
                       {isButtonLoading ? (
                         <Loader2 className="w-5 h-5 animate-spin mx-auto" />

@@ -9,7 +9,7 @@
 //     await dbConnect();
 
 //     console.log("DB connected✅");
-    
+
 
 //     // Get token from cookies
 //     // const token = request.cookies.get('authToken')?.value;
@@ -72,7 +72,7 @@
 //   relativeSurname,
 //   parentOccupation,
 //   mamaSurname,
-  
+
 //   // Horoscope Info
 //   rashi,
 //   nakshira,
@@ -83,7 +83,7 @@
 //   birthPlace,
 //   birthTime,
 //   gotraDevak,
-  
+
 //   // Expectations
 //   expectedCaste,
 //   preferredCity,
@@ -95,7 +95,7 @@
 
 // // Profile Setup
 //       profileSetup,
-  
+
 //   // Photos
 //   photos
 // } = body;
@@ -128,7 +128,7 @@
 //   complexion,
 //   wearsLens,
 //   permanentAddress,
-  
+
 //   // Relative Info
 //   fatherName,
 //   parentResidenceCity,
@@ -144,7 +144,7 @@
 //   parentOccupation,
 //   mamaSurname,
 //   profilePhoto,
-  
+
 //   // Horoscope Info
 //   rashi,
 //   nakshira,
@@ -155,7 +155,7 @@
 //   birthPlace,
 //   birthTime,
 //   gotraDevak,
-  
+
 //   // Expectations
 //   expectedCaste,
 //   preferredCity,
@@ -164,14 +164,14 @@
 //   divorcee,
 //   expectedHeight,
 //   expectedIncome,
-  
+
 //   // Photos
 //   photos,
 //    profileSetup: {
 //         willAdminFill: profileSetup?.willAdminFill ,
 //         dontAskAgain: profileSetup?.dontAskAgain 
 //       },
-  
+
 //   // Timestamp
 //   updatedAt: new Date()
 // };
@@ -181,7 +181,7 @@
 //     const updatedUser = await User.findByIdAndUpdate(
 //       userId,
 //       updateData,
-  
+
 //       { new: true, runValidators: true }
 //     ).select('-__v');
 
@@ -221,14 +221,14 @@ export async function PUT(request) {
     await dbConnect();
 
     const body = await request.json();
-    const { userId, ...updateData } = body;
-    
+    const { userId, phone, ...updateData } = body;
+
     console.log("Received update data:", updateData);
 
     if (!userId) {
       return NextResponse.json(
         { message: 'User ID is required' },
-        { status: 400,headers:corsHeaders }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -243,10 +243,10 @@ export async function PUT(request) {
       };
     }
 
-    if (updateData.photos) {
+    if (updateData.photos && Array.isArray(updateData.photos)) {
       updateData.photos = updateData.photos.map(photo => ({
         url: photo.url,
-        isPrimary: photo.isPrimary
+        isPrimary: photo.isPrimary || false
       }));
     }
 
@@ -260,7 +260,7 @@ export async function PUT(request) {
     if (!updatedUser) {
       return NextResponse.json(
         { message: 'User not found' },
-        { status: 404,headers:corsHeaders}
+        { status: 404, headers: corsHeaders }
       );
     }
 
@@ -268,16 +268,16 @@ export async function PUT(request) {
       success: true,
       data: updatedUser,
       message: 'Profile updated successfully'
-    },{headers:corsHeaders});
+    }, { headers: corsHeaders });
 
   } catch (error) {
     console.error('Error updating user profile:', error);
     return NextResponse.json(
-      { 
+      {
         message: 'Internal server error',
-        error: error.message 
+        error: error.message
       },
-      { status: 500 ,headers:corsHeaders}
+      { status: 500, headers: corsHeaders }
     );
   }
 }

@@ -1,0 +1,20 @@
+Connected to MongoDB
+Found 6 sections:
+
+Section: "Basic Information" (Name: "section-basic-info")
+  (No fields)
+
+Section: "Education & Profession" (Name: "section-education-profession")
+  (No fields)
+
+Section: "Religious & Community" (Name: "section-1752492308390")
+  (No fields)
+
+Section: "Relative Information" (Name: "section-1752482037997")
+  (No fields)
+
+Section: "Horoscope Information" (Name: "section-1752492699329")
+  (No fields)
+
+Section: "Expectations" (Name: "section-1752493374295")
+  (No fields)

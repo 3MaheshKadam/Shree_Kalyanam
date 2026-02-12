@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import connectDB from '@/lib/db';
+import connectDB from "@/lib/dbConnect";
 import User from '@/models/User';
 import Subscription from '@/models/Subscription';
 
@@ -23,25 +23,26 @@ export async function PATCH(req) {
     const expiresAt = new Date(Date.now() + plan.durationInDays * 24 * 60 * 60 * 1000);
 
     // Update user's subscription
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      {
-        $set: {
-          "subscription.plan": plan.name.trim(),
-          "subscription.expiresAt": expiresAt,
-          "subscription.transactionId": razorpay_payment_id,
-          "subscription.subscriptionId": planId,
-          "subscription.isSubscribed": true,
-        },
-      },
-      { new: true }
-    );
-
-    
-
-    if (!updatedUser) {
+    // Verify user exists first
+    const user = await User.findById(userId);
+    if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
+
+    // Update user's subscription
+    user.subscription = {
+      plan: plan.name.trim(),
+      expiresAt: expiresAt,
+      transactionId: razorpay_payment_id,
+      subscriptionId: planId,
+      isSubscribed: true,
+    };
+
+    const updatedUser = await user.save();
+
+
+
+
 
     return NextResponse.json({ message: "Subscription updated", user: updatedUser }, { status: 200 });
   } catch (err) {

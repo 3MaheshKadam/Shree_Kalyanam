@@ -1,12 +1,13 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { 
-  User, Heart, Eye, CheckCircle, X, Clock, MapPin, Calendar, 
-  Briefcase, Shield, ThumbsUp, ThumbsDown, Send, Mail, Droplet,Users,Home,GraduationCap,DollarSign,Star,
+import {
+  User, Heart, Eye, CheckCircle, X, Clock, MapPin, Calendar,
+  Briefcase, Shield, ThumbsUp, ThumbsDown, Send, Mail, Droplet, Users, Home, GraduationCap, DollarSign, Star,
   Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Phone, Globe, MessageSquare, Lock
 } from 'lucide-react';
 import { useSession } from '@/context/SessionContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import ContextualSubscriptionModal from '@/components/ContextualSubscriptionModal';
 export default function InterestsPage() {
   const { user } = useSession();
   const [activeTab, setActiveTab] = useState('received');
@@ -26,7 +27,7 @@ export default function InterestsPage() {
   });
   const [hasSubscription, setHasSubscription] = useState(false);
   const [checkingSubscription, setCheckingSubscription] = useState(true);
-//sample
+  //sample
   // Check user's subscription status
   const checkSubscription = async () => {
     try {
@@ -42,13 +43,15 @@ export default function InterestsPage() {
   };
 
   // Mask first name while keeping last name visible
-  const maskFirstName = (fullName) => {
-    if (!fullName) return '****';
-    const names = fullName.split(' ');
-    if (names.length > 1) {
-      return `${'*'.repeat(names[0].length)} ${names.slice(1).join(' ')}`;
+  // UPDATED: Now shows First Name and hides Last Name (e.g. "Rahul S.") or just First Name "Rahul"
+  const maskLastName = (fullName) => {
+    if (!fullName) return 'User';
+    const names = fullName.trim().split(/\s+/);
+    if (names.length > 0) {
+      // Return first name unmasked
+      return names[0];
     }
-    return '****';
+    return 'User';
   };
 
   // Calculate age from date of birth
@@ -68,7 +71,7 @@ export default function InterestsPage() {
   const fetchInterests = async (type) => {
     try {
       if (!user?.id ? user.id : user?.user?.id) return [];
-      const endpoint = type === 'send' 
+      const endpoint = type === 'send'
         ? `/api/interest/send?userId=${user?.id ? user.id : user.user.id}`
         : `/api/interest/received?userId=${user?.id ? user.id : user.user.id}`;
       const response = await fetch(endpoint);
@@ -134,7 +137,8 @@ export default function InterestsPage() {
     const profileData = type === 'sent' ? person.receiver : person.sender;
     setSelectedProfile({
       ...profileData,
-      image: profileData?.profilePhoto || profileData?.image
+      image: profileData?.profilePhoto || profileData?.image,
+      interestStatus: person.status
     });
     setShowModal(true);
   };
@@ -157,7 +161,7 @@ export default function InterestsPage() {
 
   // Get status badge component
   const getStatusBadge = (status) => {
-    switch(status) {
+    switch (status) {
       case 'pending':
         return <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
           <Clock className="w-3 h-3 mr-1" /> Pending
@@ -176,7 +180,7 @@ export default function InterestsPage() {
 
   // Get badge style based on type
   const getBadgeStyle = (badge) => {
-    switch(badge) {
+    switch (badge) {
       case 'New': return 'bg-blue-100 text-blue-800';
       case 'Premium': return 'bg-amber-100 text-amber-800';
       case 'Verified': return 'bg-green-100 text-green-800';
@@ -189,9 +193,9 @@ export default function InterestsPage() {
   const InterestCard = ({ person, type }) => {
     const profile = type === 'sent' ? person.receiver : person.sender;
     const profileImage = profile?.profilePhoto || profile?.image;
-    
+
     return (
-      <motion.div 
+      <motion.div
         className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 shadow-md sm:shadow-lg border border-rose-100/50 hover:shadow-sm sm:hover:shadow-xl transition-all duration-300 hover:border-rose-200"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -200,10 +204,9 @@ export default function InterestsPage() {
         <div className="flex flex-col sm:flex-row sm:items-start space-y-3 sm:space-y-0 sm:space-x-4">
           {/* Profile Image with blur effect for non-subscribers */}
           <div className="relative flex-shrink-0 self-center sm:self-start">
-            <motion.div 
-              className={`w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-rose-100 to-amber-100 rounded-full flex items-center justify-center overflow-hidden cursor-pointer hover:ring-2 hover:ring-rose-300 transition-all ${
-                !hasSubscription && profileImage ? 'blur-sm' : ''
-              }`}
+            <motion.div
+              className={`w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-rose-100 to-amber-100 rounded-full flex items-center justify-center overflow-hidden cursor-pointer hover:ring-2 hover:ring-rose-300 transition-all ${!hasSubscription && profileImage ? 'blur-sm' : ''
+                }`}
               onClick={() => {
                 if (!hasSubscription) {
                   window.location.href = '/dashboard/subscription';
@@ -216,9 +219,9 @@ export default function InterestsPage() {
             >
               {profileImage ? (
                 <>
-                  <img 
-                    src={profileImage} 
-                    alt={profile?.name} 
+                  <img
+                    src={profileImage}
+                    alt={profile?.name}
                     className="w-full h-full object-cover"
                   />
                   {!hasSubscription && (
@@ -232,7 +235,7 @@ export default function InterestsPage() {
               )}
             </motion.div>
             {profile?.isOnline && (
-              <motion.div 
+              <motion.div
                 className="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 rounded-full border-2 border-white"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -247,7 +250,7 @@ export default function InterestsPage() {
               <div className="space-y-1">
                 <div className="flex items-center justify-center sm:justify-start space-x-2 mb-1">
                   <h3 className="text-base sm:text-lg font-bold text-gray-900 text-center sm:text-left">
-                    {hasSubscription ? profile?.name : maskFirstName(profile?.name)}
+                    {hasSubscription ? profile?.name : maskLastName(profile?.name)}
                   </h3>
                   {profile?.badges?.includes('Verified') && <Shield className="w-3 h-3 sm:w-4 sm:h-4 text-green-500" />}
                 </div>
@@ -279,36 +282,65 @@ export default function InterestsPage() {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-between pt-3 border-t border-gray-100 space-y-2 sm:space-y-0">
               <div className="text-xs text-gray-500">
-                {type === 'sent' ? `Sent: ${new Date(person.createdAt).toLocaleDateString()}` : 
-                 `Received: ${new Date(person.createdAt).toLocaleDateString()}`}
+                {type === 'sent' ? `Sent: ${new Date(person.createdAt).toLocaleDateString()}` :
+                  `Received: ${new Date(person.createdAt).toLocaleDateString()}`}
               </div>
-              
+
               <div className="flex flex-wrap justify-center gap-2">
                 {type === 'received' && person.status === 'pending' && (
                   <>
-                    <motion.button 
-                      onClick={() => handleInterestAction('declined', person._id)}
-                      className="flex items-center px-2 sm:px-3 py-1 bg-red-50 text-red-600 rounded-md sm:rounded-lg text-xs sm:text-sm font-medium hover:bg-red-100 transition-colors"
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                    >
-                      <ThumbsDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" /> Decline
-                    </motion.button>
-                    <motion.button 
-                      onClick={() => handleInterestAction('accepted', person._id)}
-                      className="flex items-center px-2 sm:px-3 py-1 bg-green-50 text-green-600 rounded-md sm:rounded-lg text-xs sm:text-sm font-medium hover:bg-green-100 transition-colors"
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                    >
-                      <ThumbsUp className="w-3 h-3 sm:w-4 sm:h-4 mr-1" /> Accept
-                    </motion.button>
+                    {!hasSubscription ? (
+                      /* Unsubscribed User Actions */
+                      <>
+                        <motion.button
+                          onClick={() => handleInterestAction('declined', person._id)}
+                          className="flex items-center px-4 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.97 }}
+                        >
+                          <X className="w-4 h-4 mr-1.5" /> Not Interested
+                        </motion.button>
+
+                        <motion.button
+                          onClick={() => {
+                            setSelectedProfile(null); // Clear detailed profile
+                            setShowModal(true); // Show upgrade modal
+                          }}
+                          className="flex items-center px-4 py-2 bg-gradient-to-r from-secondary to-primary text-white rounded-lg text-sm font-bold shadow-md hover:shadow-lg transition-all"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <Lock className="w-4 h-4 mr-1.5" /> View Full Profile
+                        </motion.button>
+                      </>
+                    ) : (
+                      /* Subscribed User Actions */
+                      <>
+                        <motion.button
+                          onClick={() => handleInterestAction('declined', person._id)}
+                          className="flex items-center px-2 sm:px-3 py-1 bg-red-50 text-red-600 rounded-md sm:rounded-lg text-xs sm:text-sm font-medium hover:bg-red-100 transition-colors"
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.97 }}
+                        >
+                          <ThumbsDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" /> Decline
+                        </motion.button>
+                        <motion.button
+                          onClick={() => handleInterestAction('accepted', person._id)}
+                          className="flex items-center px-2 sm:px-3 py-1 bg-green-50 text-green-600 rounded-md sm:rounded-lg text-xs sm:text-sm font-medium hover:bg-green-100 transition-colors"
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.97 }}
+                        >
+                          <ThumbsUp className="w-3 h-3 sm:w-4 sm:h-4 mr-1" /> Accept
+                        </motion.button>
+                      </>
+                    )}
                   </>
                 )}
-                
-                {(type === 'sent' || type === 'received')  && (
-                  <motion.button 
+
+                {(type === 'sent' || (type === 'received' && hasSubscription)) && (
+                  <motion.button
                     onClick={() => handleViewProfile(person, type)}
-                    className="flex items-center px-2 sm:px-3 py-1 bg-rose-50 text-rose-600 rounded-md sm:rounded-lg text-xs sm:text-sm font-medium hover:bg-rose-100 transition-colors"
+                    className="flex items-center px-2 sm:px-3 py-1 bg-white text-secondary border border-gray-200 rounded-md sm:rounded-lg text-xs sm:text-sm font-medium hover:bg-rose-50 hover:border-rose-200 transition-colors shadow-sm"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     disabled={checkingSubscription}
@@ -331,7 +363,7 @@ export default function InterestsPage() {
   };
 
   const ProfileDetailItem = ({ icon: Icon, label, value }) => (
-    <motion.div 
+    <motion.div
       className="flex items-start mb-3"
       whileHover={{ x: 5 }}
       transition={{ type: "spring", stiffness: 300 }}
@@ -346,7 +378,7 @@ export default function InterestsPage() {
 
   const ProfileSection = ({ title, children, sectionKey }) => (
     <div className="mb-6">
-      <motion.button 
+      <motion.button
         onClick={() => toggleSection(sectionKey)}
         className="flex items-center justify-between w-full text-left mb-3"
         whileHover={{ color: "#f43f5e" }}
@@ -384,15 +416,15 @@ export default function InterestsPage() {
 
   if (isLoading && !isRefreshing) {
     return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="text-center">
-        {/* Simple Spinner */}
-        <div className="w-12 h-12 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin mx-auto mb-4"></div>
-        
-        {/* Loading Text */}
-        <p className="text-gray-600 text-lg">Loading your Interests</p>
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-center">
+          {/* Simple Spinner */}
+          <div className="w-12 h-12 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin mx-auto mb-4"></div>
+
+          {/* Loading Text */}
+          <p className="text-gray-600 text-lg">Loading your Interests</p>
+        </div>
       </div>
-    </div>
     );
   }
 
@@ -428,7 +460,7 @@ export default function InterestsPage() {
             className="fixed inset-0 bg-white/80 z-60 backdrop-blur-xs flex items-center justify-center p-4"
             onClick={() => setExpandedImage(null)}
           >
-            <motion.div 
+            <motion.div
               className="relative bg-white rounded-lg shadow-xl border-2 border-rose-500 overflow-hidden w-full max-w-md mx-4"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
@@ -450,18 +482,18 @@ export default function InterestsPage() {
                   <X className="w-4 h-4 text-white" />
                 </motion.button>
               </div>
-              
+
               {/* Image container */}
               <div className="p-4">
                 <div className="relative pt-[100%]">
-                  <img 
-                    src={expandedImage} 
-                    alt="Expanded profile" 
+                  <img
+                    src={expandedImage}
+                    alt="Expanded profile"
                     className="absolute top-0 left-0 w-full h-full object-contain"
                   />
                 </div>
               </div>
-              
+
               {/* Footer */}
               <div className="bg-rose-50 p-3 border-t border-rose-200 flex justify-center">
                 <span className="text-rose-800 text-sm font-medium">
@@ -474,47 +506,47 @@ export default function InterestsPage() {
       </AnimatePresence>
 
       <div className="max-w-5xl mx-auto space-y-6">
-       <motion.div 
-          className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg sm:shadow-xl border border-rose-100/50 relative overflow-hidden"
+        <motion.div
+          className="bg-gradient-to-r from-orange-500 via-rose-500 to-pink-600 rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg sm:shadow-xl text-white relative overflow-hidden"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1 }}
         >
-          <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-rose-50 rounded-full blur-xl sm:blur-2xl opacity-50"></div>
+          <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-white/10 rounded-full blur-xl sm:blur-2xl"></div>
           <div className="relative z-10">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">💌 Interests</h1>
-                <p className="text-sm sm:text-base text-gray-600">Manage your sent and received interests</p>
+                <h1 className="text-2xl sm:text-3xl font-serif font-bold mb-2">💌 Interests</h1>
+                <p className="text-sm sm:text-base text-white/90">Manage your sent and received interests</p>
               </div>
-              
-              <div className="flex justify-between sm:justify-start sm:space-x-6">
-                <div className="text-center">
-                  <div className="text-xs text-gray-500">Pending Received</div>
-                  <div className="text-base sm:text-lg font-bold">{stats.pendingReceived || 0}</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-xs text-gray-500">Pending Sent</div>
-                  <div className="text-base sm:text-lg font-bold">{stats.pendingSent || 0}</div>
-                </div>
-              </div>
-            </div>
 
-            <div className="absolute top-2 right-2 sm:top-4 sm:right-4">
-              <motion.button 
-                onClick={handleRefresh}
-                disabled={isRefreshing}
-                className="p-1 sm:p-2 text-gray-500 hover:text-rose-600 transition-colors"
-                whileHover={{ rotate: 180 }}
-                whileTap={{ scale: 0.8 }}
-              >
-                <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 ${isRefreshing ? 'animate-spin' : ''}`} />
-              </motion.button>
+              <div className="flex items-center gap-2 sm:gap-4 self-end xl:self-auto">
+                <div className="flex justify-start space-x-2 sm:space-x-6">
+                  <div className="bg-white/20 backdrop-blur-sm rounded-lg px-3 sm:px-4 py-2 border border-white/30 min-w-[90px] sm:min-w-[100px] text-center shadow-sm">
+                    <div className="text-xs text-white/90 font-medium whitespace-nowrap">Pending Received</div>
+                    <div className="text-lg sm:text-xl font-bold text-white mt-1">{stats.pendingReceived || 0}</div>
+                  </div>
+                  <div className="bg-white/20 backdrop-blur-sm rounded-lg px-3 sm:px-4 py-2 border border-white/30 min-w-[90px] sm:min-w-[100px] text-center shadow-sm">
+                    <div className="text-xs text-white/90 font-medium whitespace-nowrap">Pending Sent</div>
+                    <div className="text-lg sm:text-xl font-bold text-white mt-1">{stats.pendingSent || 0}</div>
+                  </div>
+                </div>
+
+                <motion.button
+                  onClick={handleRefresh}
+                  disabled={isRefreshing}
+                  className="p-2 ml-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-colors border border-white/30 shadow-sm"
+                  whileHover={{ rotate: 180 }}
+                  whileTap={{ scale: 0.8 }}
+                >
+                  <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 ${isRefreshing ? 'animate-spin' : ''}`} />
+                </motion.button>
+              </div>
             </div>
           </div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="bg-white rounded-xl shadow-lg border border-rose-100/50"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -531,21 +563,19 @@ export default function InterestsPage() {
                   <motion.button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`py-4 px-2 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors ${
-                      activeTab === tab.id
-                        ? 'border-rose-500 text-rose-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    }`}
+                    className={`py-4 px-2 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors ${activeTab === tab.id
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      }`}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
                     <Icon className="w-4 h-4" />
                     <span>{tab.label}</span>
-                    <span className={`px-2 py-1 rounded-full text-xs ${
-                      activeTab === tab.id 
-                        ? 'bg-rose-100 text-rose-600' 
-                        : 'bg-gray-100 text-gray-600'
-                    }`}>
+                    <span className={`px-2 py-1 rounded-full text-xs ${activeTab === tab.id
+                      ? 'bg-rose-50 text-primary'
+                      : 'bg-gray-100 text-gray-600'
+                      }`}>
                       {tab.count}
                     </span>
                   </motion.button>
@@ -556,7 +586,7 @@ export default function InterestsPage() {
 
           <div className="p-6">
             {getTabData().length === 0 ? (
-              <motion.div 
+              <motion.div
                 className="text-center py-12"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -569,23 +599,23 @@ export default function InterestsPage() {
                   {activeTab === 'sent' ? 'No Interests Sent Yet' : 'No Interests Received Yet'}
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  {activeTab === 'sent' 
-                    ? 'Start browsing profiles and express your interest!' 
+                  {activeTab === 'sent'
+                    ? 'Start browsing profiles and express your interest!'
                     : 'Your perfect match might be just around the corner!'}
                 </p>
-               
+
               </motion.div>
             ) : (
-              <motion.div 
+              <motion.div
                 className="space-y-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
                 {getTabData()?.map((person, index) => (
-                  <InterestCard 
-                    key={person._id} 
-                    person={person} 
+                  <InterestCard
+                    key={person._id}
+                    person={person}
                     type={activeTab}
                     custom={index}
                   />
@@ -597,139 +627,163 @@ export default function InterestsPage() {
       </div>
 
       {/* Profile Modal with Framer Motion */}
-  <AnimatePresence>
-  {showModal && selectedProfile && (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4"
-      onClick={() => setShowModal(false)}
-    >
-      <motion.div
-        initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 50, opacity: 0 }}
-        transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Modal Header */}
-        <div className="sticky top-0 bg-gradient-to-r from-rose-500 to-amber-500 p-4 z-10">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-bold text-white">
-              {selectedProfile.name}'s Profile
-            </h2>
-            <button 
-              onClick={() => setShowModal(false)}
-              className="p-1 rounded-full hover:bg-white/20 transition-colors"
+      <AnimatePresence>
+        <ContextualSubscriptionModal
+          isOpen={showModal && !selectedProfile}
+          onClose={() => setShowModal(false)}
+        />
+        {showModal && selectedProfile && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4"
+            onClick={() => setShowModal(false)}
+          >
+            <motion.div
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
+              onClick={(e) => e.stopPropagation()}
             >
-              <X className="w-6 h-6 text-white" />
-            </button>
-          </div>
-        </div>
-        
-        {/* Scrollable Content Area */}
-        <div className="overflow-y-auto flex-1 p-6">
-          {/* Profile Header */}
-          <div className="flex items-start mb-6">
-            <div className="relative mr-6">
-              <div className="w-24 h-24 bg-gradient-to-br from-rose-100 to-amber-100 rounded-full flex items-center justify-center overflow-hidden">
-                <img 
-                  src={selectedProfile?.image || selectedProfile?.profilePhoto} 
-                  alt={selectedProfile.name} 
-                  className="w-full h-full object-cover"
-                />
+              {/* Modal Header */}
+              {/* Modal Header */}
+              <div className="sticky top-0 bg-gradient-to-r from-secondary to-primary p-4 z-10">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-xl font-bold text-white">
+                    {selectedProfile.name}'s Profile
+                  </h2>
+                  <button
+                    onClick={() => setShowModal(false)}
+                    className="p-1 rounded-full hover:bg-white/20 transition-colors"
+                  >
+                    <X className="w-6 h-6 text-white" />
+                  </button>
+                </div>
               </div>
-            </div>
-            
-            <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-1">
-                {selectedProfile.name}
-              </h3>
-              <div className="flex items-center text-gray-600 mb-2">
-                <span className="mr-3">{calculateAge(selectedProfile.dob)} years</span>
-                <span>{selectedProfile.height}</span>
+
+              {/* Scrollable Content Area */}
+              <div className="overflow-y-auto flex-1 p-6">
+                {/* Profile Header */}
+                <div className="flex items-start mb-6">
+                  <div className="relative mr-6">
+                    <div className="w-24 h-24 bg-gradient-to-br from-rose-100 to-amber-100 rounded-full flex items-center justify-center overflow-hidden">
+                      <img
+                        src={selectedProfile?.image || selectedProfile?.profilePhoto}
+                        alt={selectedProfile.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-1">
+                      {selectedProfile.name}
+                    </h3>
+                    <div className="flex items-center text-gray-600 mb-2">
+                      <span className="mr-3">{calculateAge(selectedProfile.dob)} years</span>
+                      <span>{selectedProfile.height}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Information */}
+                {hasSubscription && selectedProfile.interestStatus === 'accepted' && (
+                  <div className="mb-6 bg-green-50 rounded-xl p-4 border border-green-200">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="p-2 bg-green-100 rounded-full">
+                        <Lock className="w-4 h-4 text-green-700" />
+                      </div>
+                      <h4 className="font-semibold text-lg text-green-900">Contact Information</h4>
+                    </div>
+                    <div className="text-sm text-green-700 mb-4 bg-white/50 p-2 rounded-lg border border-green-100">
+                      Contact details are visible because this interest is accepted.
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <ProfileDetailItem icon={Phone} label="Phone Number" value={selectedProfile.phone} />
+                      <ProfileDetailItem icon={Mail} label="Email Address" value={selectedProfile.email} />
+                    </div>
+                  </div>
+                )}
+
+                {/* Basic Information */}
+                <div className="mb-6">
+                  <h4 className="font-semibold text-lg mb-3 text-gray-800 border-b pb-2">Basic Information</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <ProfileDetailItem icon={Calendar} label="Date of Birth"
+                      value={new Date(selectedProfile.dob).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    />
+                    <ProfileDetailItem icon={MapPin} label="Birth Place" value={selectedProfile.birthPlace} />
+                    <ProfileDetailItem icon={Droplet} label="Blood Group" value={selectedProfile.bloodGroup} />
+                    <ProfileDetailItem icon={User} label="Gender" value={selectedProfile.gender} />
+                    <ProfileDetailItem icon={Shield} label="Religion" value={selectedProfile.religion} />
+                    <ProfileDetailItem icon={Shield} label="Caste" value={selectedProfile.caste} />
+                    <ProfileDetailItem icon={Shield} label="Sub Caste" value={selectedProfile.subCaste} />
+                    <ProfileDetailItem icon={Shield} label="Marital Status" value={selectedProfile.maritalStatus} />
+                  </div>
+                </div>
+
+                {/* Family Details */}
+                <div className="mb-6">
+                  <h4 className="font-semibold text-lg mb-3 text-gray-800 border-b pb-2">Family Details</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <ProfileDetailItem icon={User} label="Father's Name" value={selectedProfile.fatherName} />
+                    <ProfileDetailItem icon={User} label="Mother's Name" value={selectedProfile.mother} />
+                    <ProfileDetailItem icon={Users} label="Brothers" value={selectedProfile.brothers} />
+                    <ProfileDetailItem icon={Users} label="Sisters" value={selectedProfile.sisters} />
+                    <ProfileDetailItem icon={Home} label="Native City" value={selectedProfile.nativeCity} />
+                  </div>
+                </div>
+
+                {/* Professional Information */}
+                <div className="mb-6">
+                  <h4 className="font-semibold text-lg mb-3 text-gray-800 border-b pb-2">Professional Information</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <ProfileDetailItem icon={Briefcase} label="Occupation" value={selectedProfile.occupation} />
+                    <ProfileDetailItem icon={Briefcase} label="Company" value={selectedProfile.company} />
+                    <ProfileDetailItem icon={GraduationCap} label="Education" value={selectedProfile.education} />
+                    <ProfileDetailItem icon={GraduationCap} label="College" value={selectedProfile.college} />
+                    <ProfileDetailItem icon={DollarSign} label="Income" value={selectedProfile.income} />
+                  </div>
+                </div>
+
+                {/* Astrological Details */}
+                <div className="mb-6">
+                  <h4 className="font-semibold text-lg mb-3 text-gray-800 border-b pb-2">Astrological Details</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <ProfileDetailItem icon={Star} label="Rashi" value={selectedProfile.rashi} />
+                    <ProfileDetailItem icon={Star} label="Nakshatra" value={selectedProfile.nakshira} />
+                    <ProfileDetailItem icon={Star} label="Gothra" value={selectedProfile.gothra} />
+                    <ProfileDetailItem icon={Star} label="Gotra Devak" value={selectedProfile.gotraDevak} />
+                    <ProfileDetailItem icon={Star} label="Charan" value={selectedProfile.charan} />
+                    <ProfileDetailItem icon={Star} label="Gan" value={selectedProfile.gan} />
+                    <ProfileDetailItem icon={Star} label="Nadi" value={selectedProfile.nadi} />
+                    <ProfileDetailItem icon={Star} label="Mangal" value={selectedProfile.mangal ? "Yes" : "No"} />
+                  </div>
+                </div>
+
+                {/* Preferences */}
+                <div>
+                  <h4 className="font-semibold text-lg mb-3 text-gray-800 border-b pb-2">Preferences</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <ProfileDetailItem icon={Heart} label="Expected Caste" value={selectedProfile.expectedCaste} />
+                    <ProfileDetailItem icon={Heart} label="Expected Education" value={selectedProfile.expectedEducation} />
+                    <ProfileDetailItem icon={Heart} label="Expected Height" value={selectedProfile.expectedHeight} />
+                    <ProfileDetailItem icon={Heart} label="Expected Income" value={selectedProfile.expectedIncome} />
+                    <ProfileDetailItem icon={Heart} label="Expected Age Difference" value={selectedProfile.expectedAgeDifference} />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          
-          {/* Basic Information */}
-          <div className="mb-6">
-            <h4 className="font-semibold text-lg mb-3 text-gray-800 border-b pb-2">Basic Information</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ProfileDetailItem icon={Calendar} label="Date of Birth" 
-                value={new Date(selectedProfile.dob).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })} 
-              />
-              <ProfileDetailItem icon={MapPin} label="Birth Place" value={selectedProfile.birthPlace} />
-              <ProfileDetailItem icon={Droplet} label="Blood Group" value={selectedProfile.bloodGroup} />
-              <ProfileDetailItem icon={User} label="Gender" value={selectedProfile.gender} />
-              <ProfileDetailItem icon={Shield} label="Religion" value={selectedProfile.religion} />
-              <ProfileDetailItem icon={Shield} label="Caste" value={selectedProfile.caste} />
-              <ProfileDetailItem icon={Shield} label="Sub Caste" value={selectedProfile.subCaste} />
-              <ProfileDetailItem icon={Shield} label="Marital Status" value={selectedProfile.maritalStatus} />
-            </div>
-          </div>
-          
-          {/* Family Details */}
-          <div className="mb-6">
-            <h4 className="font-semibold text-lg mb-3 text-gray-800 border-b pb-2">Family Details</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ProfileDetailItem icon={User} label="Father's Name" value={selectedProfile.fatherName} />
-              <ProfileDetailItem icon={User} label="Mother's Name" value={selectedProfile.mother} />
-              <ProfileDetailItem icon={Users} label="Brothers" value={selectedProfile.brothers} />
-              <ProfileDetailItem icon={Users} label="Sisters" value={selectedProfile.sisters} />
-              <ProfileDetailItem icon={Home} label="Native City" value={selectedProfile.nativeCity} />
-            </div>
-          </div>
-          
-          {/* Professional Information */}
-          <div className="mb-6">
-            <h4 className="font-semibold text-lg mb-3 text-gray-800 border-b pb-2">Professional Information</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ProfileDetailItem icon={Briefcase} label="Occupation" value={selectedProfile.occupation} />
-              <ProfileDetailItem icon={Briefcase} label="Company" value={selectedProfile.company} />
-              <ProfileDetailItem icon={GraduationCap} label="Education" value={selectedProfile.education} />
-              <ProfileDetailItem icon={GraduationCap} label="College" value={selectedProfile.college} />
-              <ProfileDetailItem icon={DollarSign} label="Income" value={selectedProfile.income} />
-            </div>
-          </div>
-          
-          {/* Astrological Details */}
-          <div className="mb-6">
-            <h4 className="font-semibold text-lg mb-3 text-gray-800 border-b pb-2">Astrological Details</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ProfileDetailItem icon={Star} label="Rashi" value={selectedProfile.rashi} />
-              <ProfileDetailItem icon={Star} label="Nakshatra" value={selectedProfile.nakshira} />
-              <ProfileDetailItem icon={Star} label="Gothra" value={selectedProfile.gothra} />
-              <ProfileDetailItem icon={Star} label="Gotra Devak" value={selectedProfile.gotraDevak} />
-              <ProfileDetailItem icon={Star} label="Charan" value={selectedProfile.charan} />
-              <ProfileDetailItem icon={Star} label="Gan" value={selectedProfile.gan} />
-              <ProfileDetailItem icon={Star} label="Nadi" value={selectedProfile.nadi} />
-              <ProfileDetailItem icon={Star} label="Mangal" value={selectedProfile.mangal ? "Yes" : "No"} />
-            </div>
-          </div>
-          
-          {/* Preferences */}
-          <div>
-            <h4 className="font-semibold text-lg mb-3 text-gray-800 border-b pb-2">Preferences</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ProfileDetailItem icon={Heart} label="Expected Caste" value={selectedProfile.expectedCaste} />
-              <ProfileDetailItem icon={Heart} label="Expected Education" value={selectedProfile.expectedEducation} />
-              <ProfileDetailItem icon={Heart} label="Expected Height" value={selectedProfile.expectedHeight} />
-              <ProfileDetailItem icon={Heart} label="Expected Income" value={selectedProfile.expectedIncome} />
-              <ProfileDetailItem icon={Heart} label="Expected Age Difference" value={selectedProfile.expectedAgeDifference} />
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  )}
-</AnimatePresence>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

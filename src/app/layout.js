@@ -20,20 +20,20 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="beforeInteractive" />
-        <link rel="icon" href="/logo.jpeg"/>
+        <link rel="icon" href="/logo.jpeg" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-r from-rose-50 to-amber-50`}
       >
         <AuthProvider>
-        <SessionProvider>
-           {children}
-        </SessionProvider>
+          <SessionProvider>
+            {children}
+          </SessionProvider>
         </AuthProvider>
-       
+
       </body>
     </html>
   );

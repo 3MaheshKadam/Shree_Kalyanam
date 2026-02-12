@@ -19,7 +19,7 @@ export default function MatrimonialLogin() {
 
   useEffect(() => {
     setIsLoaded(true);
-    
+
     // Check if user is already logged in
     if (user) {
       router.push(`/dashboard`);
@@ -39,26 +39,47 @@ export default function MatrimonialLogin() {
     return phoneRegex.test(phone.replace(/\s/g, ''));
   };
 
-  const handleSendOTP = () => {
+  const handleSendOTP = async () => {
     setError('');
-    
+
     if (!validatePhoneNumber(phoneNumber)) {
       setError('Please enter a valid 10-digit mobile number');
       return;
     }
 
     setIsLoading(true);
-    
-    // Simulate success without API
-    setStep(2);
-    setResendTimer(30);
 
-    setIsLoading(false);
+    try {
+      const response = await fetch('/api/send-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phoneNumber: phoneNumber.replace(/\s/g, '') // Remove spaces
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data)
+      if (data.success) {
+        setStep(2);
+        setResendTimer(30);
+      } else {
+        setError(data.message || 'Failed to send OTP');
+      }
+    } catch (error) {
+      setError('Network error. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
-
   const handleOTPChange = (index, value) => {
     if (value.length > 1) return; // Prevent multiple characters
-    
+
+    // Allow only numbers
+    if (value && !/^\d+$/.test(value)) return;
+
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
@@ -80,7 +101,7 @@ export default function MatrimonialLogin() {
 
   const handleVerifyOTP = async () => {
     const otpString = otp.join('');
-    
+
     if (otpString.length !== 6) {
       setError('Please enter complete 6-digit OTP');
       return;
@@ -89,16 +110,38 @@ export default function MatrimonialLogin() {
     setIsLoading(true);
     setError(''); // Clear previous errors
 
-    const cleanedPhone = phoneNumber.replace(/\s/g, '');
+    try {
+      const response = await fetch('/api/verify-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phoneNumber: phoneNumber.replace(/\s/g, ''),
+          otp: otpString
+        }),
+      });
 
-    if (otpString === '123456') {
-      await login(cleanedPhone);
-      router.push('/dashboard');
-    } else {
-      setError('Invalid OTP');
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'OTP verification failed');
+      }
+
+      if (data.success) {
+        await login(data.userId); // Use userId from response as per MaliBandhan logic
+        console.log(data)
+        // Redirect based on user status
+        router.push(`/dashboard/${data.userId}`);
+      } else {
+        setError(data.error || 'OTP verification failed');
+      }
+    } catch (error) {
+      console.error('Verification error:', error);
+      setError(error.message || 'Network error. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const handleResendOTP = () => {
@@ -159,7 +202,7 @@ export default function MatrimonialLogin() {
                         Mobile Number
                       </label>
                       <div className="flex space-x-2 sm:space-x-3">
-                        <select 
+                        <select
                           value={countryCode}
                           onChange={(e) => setCountryCode(e.target.value)}
                           className="w-20 sm:w-24 px-2 sm:px-3 py-3 sm:py-4 border border-gray-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
@@ -263,7 +306,7 @@ export default function MatrimonialLogin() {
                         <RotateCcw size={14} className="mr-1 sm:mr-2" />
                         {resendTimer > 0 ? `Resend in ${resendTimer}s` : 'Resend Code'}
                       </button>
-                      
+
                       <button
                         onClick={() => {
                           setStep(1);

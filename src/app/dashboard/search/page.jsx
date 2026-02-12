@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { 
+import {
   Search,
   Filter,
   User,
@@ -32,7 +32,7 @@ import {
 } from 'lucide-react';
 
 export default function SearchProfilesPage() {
-   const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
@@ -40,7 +40,7 @@ export default function SearchProfilesPage() {
   const [sortBy, setSortBy] = useState('relevance');
   const [resultsCount, setResultsCount] = useState(247);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Filter states
   const [filters, setFilters] = useState({
     ageRange: [22, 35],
@@ -159,11 +159,11 @@ export default function SearchProfilesPage() {
     setIsLoaded(true);
     // Only run this on client side
     setIsMobile(window.innerWidth < 1024);
-    
+
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024);
     };
-    
+
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -219,7 +219,7 @@ export default function SearchProfilesPage() {
         <div className="aspect-[4/5] bg-gradient-to-br from-rose-100 to-amber-100 flex items-center justify-center relative">
           {profile.hasPhoto ? (
             <div className={`w-full h-full flex items-center justify-center ${profile.isBlurred ? 'blur-md' : ''}`}>
-              <User className="w-16 h-16 text-rose-500" />
+              <User className="w-16 h-16 text-primary" />
             </div>
           ) : (
             <div className="text-center">
@@ -227,7 +227,7 @@ export default function SearchProfilesPage() {
               <p className="text-sm text-gray-500">No Photo</p>
             </div>
           )}
-          
+
           {/* Overlay for locked profiles */}
           {profile.isBlurred && (
             <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
@@ -247,7 +247,7 @@ export default function SearchProfilesPage() {
               </div>
             )}
             {profile.premium && (
-              <div className="bg-gradient-to-r from-amber-400 to-rose-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center">
+              <div className="bg-gradient-to-r from-primary to-secondary text-white px-2 py-1 rounded-full text-xs font-medium flex items-center">
                 <Crown className="w-3 h-3 mr-1" />
                 Premium
               </div>
@@ -272,7 +272,7 @@ export default function SearchProfilesPage() {
               <span className="text-xs text-gray-500">{profile.lastActive}</span>
             </div>
           </div>
-          
+
           <div className="space-y-1 text-sm text-gray-600 mb-3">
             <div className="flex items-center">
               <Calendar className="w-3 h-3 mr-1" />
@@ -313,23 +313,23 @@ export default function SearchProfilesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50/50 via-white to-amber-50/30">
       <div className="max-w-7xl mx-auto p-6">
-        
+
         {/* Header Section */}
         <div className={`transform transition-all duration-1000 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-          <div className="bg-gradient-to-r from-rose-500 to-rose-600 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden mb-6">
+          <div className="bg-gradient-to-r from-secondary to-primary rounded-2xl p-6 text-white shadow-xl relative overflow-hidden mb-6">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
             <div className="relative z-10">
-              <h1 className="text-2xl font-bold mb-2">Find Your Perfect Match</h1>
+              <h1 className="text-2xl font-serif font-bold mb-2">Find Your Perfect Match</h1>
               <p className="text-rose-100">Discover profiles that align with your preferences</p>
             </div>
           </div>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-6">
-          
+
           {/* Filter Sidebar */}
           <div className={`lg:w-80 transform transition-all duration-1000 delay-200 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-            
+
             {/* Mobile Filter Toggle */}
             <div className="lg:hidden mb-4">
               <button
@@ -345,7 +345,7 @@ export default function SearchProfilesPage() {
             </div>
 
             {/* Filter Panel */}
-          <div className={`bg-white rounded-xl shadow-lg border border-rose-100/50 ${showFilters || !isMobile ? 'block' : 'hidden'} lg:block`}>
+            <div className={`bg-white rounded-xl shadow-lg border border-rose-100/50 ${showFilters || !isMobile ? 'block' : 'hidden'} lg:block`}>
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-bold text-gray-900">Filters</h2>
@@ -359,7 +359,7 @@ export default function SearchProfilesPage() {
                 </div>
 
                 <div className="space-y-0">
-                  
+
                   {/* Basic Filters */}
                   <FilterSection title="Basic Details" section="basic">
                     <div>
@@ -381,7 +381,7 @@ export default function SearchProfilesPage() {
                         </span>
                       </div>
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Height Range</label>
                       <div className="flex space-x-2">
@@ -409,7 +409,7 @@ export default function SearchProfilesPage() {
                         <option>Jain</option>
                       </select>
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Caste</label>
                       <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent text-sm">
@@ -432,7 +432,7 @@ export default function SearchProfilesPage() {
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent text-sm"
                       />
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">State</label>
                       <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent text-sm">
@@ -458,7 +458,7 @@ export default function SearchProfilesPage() {
                         <option>Professional Degree</option>
                       </select>
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Profession</label>
                       <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent text-sm">
@@ -470,7 +470,7 @@ export default function SearchProfilesPage() {
                         <option>Government Job</option>
                       </select>
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Income Range (Lakhs/year)</label>
                       <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent text-sm">
@@ -498,7 +498,7 @@ export default function SearchProfilesPage() {
                         />
                         <span className="ml-2 text-sm text-gray-700">Vegetarian only</span>
                       </label>
-                      
+
                       <label className="flex items-center">
                         <input
                           type="checkbox"
@@ -511,7 +511,7 @@ export default function SearchProfilesPage() {
                         />
                         <span className="ml-2 text-sm text-gray-700">Non-smoker</span>
                       </label>
-                      
+
                       <label className="flex items-center">
                         <input
                           type="checkbox"
@@ -524,7 +524,7 @@ export default function SearchProfilesPage() {
                         />
                         <span className="ml-2 text-sm text-gray-700">Non-drinker</span>
                       </label>
-                      
+
                       <label className="flex items-center">
                         <input
                           type="checkbox"
@@ -555,7 +555,7 @@ export default function SearchProfilesPage() {
                         />
                         <span className="ml-2 text-sm text-gray-700">Verified profiles only</span>
                       </label>
-                      
+
                       <label className="flex items-center">
                         <input
                           type="checkbox"
@@ -568,7 +568,7 @@ export default function SearchProfilesPage() {
                         />
                         <span className="ml-2 text-sm text-gray-700">With photos only</span>
                       </label>
-                      
+
                       <label className="flex items-center">
                         <input
                           type="checkbox"
@@ -587,7 +587,7 @@ export default function SearchProfilesPage() {
 
                 {/* Apply Filters Button */}
                 <div className="mt-6 pt-6 border-t border-gray-200">
-                  <button className="w-full bg-gradient-to-r from-rose-500 to-rose-600 text-white py-3 rounded-lg font-medium hover:from-rose-600 hover:to-rose-700 transition-all duration-300">
+                  <button className="w-full bg-gradient-to-r from-secondary to-primary text-white py-3 rounded-lg font-medium hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
                     Apply Filters
                   </button>
                 </div>
@@ -597,11 +597,11 @@ export default function SearchProfilesPage() {
 
           {/* Main Search Results */}
           <div className={`flex-1 transform transition-all duration-1000 delay-300 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-            
+
             {/* Search Bar & Controls */}
             <div className="bg-white rounded-xl shadow-lg border border-rose-100/50 p-4 mb-6">
               <div className="flex flex-col md:flex-row gap-4">
-                
+
                 {/* Search Input */}
                 <div className="flex-1 relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -627,17 +627,17 @@ export default function SearchProfilesPage() {
                     <option value="age_high">Age: High to Low</option>
                     <option value="recently_active">Recently Active</option>
                   </select>
-                  
+
                   <div className="flex border border-gray-300 rounded-lg overflow-hidden">
                     <button
                       onClick={() => setViewMode('grid')}
-                      className={`p-3 ${viewMode === 'grid' ? 'bg-rose-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+                      className={`p-3 ${viewMode === 'grid' ? 'bg-primary text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
                     >
                       <Grid3X3 className="w-5 h-5" />
                     </button>
                     <button
                       onClick={() => setViewMode('list')}
-                      className={`p-3 ${viewMode === 'list' ? 'bg-rose-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+                      className={`p-3 ${viewMode === 'list' ? 'bg-primary text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
                     >
                       <List className="w-5 h-5" />
                     </button>
@@ -670,7 +670,7 @@ export default function SearchProfilesPage() {
               <button
                 onClick={() => setIsLoading(true)}
                 disabled={isLoading}
-                className="bg-white border border-rose-300 text-rose-600 px-8 py-3 rounded-lg font-medium hover:bg-rose-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-white border border-rose-200 text-primary px-8 py-3 rounded-lg font-medium hover:bg-rose-50 hover:border-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? 'Loading...' : 'Load More Profiles'}
               </button>

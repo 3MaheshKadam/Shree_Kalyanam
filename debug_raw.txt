@@ -1,0 +1,598 @@
+Found 6 sections (RAW DATA):
+
+Section: "Basic Information" (Name: "section-basic-info")
+Fields Count: 12
+Fields: [
+  {
+    "name": "name",
+    "label": "Full Name",
+    "type": "text",
+    "required": true,
+    "options": [],
+    "order": 1,
+    "_id": "698ad999ba678b3c71ee2d96"
+  },
+  {
+    "name": "gender",
+    "label": "Gender",
+    "type": "select",
+    "required": true,
+    "options": [
+      "Male",
+      "Female",
+      "Other"
+    ],
+    "order": 2,
+    "_id": "698ad999ba678b3c71ee2d97"
+  },
+  {
+    "name": "dob",
+    "label": "Date of Birth",
+    "type": "date",
+    "required": true,
+    "options": [],
+    "order": 3,
+    "_id": "698ad999ba678b3c71ee2d98"
+  },
+  {
+    "name": "maritalStatus",
+    "label": "Marital Status",
+    "type": "select",
+    "required": true,
+    "options": [
+      "Unmarried",
+      "Divorced",
+      "Widowed"
+    ],
+    "order": 4,
+    "_id": "698ad999ba678b3c71ee2d99"
+  },
+  {
+    "name": "height",
+    "label": "Height",
+    "type": "text",
+    "required": true,
+    "options": [],
+    "order": 5,
+    "_id": "698ad999ba678b3c71ee2d9a"
+  },
+  {
+    "name": "weight",
+    "label": "Weight",
+    "type": "text",
+    "required": true,
+    "options": [],
+    "order": 6,
+    "_id": "698ad999ba678b3c71ee2d9b"
+  },
+  {
+    "name": "bloodGroup",
+    "label": "Blood Group",
+    "type": "select",
+    "required": false,
+    "options": [
+      "A+",
+      "A-",
+      "B+",
+      "B-",
+      "AB+",
+      "AB-",
+      "O+",
+      "O-"
+    ],
+    "order": 7,
+    "_id": "698ad999ba678b3c71ee2d9c"
+  },
+  {
+    "name": "complexion",
+    "label": "Complexion",
+    "type": "select",
+    "required": false,
+    "options": [
+      "Fair",
+      "Wheatish",
+      "Dark"
+    ],
+    "order": 8,
+    "_id": "698ad999ba678b3c71ee2d9d"
+  },
+  {
+    "name": "motherTongue",
+    "label": "Mother Tongue",
+    "type": "select",
+    "required": true,
+    "options": [
+      "Hindi",
+      "English",
+      "Marathi",
+      "Gujarati",
+      "Tamil",
+      "Telugu",
+      "Kannada",
+      "Malayalam",
+      "Bengali",
+      "Punjabi"
+    ],
+    "order": 9,
+    "_id": "698ad999ba678b3c71ee2d9e"
+  },
+  {
+    "name": "currentCity",
+    "label": "Current City",
+    "type": "text",
+    "required": true,
+    "options": [],
+    "order": 10,
+    "_id": "698ad999ba678b3c71ee2d9f"
+  },
+  {
+    "name": "permanentAddress",
+    "label": "Permanent Address",
+    "type": "textarea",
+    "required": true,
+    "options": [],
+    "order": 11,
+    "_id": "698ad999ba678b3c71ee2da0"
+  },
+  {
+    "name": "wearsLens",
+    "label": "Wears Lens",
+    "type": "select",
+    "required": false,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "order": 12,
+    "_id": "698ad999ba678b3c71ee2da1"
+  }
+]
+
+Section: "Education & Profession" (Name: "section-education-profession")
+Fields Count: 6
+Fields: [
+  {
+    "name": "education",
+    "label": "Highest Education",
+    "type": "select",
+    "required": true,
+    "options": [
+      "High School",
+      "Bachelor's",
+      "Master's",
+      "Doctorate",
+      "Diploma",
+      "Other"
+    ],
+    "order": 1,
+    "_id": "698ad999ba678b3c71ee2daf"
+  },
+  {
+    "name": "occupation",
+    "label": "Occupation",
+    "type": "text",
+    "required": true,
+    "options": [],
+    "order": 2,
+    "_id": "698ad999ba678b3c71ee2db0"
+  },
+  {
+    "name": "income",
+    "label": "Annual Income",
+    "type": "select",
+    "required": true,
+    "options": [
+      "0-2 Lakhs",
+      "2-5 Lakhs",
+      "5-8 Lakhs",
+      "8-12 Lakhs",
+      "12-18 Lakhs",
+      "18-25 Lakhs",
+      "25-35 Lakhs",
+      "35+ Lakhs"
+    ],
+    "order": 3,
+    "_id": "698ad999ba678b3c71ee2db1"
+  },
+  {
+    "name": "fieldOfStudy",
+    "label": "Field of Study",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 4,
+    "_id": "698ad999ba678b3c71ee2db2"
+  },
+  {
+    "name": "college",
+    "label": "College/University",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 5,
+    "_id": "698ad999ba678b3c71ee2db3"
+  },
+  {
+    "name": "company",
+    "label": "Company",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 6,
+    "_id": "698ad999ba678b3c71ee2db4"
+  }
+]
+
+Section: "Religious & Community" (Name: "section-1752492308390")
+Fields Count: 4
+Fields: [
+  {
+    "name": "religion",
+    "label": "Religion",
+    "type": "select",
+    "required": true,
+    "options": [
+      "Hindu",
+      "Muslim",
+      "Sikh",
+      "Christian",
+      "Jain",
+      "Buddhist"
+    ],
+    "order": 1,
+    "_id": "698ad999ba678b3c71ee2dbc"
+  },
+  {
+    "name": "caste",
+    "label": "Caste",
+    "type": "text",
+    "required": true,
+    "options": [],
+    "order": 2,
+    "_id": "698ad999ba678b3c71ee2dbd"
+  },
+  {
+    "name": "subCaste",
+    "label": "Sub Caste",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 3,
+    "_id": "698ad999ba678b3c71ee2dbe"
+  },
+  {
+    "name": "gothra",
+    "label": "Gothra",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 4,
+    "_id": "698ad999ba678b3c71ee2dbf"
+  }
+]
+
+Section: "Relative Information" (Name: "section-1752482037997")
+Fields Count: 13
+Fields: [
+  {
+    "name": "fatherName",
+    "label": "Father's Name",
+    "type": "text",
+    "required": true,
+    "options": [],
+    "order": 1,
+    "_id": "698ad999ba678b3c71ee2dc5"
+  },
+  {
+    "name": "mother",
+    "label": "Mother's Name",
+    "type": "text",
+    "required": true,
+    "options": [],
+    "order": 2,
+    "_id": "698ad999ba678b3c71ee2dc6"
+  },
+  {
+    "name": "brothers",
+    "label": "No. of Brothers",
+    "type": "number",
+    "required": false,
+    "options": [],
+    "order": 3,
+    "_id": "698ad999ba678b3c71ee2dc7"
+  },
+  {
+    "name": "marriedBrothers",
+    "label": "Married Brothers",
+    "type": "number",
+    "required": false,
+    "options": [],
+    "order": 4,
+    "_id": "698ad999ba678b3c71ee2dc8"
+  },
+  {
+    "name": "sisters",
+    "label": "No. of Sisters",
+    "type": "number",
+    "required": false,
+    "options": [],
+    "order": 5,
+    "_id": "698ad999ba678b3c71ee2dc9"
+  },
+  {
+    "name": "marriedSisters",
+    "label": "Married Sisters",
+    "type": "number",
+    "required": false,
+    "options": [],
+    "order": 6,
+    "_id": "698ad999ba678b3c71ee2dca"
+  },
+  {
+    "name": "parentResidenceCity",
+    "label": "Parent's Residence City",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 7,
+    "_id": "698ad999ba678b3c71ee2dcb"
+  },
+  {
+    "name": "nativeDistrict",
+    "label": "Native District",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 8,
+    "_id": "698ad999ba678b3c71ee2dcc"
+  },
+  {
+    "name": "nativeCity",
+    "label": "Native City",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 9,
+    "_id": "698ad999ba678b3c71ee2dcd"
+  },
+  {
+    "name": "familyWealth",
+    "label": "Family Wealth",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "placeholder": "e.g. 50 Lakhs, 1 Crore",
+    "order": 10,
+    "_id": "698ad999ba678b3c71ee2dce"
+  },
+  {
+    "name": "parentOccupation",
+    "label": "Parent's Occupation",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 11,
+    "_id": "698ad999ba678b3c71ee2dcf"
+  },
+  {
+    "name": "mamaSurname",
+    "label": "Mama's Surname",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 12,
+    "_id": "698ad999ba678b3c71ee2dd0"
+  },
+  {
+    "name": "relativeSurname",
+    "label": "Relative Surnames",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "placeholder": "Comma separated",
+    "order": 13,
+    "_id": "698ad999ba678b3c71ee2dd1"
+  }
+]
+
+Section: "Horoscope Information" (Name: "section-1752492699329")
+Fields Count: 9
+Fields: [
+  {
+    "name": "rashi",
+    "label": "Rashi",
+    "type": "select",
+    "required": false,
+    "options": [
+      "Mesh",
+      "Vrishabh",
+      "Mithun",
+      "Kark",
+      "Simha",
+      "Kanya",
+      "Tula",
+      "Vrishchik",
+      "Dhanu",
+      "Makar",
+      "Kumbh",
+      "Meen"
+    ],
+    "order": 1,
+    "_id": "698ad999ba678b3c71ee2de0"
+  },
+  {
+    "name": "nakshatra",
+    "label": "Nakshatra",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 2,
+    "_id": "698ad999ba678b3c71ee2de1"
+  },
+  {
+    "name": "charan",
+    "label": "Charan",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 3,
+    "_id": "698ad999ba678b3c71ee2de2"
+  },
+  {
+    "name": "gan",
+    "label": "Gan",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 4,
+    "_id": "698ad999ba678b3c71ee2de3"
+  },
+  {
+    "name": "nadi",
+    "label": "Nadi",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 5,
+    "_id": "698ad999ba678b3c71ee2de4"
+  },
+  {
+    "name": "mangal",
+    "label": "Mangal",
+    "type": "select",
+    "required": false,
+    "options": [
+      "Yes",
+      "No",
+      "Anshik"
+    ],
+    "order": 6,
+    "_id": "698ad999ba678b3c71ee2de5"
+  },
+  {
+    "name": "birthPlace",
+    "label": "Birth Place",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 7,
+    "_id": "698ad999ba678b3c71ee2de6"
+  },
+  {
+    "name": "birthTime",
+    "label": "Birth Time",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 8,
+    "_id": "698ad999ba678b3c71ee2de7"
+  },
+  {
+    "name": "gotraDevak",
+    "label": "Gotra Devak",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "order": 9,
+    "_id": "698ad999ba678b3c71ee2de8"
+  }
+]
+
+Section: "Expectations" (Name: "section-1752493374295")
+Fields Count: 7
+Fields: [
+  {
+    "name": "expectedCaste",
+    "label": "Expected Caste",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "placeholder": "Enter Expected Caste",
+    "order": 1,
+    "_id": "698ad999ba678b3c71ee2df3"
+  },
+  {
+    "name": "expectedHeight",
+    "label": "Expected Height",
+    "type": "select",
+    "required": false,
+    "options": [
+      "4'5\" - 5'0\"",
+      "5'0\" - 5'5\"",
+      "5'5\" - 6'0\"",
+      "6'0\"+"
+    ],
+    "order": 2,
+    "_id": "698ad999ba678b3c71ee2df4"
+  },
+  {
+    "name": "expectedEducation",
+    "label": "Expected Education",
+    "type": "select",
+    "required": false,
+    "options": [
+      "High School",
+      "Bachelor's",
+      "Master's",
+      "Doctorate",
+      "Diploma",
+      "Other"
+    ],
+    "order": 3,
+    "_id": "698ad999ba678b3c71ee2df5"
+  },
+  {
+    "name": "preferredCity",
+    "label": "Preferred City",
+    "type": "text",
+    "required": false,
+    "options": [],
+    "placeholder": "Enter Preferred City",
+    "order": 4,
+    "_id": "698ad999ba678b3c71ee2df6"
+  },
+  {
+    "name": "expectedAgeDifference",
+    "label": "Expected Age Difference",
+    "type": "select",
+    "required": false,
+    "options": [
+      "1-3 Years",
+      "3-5 Years",
+      "5-7 Years",
+      "7+ Years"
+    ],
+    "order": 5,
+    "_id": "698ad999ba678b3c71ee2df7"
+  },
+  {
+    "name": "expectedIncome",
+    "label": "Expected Income",
+    "type": "select",
+    "required": false,
+    "options": [
+      "0-2 Lakhs",
+      "2-5 Lakhs",
+      "5-8 Lakhs",
+      "8-12 Lakhs",
+      "12-18 Lakhs",
+      "18-25 Lakhs",
+      "25-35 Lakhs",
+      "35+ Lakhs"
+    ],
+    "order": 6,
+    "_id": "698ad999ba678b3c71ee2df8"
+  },
+  {
+    "name": "divorcee",
+    "label": "Accept Divorcee",
+    "type": "select",
+    "required": false,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "order": 7,
+    "_id": "698ad999ba678b3c71ee2df9"
+  }
+]
