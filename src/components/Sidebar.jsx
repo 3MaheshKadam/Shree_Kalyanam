@@ -1,18 +1,20 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { 
-  LayoutDashboard, 
-  User, 
-  Search, 
-  Heart, 
-  UserPlus, 
+import {
+  LayoutDashboard,
+  User,
+  Search,
+  Heart,
+  UserPlus,
   Settings,
   Sparkles,
   Crown,
   X,
-  Star
+  Star,
+  LogOut
 } from 'lucide-react';
+import { useSession } from "@/context/SessionContext";
 
 // Configuration
 const NAV_ITEMS = [
@@ -25,17 +27,17 @@ const NAV_ITEMS = [
 ];
 
 const QUICK_ACTIONS = [
-  { 
-    href: "/search", 
-    label: "Advanced Search", 
-    icon: Search, 
-    colorScheme: "red" 
+  {
+    href: "/search",
+    label: "Advanced Search",
+    icon: Search,
+    colorScheme: "red"
   },
-  { 
-    href: "/dashboard/premium-features", 
-    label: "Premium Features", 
-    icon: Star, 
-    colorScheme: "emerald" 
+  {
+    href: "/dashboard/premium-features",
+    label: "Premium Features",
+    icon: Star,
+    colorScheme: "emerald"
   },
 ];
 
@@ -64,7 +66,7 @@ const Logo = () => (
       <h1 className="font-bold text-2xl bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 bg-clip-text text-transparent">
         Shree Kalyanam
       </h1>
-    
+
     </div>
   </div>
 );
@@ -93,8 +95,8 @@ const NavLink = ({ href, label, icon: Icon, isActive, onClick }) => (
     <div className="flex items-center space-x-3">
       <div className={`
         p-2.5 rounded-lg transition-all duration-200
-        ${isActive 
-          ? "bg-white/25 backdrop-blur-sm" 
+        ${isActive
+          ? "bg-white/25 backdrop-blur-sm"
           : "bg-gradient-to-br from-orange-50 to-red-50 group-hover:from-orange-100 group-hover:to-red-100"
         }
       `}>
@@ -103,7 +105,7 @@ const NavLink = ({ href, label, icon: Icon, isActive, onClick }) => (
           ${isActive ? "text-white" : "text-orange-600 group-hover:text-red-600"}
         `} />
       </div>
-      
+
       <span className={`
         font-semibold text-sm transition-all duration-200
         ${isActive ? "text-white" : "text-slate-700 group-hover:text-slate-900"}
@@ -111,7 +113,7 @@ const NavLink = ({ href, label, icon: Icon, isActive, onClick }) => (
         {label}
       </span>
     </div>
-    
+
     {isActive ? (
       <div className="flex items-center gap-1">
         <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
@@ -146,7 +148,7 @@ const QuickActionLink = ({ href, label, icon: Icon, colorScheme, onClick }) => (
       `}>
         <Icon className={`w-4 h-4 ${getColorClasses(colorScheme, 'icon')} transition-all duration-200`} />
       </div>
-      
+
       <span className={`
         font-medium text-sm
         ${colorScheme === 'red' ? 'group-hover:text-red-600' : 'group-hover:text-emerald-600'}
@@ -178,9 +180,10 @@ const DecorativeBlobs = () => (
 // Main Component
 export default function Sidebar({ mobileOpen = false, setMobileOpen }) {
   const pathname = usePathname();
-  
+  const { logout } = useSession();
+
   const closeSidebar = () => setMobileOpen?.(false);
-  
+
   const isLinkActive = (href, exact = false) => {
     return exact ? pathname === href : pathname.startsWith(href);
   };
@@ -196,15 +199,15 @@ export default function Sidebar({ mobileOpen = false, setMobileOpen }) {
         transition-all duration-300 ease-in-out
         ${mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        
+
         {/* Mobile Close Button */}
-        <button 
+        <button
           onClick={closeSidebar}
           className="lg:hidden absolute top-5 right-5 p-2.5 rounded-xl bg-white/90 text-orange-600 hover:bg-orange-100 shadow-lg transition-all duration-200 backdrop-blur-sm z-50 border border-orange-200"
         >
           <X className="w-5 h-5" />
         </button>
-        
+
         {/* Header */}
         <div className="p-6 border-b border-orange-200/50 bg-white/60 backdrop-blur-md">
           <Logo />
@@ -213,7 +216,7 @@ export default function Sidebar({ mobileOpen = false, setMobileOpen }) {
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto p-5 space-y-2.5">
           <SectionHeader label="Main Menu" />
-          
+
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.href}
@@ -227,12 +230,12 @@ export default function Sidebar({ mobileOpen = false, setMobileOpen }) {
 
           {/* Quick Actions */}
           <div className="mt-8 pt-6 border-t border-orange-200/50">
-            <SectionHeader 
-              label="Quick Actions" 
-              gradientFrom="red-500" 
-              gradientTo="pink-500" 
+            <SectionHeader
+              label="Quick Actions"
+              gradientFrom="red-500"
+              gradientTo="pink-500"
             />
-            
+
             {QUICK_ACTIONS.map((action) => (
               <QuickActionLink
                 key={action.href}
@@ -243,7 +246,35 @@ export default function Sidebar({ mobileOpen = false, setMobileOpen }) {
                 onClick={closeSidebar}
               />
             ))}
+
+            <button
+              onClick={() => {
+                closeSidebar();
+                logout();
+              }}
+              className="w-full mt-2 flex items-center justify-between px-5 py-3 rounded-xl 
+                text-slate-700 transition-all duration-200 
+                group border border-slate-200/50 hover:border-red-300
+                hover:bg-gradient-to-r active:scale-[0.98]
+                hover:from-red-50 hover:to-orange-50"
+            >
+              <div className="flex items-center space-x-3">
+                <div className="p-2 rounded-lg bg-white border-2 border-red-200 group-hover:border-red-400 transition-all duration-200 group-hover:scale-110">
+                  <LogOut className="w-4 h-4 text-red-500 transition-all duration-200" />
+                </div>
+                <span className="font-medium text-sm group-hover:text-red-600">
+                  Log Out
+                </span>
+              </div>
+
+              <div className="w-6 h-6 rounded-full border-2 border-red-300 text-red-500 flex items-center justify-center transition-all duration-200 group-hover:rotate-90">
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+              </div>
+            </button>
           </div>
+
         </nav>
 
         {/* Footer */}
@@ -260,7 +291,7 @@ export default function Sidebar({ mobileOpen = false, setMobileOpen }) {
 
       {/* Mobile Overlay */}
       {mobileOpen && (
-        <div 
+        <div
           onClick={closeSidebar}
           className="fixed inset-0 bg-black/30 backdrop-blur-sm z-20 lg:hidden"
         />

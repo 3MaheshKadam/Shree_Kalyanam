@@ -124,6 +124,25 @@ export default function SettingsLayout() {
       </div>
 
      
+
+      <div className="bg-white rounded-xl p-6 shadow-lg border border-rose-100/50">
+        <div className="flex items-center space-x-3 mb-4">
+          <LogOut className="w-5 h-5 text-rose-500" />
+          <h3 className="text-lg font-bold text-gray-900">Session Management</h3>
+        </div>
+        <div className="space-y-4">
+          <p className="text-sm text-gray-600">
+            Log out of your account on this device.
+          </p>
+          <button
+            onClick={() => setShowLogoutModal(true)}
+            className="w-full px-6 py-3 bg-rose-100 text-rose-700 rounded-lg hover:bg-rose-200 transition-colors font-medium flex items-center justify-center space-x-2"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Log Out</span>
+          </button>
+        </div>
+      </div>
     </div>
   );
 
