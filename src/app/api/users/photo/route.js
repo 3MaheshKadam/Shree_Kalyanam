@@ -1,75 +1,93 @@
-// import { NextResponse } from 'next/server';
-// import jwt from 'jsonwebtoken';
-// import User from '@/models/User';
-// import dbConnect from '@/utils/dbConnect';
-// import cloudinary from '@/utils/cloudinary';
+import { NextResponse } from 'next/server';
+import connectDB from '@/lib/dbConnect';
+import User from '@/models/User';
 
-// export async function POST(request) {
-//   try {
-//     await dbConnect();
-    
-//     // Get token from cookies
-//     const token = request.cookies.get('authToken')?.value;
-//     if (!token) {
-//       return NextResponse.json(
-//         { message: 'Unauthorized' },
-//         { status: 401 }
-//       );
-//     }
+const corsHeaders = {
+    'Access-Control-Allow-Origin': 'http://localhost:8081',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Credentials': 'true'
+};
 
-//     // Verify token
-//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-//     if (!decoded) {
-//       return NextResponse.json(
-//         { message: 'Invalid token' },
-//         { status: 401 }
-//       );
-//     }
+export async function PUT(req) {
+    try {
+        await connectDB();
 
-//     const formData = await request.formData();
-//     const file = formData.get('file');
-    
-//     if (!file) {
-//       return NextResponse.json(
-//         { message: 'No file uploaded' },
-//         { status: 400 }
-//       );
-//     }
+        const { userId, url, isPrimary, delete: shouldDelete } = await req.json();
 
-//     // Convert file to buffer
-//     const buffer = await file.arrayBuffer();
-//     const array = new Uint8Array(buffer);
-    
-//     // Upload to Cloudinary
-//     const result = await new Promise((resolve, reject) => {
-//       cloudinary.uploader.upload_stream(
-//         {
-//           folder: 'profile_photos',
-//           resource_type: 'image',
-//           public_id: `user_${decoded.userId}_profile`,
-//         },
-//         (error, result) => {
-//           if (error) reject(error);
-//           else resolve(result);
-//         }
-//       ).end(array);
-//     });
+        console.log('Photo update request:', { userId, url, isPrimary, shouldDelete });
 
-//     const updatedUser = await User.findByIdAndUpdate(
-//       decoded.userId,
-//       { profilePhoto: result.secure_url },
-//       { new: true }
-//     ).select('-__v');
+        if (!userId) {
+            return NextResponse.json(
+                { message: 'User ID is required' },
+                { status: 400, headers: corsHeaders }
+            );
+        }
 
-//     return NextResponse.json({
-//       message: 'Profile photo updated successfully',
-//       profilePhoto: updatedUser.profilePhoto
-//     });
-//   } catch (error) {
-//     console.error('Error updating profile photo:', error);
-//     return NextResponse.json(
-//       { message: 'Internal server error' },
-//       { status: 500 }
-//     );
-//   }
-// }
+        const user = await User.findById(userId);
+        if (!user) {
+            return NextResponse.json(
+                { message: 'User not found' },
+                { status: 404, headers: corsHeaders }
+            );
+        }
+
+        // Initialize photos array if it doesn't exist
+        if (!user.photos) {
+            user.photos = [];
+        }
+
+        if (shouldDelete) {
+            // Remove photo from user's photos array
+            user.photos = user.photos.filter(p => p.url !== url);
+
+            // If deleted photo was primary, set first photo as primary or null
+            if (user.profilePhoto === url) {
+                user.profilePhoto = user.photos.length > 0 ? user.photos[0].url : null;
+                if (user.photos.length > 0) {
+                    user.photos[0].isPrimary = true;
+                }
+            }
+        } else if (isPrimary) {
+            // Set all photos to non-primary first
+            user.photos.forEach(p => p.isPrimary = false);
+
+            // Find existing photo or add new one
+            const existingPhoto = user.photos.find(p => p.url === url);
+            if (existingPhoto) {
+                existingPhoto.isPrimary = true;
+            } else {
+                user.photos.push({ url, isPrimary: true });
+            }
+
+            // Update profilePhoto
+            user.profilePhoto = url;
+        } else {
+            // Add new photo if it doesn't exist
+            const existingPhoto = user.photos.find(p => p.url === url);
+            if (!existingPhoto) {
+                user.photos.push({ url, isPrimary: false });
+            }
+        }
+
+        await user.save();
+
+        return NextResponse.json({
+            success: true,
+            message: 'Photo updated successfully',
+            profilePhoto: user.profilePhoto,
+            photos: user.photos
+        }, { headers: corsHeaders });
+
+    } catch (error) {
+        console.error('Error updating photo:', error);
+        return NextResponse.json(
+            {
+                success: false,
+                message: 'Internal server error',
+                error: error.message
+            },
+            { status: 500, headers: corsHeaders }
+        );
+    }
+}

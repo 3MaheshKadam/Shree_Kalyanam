@@ -17,9 +17,34 @@ export async function GET(request) {
 
     // Get query parameters for potential filtering
     const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId'); // Get requesting user ID
     const limit = searchParams.get('limit') || 20;
     const page = searchParams.get('page') || 1;
     const skip = (page - 1) * limit;
+
+    // Check subscription status
+    if (userId) {
+      const requestingUser = await User.findById(userId).select('subscription');
+
+      if (!requestingUser) {
+        return NextResponse.json(
+          { success: false, message: 'User not found', requiresSubscription: true },
+          { status: 404, headers: corsHeaders }
+        );
+      }
+
+      // Check if user has active subscription
+      const isSubscribed = requestingUser.subscription?.isSubscribed || false;
+      const subscriptionExpired = requestingUser.subscription?.expiresAt
+        ? new Date(requestingUser.subscription.expiresAt) < new Date()
+        : true;
+
+      // If not subscribed, we still return data but the frontend will blur it
+      // The phone/email are already excluded below
+      // if (!isSubscribed || subscriptionExpired) {
+      //   // Allow access but frontend will handle the UI restrictions
+      // }
+    }
 
     // Basic query - you can extend this with more filters as needed
     const query = {};
@@ -90,11 +115,11 @@ export async function GET(request) {
       query.education = education;
     }
 
-    // Fetch users with pagination
+    // Fetch users with pagination (exclude contact info for privacy)
     const users = await User.find(query)
       .skip(skip)
       .limit(parseInt(limit))
-      .select('-__v') // Exclude version key
+      .select('-__v -phone -email') // Exclude contact info and version key
       .lean(); // Convert to plain JavaScript objects
 
     // Get total count for pagination info

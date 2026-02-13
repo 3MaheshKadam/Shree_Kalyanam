@@ -14,7 +14,35 @@ const corsHeaders = {
 
 export async function POST(req) {
   try {
-    const { phoneNumber, otp } = await req.json();
+    // Log request details for debugging
+    console.log('Verify OTP - Request received');
+    console.log('Content-Type:', req.headers.get('content-type'));
+
+    let phoneNumber, otp;
+    try {
+      // Read the raw body text first for debugging
+      const bodyText = await req.text();
+      console.log('Raw body text:', bodyText);
+      console.log('Body length:', bodyText.length);
+
+      if (!bodyText || bodyText.trim() === '') {
+        return new NextResponse(
+          JSON.stringify({ success: false, error: "Request body is empty" }),
+          { status: 400, headers: corsHeaders }
+        );
+      }
+
+      const body = JSON.parse(bodyText);
+      phoneNumber = body.phoneNumber;
+      otp = body.otp;
+      console.log('Parsed body:', { phoneNumber, otp });
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError);
+      return new NextResponse(
+        JSON.stringify({ success: false, error: "Invalid request body - must be valid JSON" }),
+        { status: 400, headers: corsHeaders }
+      );
+    }
 
     // Input validation
     if (!phoneNumber || phoneNumber.length !== 10 || !otp || otp.length !== 6) {

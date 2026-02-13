@@ -13,12 +13,12 @@ export async function GET(req) {
     await connectDB();
 
     const userId = req.nextUrl.searchParams.get("userId");
-    
+
     // Validate input
     if (!userId) {
       return NextResponse.json(
         { message: "User ID is required" },
-        { status: 400 ,headers:corsHeaders}
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -27,7 +27,25 @@ export async function GET(req) {
     if (!userExists) {
       return NextResponse.json(
         { message: "User not found" },
-        { status: 404 ,headers:corsHeaders}
+        { status: 404, headers: corsHeaders }
+      );
+    }
+
+    // Check user's subscription status
+    const isSubscribed = userExists.subscription?.isSubscribed || false;
+    const subscriptionExpired = userExists.subscription?.expiresAt
+      ? new Date(userExists.subscription.expiresAt) < new Date()
+      : true;
+
+    if (!isSubscribed || subscriptionExpired) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Subscribe to view interests",
+          requiresSubscription: true,
+          subscriptionStatus: 'inactive'
+        },
+        { status: 403, headers: corsHeaders }
       );
     }
 
@@ -37,8 +55,14 @@ export async function GET(req) {
     // Populate sender and receiver details
     const populatedInterests = await Promise.all(
       interests.map(async (interest) => {
-        const sender = await User.findById(interest.senderId).select('-password'); // Exclude sensitive data
+        // Include contact info only if interest is accepted and contact is shared
+        const selectFields = interest.status === 'accepted' && interest.contactShared
+          ? '-password'
+          : '-password -phone -email';
+
+        const sender = await User.findById(interest.senderId).select(selectFields);
         const receiver = await User.findById(interest.receiverId).select('-password');
+
         return {
           ...interest._doc,
           sender,
@@ -47,21 +71,21 @@ export async function GET(req) {
       })
     );
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       count: populatedInterests.length,
-      interests: populatedInterests 
-    },{headers:corsHeaders});
+      interests: populatedInterests
+    }, { headers: corsHeaders });
 
   } catch (error) {
     console.error("Error fetching received interests:", error);
     return NextResponse.json(
-      { 
+      {
         success: false,
         message: "Internal server error",
-        error: error.message 
+        error: error.message
       },
-      { status: 500,headers:corsHeaders }
+      { status: 500, headers: corsHeaders }
     );
   }
 }

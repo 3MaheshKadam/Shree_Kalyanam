@@ -18,18 +18,36 @@ export async function POST(req) {
     if (!senderId || !receiverId) {
       return NextResponse.json(
         { message: "Both senderId and receiverId are required" },
-        { status: 400,headers:corsHeaders }
+        { status: 400, headers: corsHeaders }
       );
     }
 
     // Check if users exist
     const senderExists = await User.findById(senderId);
     const receiverExists = await User.findById(receiverId);
-    
+
     if (!senderExists || !receiverExists) {
       return NextResponse.json(
         { message: "Either sender or receiver does not exist" },
-        { status: 404 ,headers:corsHeaders}
+        { status: 404, headers: corsHeaders }
+      );
+    }
+
+    // Check sender's subscription status
+    const isSubscribed = senderExists.subscription?.isSubscribed || false;
+    const subscriptionExpired = senderExists.subscription?.expiresAt
+      ? new Date(senderExists.subscription.expiresAt) < new Date()
+      : true;
+
+    if (!isSubscribed || subscriptionExpired) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Subscribe to send interests",
+          requiresSubscription: true,
+          subscriptionStatus: 'inactive'
+        },
+        { status: 403, headers: corsHeaders }
       );
     }
 
@@ -38,7 +56,7 @@ export async function POST(req) {
     if (existing) {
       return NextResponse.json(
         { message: "Interest already sent" },
-        { status: 400 ,headers:corsHeaders}
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -46,20 +64,21 @@ export async function POST(req) {
     const interest = new Interest({ senderId, receiverId });
     await interest.save();
 
-    return NextResponse.json({ 
+    return NextResponse.json({
+      success: true,
       message: "Interest sent successfully",
       interest: {
         ...interest._doc,
         sender: senderExists,
         receiver: receiverExists
       }
-    },{headers:corsHeaders});
+    }, { headers: corsHeaders });
 
   } catch (error) {
     console.error("Error in POST interest:", error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500,headers:corsHeaders }
+      { status: 500, headers: corsHeaders }
     );
   }
 }
@@ -72,7 +91,7 @@ export async function GET(req) {
     if (!userId) {
       return NextResponse.json(
         { message: "User ID is required" },
-        { status: 400,headers:corsHeaders }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -81,7 +100,25 @@ export async function GET(req) {
     if (!userExists) {
       return NextResponse.json(
         { message: "User not found" },
-        { status: 404,headers:corsHeaders }
+        { status: 404, headers: corsHeaders }
+      );
+    }
+
+    // Check user's subscription status
+    const isSubscribed = userExists.subscription?.isSubscribed || false;
+    const subscriptionExpired = userExists.subscription?.expiresAt
+      ? new Date(userExists.subscription.expiresAt) < new Date()
+      : true;
+
+    if (!isSubscribed || subscriptionExpired) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Subscribe to view interests",
+          requiresSubscription: true,
+          subscriptionStatus: 'inactive'
+        },
+        { status: 403, headers: corsHeaders }
       );
     }
 
@@ -91,8 +128,15 @@ export async function GET(req) {
     // Populate sender and receiver details
     const populatedInterests = await Promise.all(
       interests.map(async (interest) => {
-        const sender = await User.findById(interest.senderId).select('-password'); // Exclude sensitive data
-        const receiver = await User.findById(interest.receiverId).select('-password');
+        const sender = await User.findById(interest.senderId).select('-password');
+
+        // Include contact info only if interest is accepted and contact is shared
+        const selectFields = interest.status === 'accepted' && interest.contactShared
+          ? '-password'
+          : '-password -phone -email';
+
+        const receiver = await User.findById(interest.receiverId).select(selectFields);
+
         return {
           ...interest._doc,
           sender,
@@ -101,16 +145,16 @@ export async function GET(req) {
       })
     );
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
-      interests: populatedInterests 
-    },{headers:corsHeaders});
+      interests: populatedInterests
+    }, { headers: corsHeaders });
 
   } catch (error) {
     console.error("Error in GET interests:", error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500,headers:corsHeaders }
+      { status: 500, headers: corsHeaders }
     );
   }
 }

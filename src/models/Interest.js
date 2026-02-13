@@ -4,7 +4,8 @@ const { Schema } = mongoose; // ✅ Destructure Schema from mongoose
 const InterestSchema = new Schema({
   senderId: { type: Schema.Types.ObjectId, required: true },
   receiverId: { type: Schema.Types.ObjectId, required: true },
-  status: { type: String, enum: ['pending', 'accepted', 'declined','cancel'], default: 'pending' },
+  status: { type: String, enum: ['pending', 'accepted', 'declined', 'cancel'], default: 'pending' },
+  contactShared: { type: Boolean, default: false }, // Track if contact details were shared
   createdAt: { type: Date, default: Date.now }
 });
 
